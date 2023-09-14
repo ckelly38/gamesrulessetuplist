@@ -5,9 +5,12 @@ function NavBar({gameid})
 {
     return (
         <div>
-            <NavLink className="App-link" exact to="/">Home</NavLink>
-            <NavLink className="App-link" to={"/" + gameid + "/about"}>About</NavLink>
-            <NavLink className="App-link" to={"/" + gameid + "/setup"}>Setup</NavLink>
+            <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
+                exact to="/">Home</NavLink>
+            <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
+                to={"/" + gameid + "/about"}>About</NavLink>
+            <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
+                to={"/" + gameid + "/setup"}>Setup</NavLink>
         </div>
     );
 }

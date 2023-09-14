@@ -6,6 +6,7 @@ import NavBar from "./NavBar";
 import Home from "./Home";
 import About from "./About";
 import GameSetup from "./GameSetup";
+import GameRulesSetupRenderer from "./GameRulesSetupRenderer";
 
 function App() {
   const [games, setGames] = useState([]);
@@ -35,10 +36,10 @@ function App() {
             <Home games={games} />
           </Route>
           <Route path="/:id/about">
-            <About games={games} />
+            <GameRulesSetupRenderer games={games} type="ABOUT" />
           </Route>
           <Route path="/:id/setup">
-            <GameSetup games={games} />
+            <GameRulesSetupRenderer games={games} type="SETUP" />
           </Route>
           <Route path="*/*">
             <>

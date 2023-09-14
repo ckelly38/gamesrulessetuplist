@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "./NavBar";
 
-function GameSetup({games, gameobj})
+function GameSetup({games, gameobj, shownavbar})
 {
     if (games === undefined || games === null || games.length < 1)
     {
@@ -11,6 +11,7 @@ function GameSetup({games, gameobj})
     //else;//do nothing
 
     console.log("gameobj = ", gameobj);
+    console.log("shownavbar = " + shownavbar);
 
     const imgsrc = gameobj.image;
     const name = gameobj.name;
@@ -24,7 +25,7 @@ function GameSetup({games, gameobj})
 
     return (
         <>
-            <NavBar gameid={gameobj.id} />
+            {shownavbar ? <NavBar gameid={gameobj.id} /> : null}
             <div>
                 <h1>{name} Game Setup:</h1>
                 <img src={imgsrc} alt={name + " setup"} />

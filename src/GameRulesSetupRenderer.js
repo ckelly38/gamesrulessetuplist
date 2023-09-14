@@ -9,11 +9,8 @@ function GameRulesSetupRenderer({games, type})
     const params = useParams();
     console.log("params = ", params);
 
-    if (params.id === undefined || params.id === null || isNaN(params.id))
-    {
-        //
-    }
-    //else;//do nothing
+    const renderall = (params.id === undefined || params.id === null || isNaN(params.id));
+    console.log("renderall = " + renderall);
 
     if (games === undefined || games === null || games.length < 1)
     {
@@ -39,20 +36,56 @@ function GameRulesSetupRenderer({games, type})
         }
         else return games[mygamesindex];
     }
-    const mygameobj = getGameObj(parseInt(params.id));
+    let mygameobj = null;
+    if (renderall);
+    else mygameobj = getGameObj(parseInt(params.id));
     console.log("mygameobj = ", mygameobj);
+    console.log("type = " + type);
+
+    function finishRendering(usesetup, useall, games)
+    {
+        if (useall)
+        {
+            let myretobjs = games.map((game) => {
+                if (usesetup)
+                {
+                    return (
+                        <GameSetup key={game.id} games={games} gameobj={game} shownavbar={game.id === 1} />
+                    );
+                }
+                else
+                {
+                    return (
+                        <About key={game.id} games={games} gameobj={game} shownavbar={game.id === 1} />
+                    );
+                }
+            });
+            return myretobjs;
+        }
+        else
+        {
+            if (usesetup)
+            {
+                return (
+                    <GameSetup games={games} gameobj={mygameobj} shownavbar={true} />
+                );
+            }
+            else
+            {
+                return (
+                    <About games={games} gameobj={mygameobj} shownavbar={true} />
+                );
+            }
+        }
+    }
 
     if (type === "SETUP" || type === "setup" || type === "Setup")
     {
-        return (
-            <GameSetup games={games} gameobj={mygameobj} />
-        );
+        return finishRendering(true, renderall, games);
     }
     else if (type === "ABOUT" || type === "about" || type === "About")
     {
-        return (
-            <About games={games} gameobj={mygameobj} />
-        );
+        return finishRendering(false, renderall, games);
     }
     else
     {

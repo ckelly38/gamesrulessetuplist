@@ -1,6 +1,6 @@
 import React from "react";
 
-function About({imgsrc, name})
+function About(props)
 {
     return (
         null

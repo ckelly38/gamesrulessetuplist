@@ -1,10 +1,10 @@
 import React from "react";
 
-function NavBar(props)
+function Home(props)
 {
     return (
         null
     );
 }
 
-export default NavBar;
+export default Home;

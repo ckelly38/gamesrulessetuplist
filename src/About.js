@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import NavBar from "./NavBar";
 
 function About({games})
 {
@@ -32,12 +33,12 @@ function About({games})
     }
     const mygameobj = getGameObj(parseInt(params.id));
     console.log("mygameobj = ", mygameobj);
-    console.log("mygameobj.rules = ", mygameobj.rules);
-
-    //display the rules for the game
 
     return (
-        <div>About</div>
+        <>
+            <NavBar gameid={mygameobj.id} />
+            <div>About</div>
+        </>
     );
 }
 

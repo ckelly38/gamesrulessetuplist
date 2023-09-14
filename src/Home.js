@@ -8,10 +8,10 @@ function Home({games})
             <p>{game.name}:</p>
             <ul>
                 <li>
-                    <NavLink to={"/"+game.id+"/about"}>About</NavLink>
+                    <NavLink to={"/" + game.id + "/about"}>About</NavLink>
                 </li>
                 <li>
-                    <NavLink to={"/"+game.id+"/about"}>Setup</NavLink>
+                    <NavLink to={"/" + game.id + "/setup"}>Setup</NavLink>
                 </li>
             </ul>
         </li>

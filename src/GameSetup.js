@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import NavBar from "./NavBar";
 
 function GameSetup({games})
 {
@@ -33,7 +34,7 @@ function GameSetup({games})
     const mygameobj = getGameObj(parseInt(params.id));
     console.log("mygameobj = ", mygameobj);
 
-    const imgsrc = mygameobj.imgsrc;
+    const imgsrc = mygameobj.image;
     const name = mygameobj.name;
 
     if (imgsrc === undefined || imgsrc === null || imgsrc.length < 1 ||
@@ -44,10 +45,13 @@ function GameSetup({games})
     //else;//do nothing
 
     return (
-        <div>
-            <h1>{name} Game Setup:</h1>
-            <img src={imgsrc} alt={name + " setup"} />
-        </div>
+        <>
+            <NavBar gameid={mygameobj.id} />
+            <div>
+                <h1>{name} Game Setup:</h1>
+                <img src={imgsrc} alt={name + " setup"} />
+            </div>
+        </>
     );
 }
 

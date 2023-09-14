@@ -30,7 +30,6 @@ function App() {
   {
     return (
       <div className="App">
-        <NavBar />
         <Switch>
           <Route exact path="/">
             <Home games={games} />
@@ -42,7 +41,10 @@ function App() {
             <GameSetup games={games} />
           </Route>
           <Route path="*/*">
-            <h1>ERROR: 404 PAGE NOT FOUND!</h1>
+            <>
+              <NavBar />
+              <h1>ERROR: 404 PAGE NOT FOUND!</h1>
+            </>
           </Route>
         </Switch>
       </div>

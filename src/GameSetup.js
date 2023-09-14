@@ -13,8 +13,17 @@ function GameSetup({games, gameobj, shownavbar})
     console.log("gameobj = ", gameobj);
     console.log("shownavbar = " + shownavbar);
 
+    if (gameobj === undefined || gameobj === null)
+    {
+        throw new Error("game object is required and must not be null!");
+    }
+    //else;//do nothing
+
     const imgsrc = gameobj.image;
     const name = gameobj.name;
+    
+    console.log("imgsrc = " + imgsrc);
+    console.log("name = " + name);
 
     if (imgsrc === undefined || imgsrc === null || imgsrc.length < 1 ||
         name === undefined || name === null || name.length < 1)
@@ -23,12 +32,21 @@ function GameSetup({games, gameobj, shownavbar})
     }
     //else;//do nothing
 
+    let description = "";
+    if (gameobj.description === undefined || gameobj.description === null || gameobj.description.length < 1)
+    {
+        description = "This shows the general setup of the game: " + name + ".";
+    }
+    else description = gameobj.description;
+    console.log("description = " + description);
+
     return (
         <>
             {shownavbar ? <NavBar gameid={gameobj.id} /> : null}
             <div>
                 <h1>{name} Game Setup:</h1>
                 <img src={imgsrc} alt={name + " setup"} />
+                <p>{description}</p>
             </div>
         </>
     );

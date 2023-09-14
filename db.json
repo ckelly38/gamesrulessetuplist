@@ -9,6 +9,7 @@
             "AverageMinutes": 15,
             "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
             "image": "https://images.saymedia-content.com/.image/ar_3:2%2Cc_limit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_700/MTc0NDYwNDM5NTcyMzkxNTU4/how-to-play-hearts-card-games-on-a-computer.jpg",
+            "description": "This image shows the set up, and a trick with 4 people, for Hearts. The person on the West side took it because they played the Ace of Clubs.",
             "rules": {
                 "basic": [
                     "In the same suit: Ace is highest; ace > king > queen > jack > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2 > non-suit-followers",
@@ -58,6 +59,7 @@
             "AverageMinutes": 0,
             "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
             "image": "url",
+            "description": "",
             "rules": {
                 "basic": []
             },
@@ -72,6 +74,7 @@
             "AverageMinutes": 0,
             "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
             "image": "url",
+            "description": "",
             "rules": {
                 "basic": []
             },

@@ -26,7 +26,28 @@ function App() {
   console.log("loaded = " + loaded);
   console.log("games = ", games);
 
-  if (loaded);
+  if (loaded)
+  {
+    return (
+      <div className="App">
+        <NavBar />
+        <Switch>
+          <Route exact path="/">
+            <Home games={games} />
+          </Route>
+          <Route path="/:id/about">
+            <About games={games} />
+          </Route>
+          <Route path="/:id/setup">
+            <GameSetup games={games} />
+          </Route>
+          <Route path="*/*">
+            <h1>ERROR: 404 PAGE NOT FOUND!</h1>
+          </Route>
+        </Switch>
+      </div>
+    );
+  }
   else
   {
     return (
@@ -36,26 +57,6 @@ function App() {
       </div>
     );
   }
-
-  return (
-    <div className="App">
-      <NavBar />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/:id/about">
-          <About games={games} />
-        </Route>
-        <Route path="/:id/setup">
-          <GameSetup games={games} />
-        </Route>
-        <Route path="*/*">
-          <h1>ERROR: 404 PAGE NOT FOUND!</h1>
-        </Route>
-      </Switch>
-    </div>
-  );
 }
 
 export default App;

@@ -14,7 +14,13 @@ function GameSetup({games})
 
     function getGameObj(mid)
     {
-        let mygamesindex = games.findIndex((game) => (game.id === mid));
+        console.log("mid = " + mid);
+
+        let mygamesindex = games.findIndex((game) => {
+            console.log("game.id = " + game.id);
+            if (game.id === mid) return true;
+            else return false;
+        });
         console.log("mygamesindex = " + mygamesindex);
 
         if (mygamesindex < 0 || (mygamesindex > games.length - 1 && games.length > 0))
@@ -24,7 +30,7 @@ function GameSetup({games})
         }
         else return games[mygamesindex];
     }
-    const mygameobj = getGameObj(params.id);
+    const mygameobj = getGameObj(parseInt(params.id));
     console.log("mygameobj = ", mygameobj);
 
     const imgsrc = mygameobj.imgsrc;

@@ -1,7 +1,35 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 
-function About(props)
+function About({games})
 {
+    const params = useParams();
+    console.log("params = ", params);
+
+    if (games === undefined || games === null || games.length < 1)
+    {
+        throw new Error("there must be at least one game found!");
+    }
+    //else;//do nothing
+
+    function getGameObj(mid)
+    {
+        let mygamesindex = games.findIndex((game) => (game.id === mid));
+        console.log("mygamesindex = " + mygamesindex);
+
+        if (mygamesindex < 0 || (mygamesindex > games.length - 1 && games.length > 0))
+        {
+            throw new Error("illegal index found and used for the games object index! " +
+                "The id must be found on the list of games, but it was not!");
+        }
+        else return games[mygamesindex];
+    }
+    const mygameobj = getGameObj(params.id);
+    console.log("mygameobj = ", mygameobj);
+    console.log("mygameobj.rules = ", mygameobj.rules);
+
+    //display the rules for the game
+
     return (
         <div>About</div>
     );

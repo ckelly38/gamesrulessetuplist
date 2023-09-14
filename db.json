@@ -8,6 +8,7 @@
             "NumberOfDecks": 1,
             "AverageMinutes": 15,
             "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+            "image": "https://images.saymedia-content.com/.image/ar_3:2%2Cc_limit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:eco%2Cw_700/MTc0NDYwNDM5NTcyMzkxNTU4/how-to-play-hearts-card-games-on-a-computer.jpg",
             "rules": {
                 "basic": [
                     "In the same suit: Ace is highest; ace > king > queen > jack > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2 > non-suit-followers",
@@ -47,6 +48,34 @@
                 "To try to get zero by: short suiting yourself when you pass, so you can drop the Queen of Spades or your hearts and make sure that you cannot get stuck with the lead.",
                 "To try to get zero by: When there is a shooter, the shooter must be stopped first. Sacrifice to stop a shooter, then manage to get rid of the lead."
             ]
+        },
+        {
+            "name": "name",
+            "id": 0,
+            "MinNumberOfPlayers": 0,
+            "MaxNumberOfPlayers": 0,
+            "NumberOfDecks": 0,
+            "AverageMinutes": 0,
+            "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+            "image": "url",
+            "rules": {
+                "basic": []
+            },
+            "strategies": []
+        },
+        {
+            "name": "name",
+            "id": 0,
+            "MinNumberOfPlayers": 0,
+            "MaxNumberOfPlayers": 0,
+            "NumberOfDecks": 0,
+            "AverageMinutes": 0,
+            "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+            "image": "url",
+            "rules": {
+                "basic": []
+            },
+            "strategies": []
         }
     ]
 }

@@ -1,4 +1,6 @@
 import logo from './logo.svg';
+import React from "react";
+import {Switch, Route} from "react-router-dom";
 import './App.css';
 import NavBar from "./NavBar";
 import Home from "./Home";
@@ -17,7 +19,7 @@ function App() {
           <About />
         </Route>
         <Route path="/:id/setup">
-          <GameSetup />
+          <GameSetup games={null} />
         </Route>
         <Route path="*/*">
           <h1>ERROR: 404 PAGE NOT FOUND!</h1>

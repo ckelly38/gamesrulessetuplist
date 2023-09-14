@@ -1,10 +1,10 @@
 import React from "react";
 
-function About({imgsrc, name})
+function NavBar({imgsrc, name})
 {
     return (
         null
     );
 }
 
-export default About;
+export default NavBar;

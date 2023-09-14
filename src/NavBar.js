@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 
 function NavBar({gameid})
 {
+    console.log("NavBar: gameid = " + gameid);
+    
     return (
         <div>
             <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}

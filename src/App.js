@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import React, { useEffect, useState } from "react";
-import {Switch, Route} from "react-router-dom";
+import {Switch, Route, Redirect} from "react-router-dom";
 import './App.css';
 import NavBar from "./NavBar";
 import Home from "./Home";
@@ -33,7 +33,17 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/">
+            <NavBar />
             <Home games={games} />
+          </Route>
+          <Route exact path="/home">
+            <Redirect to="/" />
+          </Route>
+          <Route exact path="/about">
+            <GameRulesSetupRenderer games={games} type="ABOUT" />
+          </Route>
+          <Route exact path="/setup">
+            <GameRulesSetupRenderer games={games} type="SETUP" />
           </Route>
           <Route path="/:id/about">
             <GameRulesSetupRenderer games={games} type="ABOUT" />

@@ -50,13 +50,15 @@ function GameRulesSetupRenderer({games, type})
                 if (usesetup)
                 {
                     return (
-                        <GameSetup key={game.id} games={games} gameobj={game} shownavbar={game.id === 1} />
+                        <GameSetup key={game.id} games={games} gameobj={game} nonavbarid={true}
+                            shownavbar={game.id === 1} />
                     );
                 }
                 else
                 {
                     return (
-                        <About key={game.id} games={games} gameobj={game} shownavbar={game.id === 1} />
+                        <About key={game.id} games={games} gameobj={game} nonavbarid={true}
+                            shownavbar={game.id === 1} />
                     );
                 }
             });

@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "./NavBar";
 
-function About({games, gameobj, shownavbar})
+function About({games, gameobj, shownavbar, nonavbarid = false})
 {
     if (games === undefined || games === null || games.length < 1)
     {
@@ -12,10 +12,11 @@ function About({games, gameobj, shownavbar})
 
     console.log("gameobj = ", gameobj);
     console.log("shownavbar = " + shownavbar);
+    console.log("nonavbarid = " + nonavbarid);
 
     return (
         <>
-            {shownavbar ? <NavBar gameid={gameobj.id} /> : null}
+            {shownavbar ? (nonavbarid ? <NavBar /> : <NavBar gameid={gameobj.id} />) : null}
             <div>About</div>
         </>
     );

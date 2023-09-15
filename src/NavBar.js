@@ -7,11 +7,11 @@ function NavBar({gameid})
     
     return (
         <>
-            <div>
+            <div className="App">
                 <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
                     exact to="/">Home</NavLink>
                 <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
-                    to={"/" + gameid + "/about"}>About</NavLink>
+                    to={"/" + gameid + "/about"}>Stats</NavLink>
                 <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
                     to={"/" + gameid + "/setup"}>Setup</NavLink>
             </div>

@@ -38,7 +38,7 @@ function GameSetup({games, gameobj})
     console.log("description = " + description);
 
     return (
-        <div>
+        <div className="App">
             <h1>{name} Game Setup:</h1>
             <img src={imgsrc} alt={name + " setup"} />
             <p>{description}</p>

@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import NavBar from "./NavBar";
-import About from "./About";
+import Stats from "./Stats";
 import GameSetup from "./GameSetup";
 
-function GameRulesSetupRenderer({games, type})
+function GameRulesStatsSetupRenderer({games, type})
 {
     const params = useParams();
     console.log("params = ", params);
@@ -56,7 +56,7 @@ function GameRulesSetupRenderer({games, type})
                 else
                 {
                     return (
-                        <About key={game.id} games={games} gameobj={game} />
+                        <Stats key={game.id} games={games} gameobj={game} />
                     );
                 }
             });
@@ -74,7 +74,7 @@ function GameRulesSetupRenderer({games, type})
                 <>
                     <NavBar gameid={mygameobj.id} />
                     {usesetup ? ( <GameSetup games={games} gameobj={mygameobj} /> ) : (
-                        <About games={games} gameobj={mygameobj} />
+                        <Stats games={games} gameobj={mygameobj} />
                     )}
                 </>
             );
@@ -85,7 +85,8 @@ function GameRulesSetupRenderer({games, type})
     {
         return finishRendering(true, renderall, games);
     }
-    else if (type === "ABOUT" || type === "about" || type === "About")
+    else if (type === "STATS" || type === "stats" || type === "Stats" || type === "Statistics" ||
+        type === "STATISTICS")
     {
         return finishRendering(false, renderall, games);
     }
@@ -95,4 +96,4 @@ function GameRulesSetupRenderer({games, type})
     }
 }
 
-export default GameRulesSetupRenderer;
+export default GameRulesStatsSetupRenderer;

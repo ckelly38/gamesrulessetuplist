@@ -4,7 +4,7 @@ import {Switch, Route, Redirect} from "react-router-dom";
 import './App.css';
 import NavBar from "./NavBar";
 import Home from "./Home";
-import GameRulesSetupRenderer from "./GameRulesSetupRenderer";
+import GameRulesStatsSetupRenderer from "./GameRulesStatsSetupRenderer";
 
 function App() {
   const [games, setGames] = useState([]);
@@ -28,35 +28,39 @@ function App() {
   if (loaded)
   {
     return (
-      <div className="App">
-        <Switch>
-          <Route exact path="/">
+      <Switch>
+        <Route exact path="/">
+          <NavBar />
+          <Home games={games} />
+        </Route>
+        <Route exact path="/home">
+          <Redirect to="/" />
+        </Route>
+        <Route exact path="/about">
+          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+        </Route>
+        <Route path="/:id/about">
+          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+        </Route>
+        <Route exact path="/stats">
+          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+        </Route>
+        <Route path="/:id/stats">
+          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+        </Route>
+        <Route exact path="/setup">
+          <GameRulesStatsSetupRenderer games={games} type="SETUP" />
+        </Route>
+        <Route path="/:id/setup">
+          <GameRulesStatsSetupRenderer games={games} type="SETUP" />
+        </Route>
+        <Route path="*/*">
+          <>
             <NavBar />
-            <Home games={games} />
-          </Route>
-          <Route exact path="/home">
-            <Redirect to="/" />
-          </Route>
-          <Route exact path="/about">
-            <GameRulesSetupRenderer games={games} type="ABOUT" />
-          </Route>
-          <Route path="/:id/about">
-            <GameRulesSetupRenderer games={games} type="ABOUT" />
-          </Route>
-          <Route exact path="/setup">
-            <GameRulesSetupRenderer games={games} type="SETUP" />
-          </Route>
-          <Route path="/:id/setup">
-            <GameRulesSetupRenderer games={games} type="SETUP" />
-          </Route>
-          <Route path="*/*">
-            <>
-              <NavBar />
-              <h1>ERROR: 404 PAGE NOT FOUND!</h1>
-            </>
-          </Route>
-        </Switch>
-      </div>
+            <h1>ERROR: 404 PAGE NOT FOUND!</h1>
+          </>
+        </Route>
+      </Switch>
     );
   }
   else

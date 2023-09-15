@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.App-table, tr, td, th, table {
+  border-width: 0px;
+  border-style: solid;
+  border-color: black;
+}
+
+.tabletextright {
+  text-align: right; 
+}
+
+.tabletextleft {
+  text-align: left;
+}

@@ -13,6 +13,9 @@ function Home({games})
                 <li>
                     <NavLink to={"/" + game.id + "/setup"}>Setup</NavLink>
                 </li>
+                <li>
+                    <NavLink to={"/" + game.id + "/rules"}>Rules And Strategies</NavLink>
+                </li>
             </ul>
         </li>
     ));

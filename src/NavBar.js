@@ -14,6 +14,8 @@ function NavBar({gameid})
                     to={"/" + gameid + "/about"}>Stats</NavLink>
                 <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
                     to={"/" + gameid + "/setup"}>Setup</NavLink>
+                <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
+                    to={"/" + gameid + "/rules"}>Rules</NavLink>
             </div>
             <hr />
         </>

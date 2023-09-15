@@ -27,7 +27,8 @@ function Stats({games, gameobj})
     "image": "url",
     "description": "",
     "rules": {
-        "basic": []
+        "basic": [],
+        "vegasstyle": []
     },
     "strategies": []
     */

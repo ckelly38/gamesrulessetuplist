@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import NavBar from "./NavBar";
 import Stats from "./Stats";
 import GameSetup from "./GameSetup";
+import RulesNStrategies from "./RulesNStrategies";
 
 function GameRulesStatsSetupRenderer({games, type})
 {
@@ -42,23 +43,97 @@ function GameRulesStatsSetupRenderer({games, type})
     console.log("mygameobj = ", mygameobj);
     console.log("type = " + type);
 
-    function finishRendering(usesetup, useall, games)
+    function errorCheckBools(boolsobj)
     {
+        if (boolsobj === undefined || boolsobj === null)
+        {
+            throw new Error("boolsobj must not be null! It must be defined!");
+        }
+        //else;//do nothing
+
+        const usesetup = boolsobj.usesetup;
+        const usestats = boolsobj.usestats;
+        const userules = boolsobj.userules;
+
+        console.log("usesetup = " + usesetup);
+        console.log("usestats = " + usestats);
+        console.log("userules = " + userules);
+        if (usesetup === undefined || usesetup === null ||
+            usestats === undefined || usestats === null ||
+            userules === undefined || userules === null)
+        {
+            throw new Error("the bools object was created wrong because at least one of the " +
+                "expected properties were not defined or were null, but all must be booleans!");
+        }
+        else
+        {
+            if ((usesetup === true || usesetup === false) &&
+                (usestats === true || usestats === false) &&
+                (userules === true || userules === false))
+            {
+                //they were defined as booleans correctly
+            }
+            else
+            {
+                throw new Error("the bools object was created wrong because at least one of the " +
+                    "expected properties were not booleans and must be!");
+            }
+        }
+
+        if (usesetup)
+        {
+            if (usestats || userules)
+            {
+                throw new Error("only one must be true!");
+            }
+            //else;//do nothing
+        }
+        //else;//do nothing
+        if (usestats)
+        {
+            if (usesetup || userules)
+            {
+                throw new Error("only one must be true!");
+            }
+            //else;//do nothing
+        }
+        //else;//do nothing
+        if (userules)
+        {
+            if (usesetup || usestats)
+            {
+                throw new Error("only one must be true!");
+            }
+            //else;//do nothing
+        }
+        //else;//do nothing
+    }
+
+    function finishRendering(boolsobj, useall, games)
+    {
+        errorCheckBools(boolsobj);
         if (useall)
         {
             let myretobjs = games.map((game) => {
-                if (usesetup)
+                if (boolsobj.usesetup)
                 {
                     return (
                         <GameSetup key={game.id} games={games} gameobj={game} />
                     );
                 }
-                else
+                else if (boolsobj.usestats)
                 {
                     return (
                         <Stats key={game.id} games={games} gameobj={game} />
                     );
                 }
+                else if (boolsobj.userules)
+                {
+                    return (
+                        <RulesNStrategies key={game.id} games={games} gameobj={game} />
+                    );
+                }
+                else throw new Error("illegal key found and used in the bools object");
             });
 
             return (
@@ -73,22 +148,40 @@ function GameRulesStatsSetupRenderer({games, type})
             return (
                 <>
                     <NavBar gameid={mygameobj.id} />
-                    {usesetup ? ( <GameSetup games={games} gameobj={mygameobj} /> ) : (
-                        <Stats games={games} gameobj={mygameobj} />
+                    {boolsobj.usesetup ? ( <GameSetup games={games} gameobj={mygameobj} /> ) : (
+                        (boolsobj.usestats ? (
+                            <Stats games={games} gameobj={mygameobj} />
+                        ) : (boolsobj.userules ? (
+                            <RulesNStrategies games={games} gameobj={mygameobj} />
+                        ) : null))
                     )}
                 </>
             );
         }
     }
 
+    let myboolsobj = {
+        usesetup: false,
+        usestats: false,
+        userules: false,
+    };
+
     if (type === "SETUP" || type === "setup" || type === "Setup")
     {
-        return finishRendering(true, renderall, games);
+        myboolsobj.usesetup = true;
+        return finishRendering(myboolsobj, renderall, games);
     }
     else if (type === "STATS" || type === "stats" || type === "Stats" || type === "Statistics" ||
         type === "STATISTICS")
     {
-        return finishRendering(false, renderall, games);
+        myboolsobj.usestats = true;
+        return finishRendering(myboolsobj, renderall, games);
+    }
+    else if (type === "RULES" || type === "Rules" || type === "rules" ||
+        type === "STRATEGIES" || type === "Strategies" || type === "strategies")
+    {
+        myboolsobj.userules = true;
+        return finishRendering(myboolsobj, renderall, games);
     }
     else
     {

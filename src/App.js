@@ -6,6 +6,7 @@ import NavBar from "./NavBar";
 import Home from "./Home";
 import GameRulesStatsSetupRenderer from "./GameRulesStatsSetupRenderer";
 
+
 function App() {
   const [games, setGames] = useState([]);
   const [loaded, setIsLoaded] = useState(false);
@@ -53,6 +54,12 @@ function App() {
         </Route>
         <Route path="/:id/setup">
           <GameRulesStatsSetupRenderer games={games} type="SETUP" />
+        </Route>
+        <Route exact path="/rules">
+          <GameRulesStatsSetupRenderer games={games} type="RULES" />
+        </Route>
+        <Route path="/:id/rules">
+          <GameRulesStatsSetupRenderer games={games} type="RULES" />
         </Route>
         <Route path="*/*">
           <>

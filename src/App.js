@@ -4,8 +4,6 @@ import {Switch, Route, Redirect} from "react-router-dom";
 import './App.css';
 import NavBar from "./NavBar";
 import Home from "./Home";
-import About from "./About";
-import GameSetup from "./GameSetup";
 import GameRulesSetupRenderer from "./GameRulesSetupRenderer";
 
 function App() {
@@ -42,11 +40,11 @@ function App() {
           <Route exact path="/about">
             <GameRulesSetupRenderer games={games} type="ABOUT" />
           </Route>
-          <Route exact path="/setup">
-            <GameRulesSetupRenderer games={games} type="SETUP" />
-          </Route>
           <Route path="/:id/about">
             <GameRulesSetupRenderer games={games} type="ABOUT" />
+          </Route>
+          <Route exact path="/setup">
+            <GameRulesSetupRenderer games={games} type="SETUP" />
           </Route>
           <Route path="/:id/setup">
             <GameRulesSetupRenderer games={games} type="SETUP" />

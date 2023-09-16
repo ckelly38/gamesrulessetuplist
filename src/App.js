@@ -4,6 +4,7 @@ import {Switch, Route, Redirect} from "react-router-dom";
 import './App.css';
 import NavBar from "./NavBar";
 import Home from "./Home";
+import AddAGame from "./AddAGame";
 import GameRulesStatsSetupRenderer from "./GameRulesStatsSetupRenderer";
 
 
@@ -36,6 +37,12 @@ function App() {
         </Route>
         <Route exact path="/home">
           <Redirect to="/" />
+        </Route>
+        <Route exact path="/new">
+          <>
+            <NavBar />
+            <AddAGame />
+          </>
         </Route>
         <Route exact path="/about">
           <GameRulesStatsSetupRenderer games={games} type="STATS" />

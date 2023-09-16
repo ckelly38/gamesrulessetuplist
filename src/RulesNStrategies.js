@@ -33,12 +33,17 @@ function RulesNStrategies({games, gameobj})
     "strategies": []
     */
 
+    function createMarkUp(content)
+    {
+        return {__html: "" + content};
+    }
+
     let mybasicrulelis = gameobj.rules.basic.map((rule, index) =>
-        <li key={"basic" + gameobj.name + index}>{rule}</li>);
+        <li key={"basic" + gameobj.name + index} dangerouslySetInnerHTML={createMarkUp(rule)} />);
     let myvegasrulelis = gameobj.rules.vegasstyle.map((rule, index) =>
-        <li key={"vegas" + gameobj.name + index}>{rule}</li>);
+        <li key={"vegas" + gameobj.name + index} dangerouslySetInnerHTML={createMarkUp(rule)} />);
     let mystratlis = gameobj.strategies.map((rule, index) =>
-        <li key={"strats" + gameobj.name + index}>{rule}</li>);
+        <li key={"strats" + gameobj.name + index} dangerouslySetInnerHTML={createMarkUp(rule)} />);
     
     return (
         <div>

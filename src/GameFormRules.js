@@ -3,7 +3,7 @@ import GameFormRule from "./GameFormRule";
 
 function GameFormRules({handleChange})
 {
-    let myruleobjs = new Array();
+    let myruleobjs = [];
     function addRule(event)
     {
         myruleobjs.push(<GameFormRule key={"rule" + (myruleobjs.length + 1)} mid={myruleobjs.length + 1}

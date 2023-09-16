@@ -27,6 +27,39 @@ function App() {
   console.log("loaded = " + loaded);
   console.log("games = ", games);
 
+  function addGame(nwgameobj)
+  {
+    if (nwgameobj === undefined || nwgameobj === null)
+    {
+      throw new Error("the game object that we want to add to the list of games must be defined and " +
+        "not null!");
+    }
+    //else;//do nothing
+    setIsLoaded(false);
+    
+    let configobj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(nwgameobj)
+    };
+    fetch("http://localhost:3000/games", configobj).then((response) => response.json())
+    .then((response) => {
+      console.log("response = ", response);
+      const mynwgameobj = response;
+      let nwgames = {...games};
+      nwgames.push(mynwgameobj);
+      setGames(nwgames);
+      setIsLoaded(true);
+    }).catch((err) => {
+      console.error("there was a problem puting the new game on the server!");
+      console.error(err);
+      alert("Error: there was a problem puting the new game on the server!");
+    });
+  }
+
   if (loaded)
   {
     return (
@@ -41,7 +74,7 @@ function App() {
         <Route exact path="/new">
           <>
             <NavBar />
-            <AddAGame />
+            <AddAGame addGame={addGame} />
           </>
         </Route>
         <Route exact path="/about">

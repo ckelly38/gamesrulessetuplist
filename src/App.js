@@ -49,7 +49,7 @@ function App() {
     .then((response) => {
       console.log("response = ", response);
       const mynwgameobj = response;
-      let nwgames = {...games};
+      let nwgames = [...games];
       nwgames.push(mynwgameobj);
       setGames(nwgames);
       setIsLoaded(true);

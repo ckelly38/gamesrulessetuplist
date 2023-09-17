@@ -18,6 +18,12 @@ function AddAGame({addGame})
         },
         "strategies": []
     });
+    const [myrules, setMyRules] = useState([{
+        id: "rule1",
+        isbasic: false,
+        isvegas: false,
+        text: ""
+    }]);
 
     function handleSubmit(event)
     {
@@ -187,7 +193,7 @@ function AddAGame({addGame})
             <label htmlFor="avnummins" id="avnumminslbl">Average Number of Minutes: </label>
             <input required={true} id="avnummins" type="number" min="0" step="any" placeholder="0"
                 value={gameobj.AverageMinutes} onChange={handleChange} /><br />
-            <GameFormRules handleChange={handleChange} />
+            <GameFormRules myrules={myrules} setMyRules={setMyRules} handleChange={handleChange} />
             <input type="submit" value="Submit" />
         </form>
     );

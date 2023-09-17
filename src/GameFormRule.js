@@ -4,14 +4,14 @@ function GameFormRule({handleChange, mid})
 {
     return (
         <div id={"rule" + mid}>
-            <label htmlFor="nwrule" id="nwrulelbl">Rule Num: </label>
-            <input id="nwrule" type="text" placeholder="Rule:" onChange={handleChange} /><br />
-            <input required={true} type="radio" id="basicrule" name="kindofrule" value="basic"
+            <label htmlFor="nwrule" id="nwrulelbl">Rule #{mid}: </label>
+            <input id={"nwrule" + mid} type="text" placeholder="Rule:" onChange={handleChange} /><br />
+            <input required={true} type="radio" id={"basicrule" + mid} name="kindofrule" value="basic"
                 onChange={handleChange} />
-            <label htmlFor="basicrule" id="basicrulelbl">Basic Rule</label>
-            <input required={true} type="radio" id="vegasrule" name="kindofrule" value="vegas"
+            <label htmlFor={"basicrule" + mid} id={"basicrulelbl" + mid}>Basic Rule</label>
+            <input required={true} type="radio" id={"vegasrule" + mid} name="kindofrule" value="vegas"
                 onChange={handleChange} />
-            <label htmlFor="vegasrule" id="vegasrulelbl">Vegas Rule</label>
+            <label htmlFor={"vegasrule" + mid} id={"vegasrulelbl" + mid}>Vegas Rule</label>
         </div>
     );
 }

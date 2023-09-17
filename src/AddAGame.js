@@ -26,6 +26,75 @@ function AddAGame({addGame})
         //take the new game object and call addGame(gameobj);
         addGame(gameobj);
     }
+    
+    function doesInputHaveUnnecessaryCharacters(inputobj)
+    {
+        console.log("AddAGame screener: inputobj = ", inputobj);
+        if (inputobj.input === undefined || inputobj.input === null)
+        {
+            throw new Error("AddAGame screener: the input string was null and must be defined!");
+        }
+        //else;//do nothing
+        console.log("screener: inputobj.input.length = " + inputobj.input.length);
+
+        for (let i = 0; i < inputobj.input.length; i++)
+        {
+            //need to screen for "" before end of the string
+            //need to screen for < or > or / or =
+            console.log("inputobj.input.charAt(" + i + ") = " + inputobj.input.charAt(i));
+            if (inputobj.input.charAt(i) === '<')
+            {
+                console.log("may have found a tag start here at i = " + i + "!");
+                let errmsg = "";
+                for (let k = i + 1; k < inputobj.input.length; k++)
+                {
+                    if (inputobj.input.charAt(k) === '"')
+                    {
+                        errmsg = "AddAGame screener: illegal character " +
+                            "found. Found < then \" after it!";
+                    }
+                    else if (inputobj.input.charAt(k) === '>')
+                    {
+                        errmsg = "AddAGame screener: illegal character found. " +
+                            "Found < then > after it!";
+                    }
+                    else if (inputobj.input.charAt(k) === '=')
+                    {
+                        errmsg = "AddAGame screener: illegal character found. " +
+                            "Found < then = after it!";
+                    }
+                    else
+                    {
+                        if (k === i + 1)
+                        {
+                            if (inputobj.input.charAt(k) === '/')
+                            {
+                                errmsg = "AddAGame screener: illegal character found. " +
+                                    "Found < then / after it!";
+                            }
+                            else if (inputobj.input.charAt(k) === '>')
+                            {
+                                errmsg = "AddAGame screener: illegal character found. " +
+                                    "Found < then > after it!";
+                            }
+                            //else;//do nothing
+                        }
+                        //else;//do nothing
+                    }
+
+                    if (errmsg.length > 0)
+                    {
+                        console.error(errmsg);
+                        alert("Error: input = " + inputobj.input + " is illegal! " + errmsg);
+                        return true;
+                    }
+                }//end of k for loop
+            }
+            //else;//do nothing should be safe
+        }//end of i for loop
+        console.log("AddAGame screener: input object is safe!");
+        return false;
+    }
 
     function handleChange(event)
     {
@@ -53,12 +122,26 @@ function AddAGame({addGame})
         else if (event.target.id === "maxnumplayers") objkey = "MaxNumberOfPlayers";
         else if (event.target.id === "numdecks") objkey = "NumberOfDecks";
         else if (event.target.id === "avnummins") objkey = "AverageMinutes";
-        else throw new Error("NEED TO DO SOMETHING HERE TO HANDLE THE ID (" + event.target.id + ")!");
+        else
+        {
+            throw new Error("handleChange: NEED TO DO SOMETHING HERE TO HANDLE THE ID (" +
+                event.target.id + ")!");
+        }
         console.log("handleChange: objkey = " + objkey);
         console.log("handleChange: usenumber = " + usenumber);
 
         if (usenumber) nwgameobj[objkey] = Number(event.target.value);
-        else nwgameobj[objkey] = event.target.value;
+        else
+        {
+            if (doesInputHaveUnnecessaryCharacters({input: "" + event.target.value}))
+            {
+                console.error("handleChange: input (" + event.target.value +
+                    ") has illegal characters in it!");
+                console.log("changes aborted!");
+                return;
+            }
+            else nwgameobj[objkey] = event.target.value;
+        }
         console.log("handleChange: NEW nwgameobj = ", nwgameobj);
 
         setGameObject(nwgameobj);

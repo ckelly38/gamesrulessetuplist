@@ -81,22 +81,6 @@
         "vegasstyle": []
       },
       "strategies": []
-    },
-    {
-      "name": "name",
-      "MinNumberOfPlayers": 1,
-      "MaxNumberOfPlayers": 1,
-      "NumberOfDecks": 1,
-      "AverageMinutes": 0,
-      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
-      "image": "",
-      "description": "",
-      "rules": {
-        "basic": {},
-        "vegasstyle": {}
-      },
-      "strategies": {},
-      "id": 2
     }
   ]
 }

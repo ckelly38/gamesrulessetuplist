@@ -110,9 +110,9 @@ function AddAGame({addGame})
         console.log("handleChange: OLD gameobj = ", gameobj);
 
         let nwgameobj = {...gameobj};
-        nwgameobj.rules.basic = {...gameobj.rules.basic};
-        nwgameobj.rules.vegasstyle = {...gameobj.rules.vegasstyle};
-        nwgameobj.strategies={...gameobj.strategies};
+        nwgameobj.rules.basic = [...gameobj.rules.basic];
+        nwgameobj.rules.vegasstyle = [...gameobj.rules.vegasstyle];
+        nwgameobj.strategies=[...gameobj.strategies];
 
         console.log("handleChange: COPY OLD gameobj = ", nwgameobj);
         

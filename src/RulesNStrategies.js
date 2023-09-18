@@ -33,17 +33,30 @@ function RulesNStrategies({games, gameobj})
     "strategies": []
     */
 
+    function generateMarkUpForDisplayFromRule(rule)
+    {
+        //need some way of Bolding, Underlining, Italicizing, Changing the Font Color, Changing the Font,
+        //adding a new line like both br and p
+        //How about /b /i /u /br /p
+        // /style font-family: name; font-size: #####px; color: name or hexvalue or rgb(r,g,b,a) /style
+        //and pair them like html
+        return null;
+    }
+
     function createMarkUp(content)
     {
         return {__html: "" + content};
     }
 
     let mybasicrulelis = gameobj.rules.basic.map((rule, index) =>
-        <li key={"basic" + gameobj.name + index} dangerouslySetInnerHTML={createMarkUp(rule)} />);
+        <li key={"basic" + gameobj.name + index}
+        dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
     let myvegasrulelis = gameobj.rules.vegasstyle.map((rule, index) =>
-        <li key={"vegas" + gameobj.name + index} dangerouslySetInnerHTML={createMarkUp(rule)} />);
+        <li key={"vegas" + gameobj.name + index}
+        dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
     let mystratlis = gameobj.strategies.map((rule, index) =>
-        <li key={"strats" + gameobj.name + index} dangerouslySetInnerHTML={createMarkUp(rule)} />);
+        <li key={"strats" + gameobj.name + index}
+        dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
     
     return (
         <div>

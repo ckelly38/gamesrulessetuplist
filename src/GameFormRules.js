@@ -69,7 +69,19 @@ function GameFormRules({myrules, setMyRules, handleChange})
             console.log("myvalkey = " + myvalkey);
             console.log("myobjkey = " + myobjkey);
             
-            mynwruleobj[myobjkey] = event.target[myvalkey];
+            if (myobjkey === "text")
+            {
+                //check to make sure the input does not have invalid characters in it
+                if (handleChange({input: "" + event.target[myvalkey]}))
+                {
+                    console.error("handleChange: input (" + event.target[myvalkey] +
+                        ") has illegal characters in it!");
+                    console.log("changes aborted!");
+                    return;
+                }
+                else mynwruleobj[myobjkey] = event.target[myvalkey];
+            }
+            else mynwruleobj[myobjkey] = event.target[myvalkey];
             
             console.log("mynwruleobj = ", mynwruleobj);
 

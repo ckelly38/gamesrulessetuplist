@@ -58,7 +58,7 @@ function GameFormRules({myrules, setMyRules, handleChange})
             //we have the change from event.target.value
 
             let mynwruleobj = {...myrules[myidnum - 1]};
-            const usechecked = ((myruleindx > 0 || myruleindx == 0) && myruleindx < 2);
+            const usechecked = ((myruleindx > 0 || myruleindx === 0) && myruleindx < 2);
             const myvalkey = (usechecked ? "checked" : "value"); 
             let myobjkey = "";
             if (myruleindx === 0) myobjkey = "isbasic";

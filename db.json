@@ -13,8 +13,9 @@
       "rules": {
         "basic": [
           "In the same suit: Ace is highest; ace > king > queen > jack > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2 > non-suit-followers",
-          "The suits are: Hearts, Spades, Clubs, and Diamonds",
+          "The suits are: /b/style color: red /styleHearts/b, Spades, Clubs, and /b/style color: red /styleDiamonds/b",
           "You must follow suit, and play it if you have it.",
+          "test ///breally/b",
           "/b/uIf you cannot follow suit/u/b: if you have the /b/uQueen of Spades/u/b in your hand: you must drop it; otherwise you can play any card/p/p",
           "To take the /utrick/u and the /ulead/u (if you did not already have it), you must play a card in suit, in your hand, that ranks above all of the other cards played in suit.",
           "After taking a /utrick/u and the lead, you get to pick the next card and suit, from your hand, to lead with.",

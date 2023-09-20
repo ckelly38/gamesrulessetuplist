@@ -517,6 +517,146 @@ function RulesNStrategies({games, gameobj})
         throw new Error("NOT DONE YET 9-19-2023 4:30 AM!");
     }
 
+    function getLevelsDisplayStrOrStrs(rule, levels, useonedigitforlevelsperstr = true)
+    {
+        if (levels === undefined || levels === null) return null;
+        else if (levels.length < 1) return [""];
+        else
+        {
+            let maxlevel = levels[0];
+            let maxleveli = 0;
+            for (let n = 0; n < levels.length; n++)
+            {
+                if (maxlevel < levels[n])
+                {
+                    maxlevel = levels[n];
+                    maxleveli = n;
+                }
+                //else;//do nothing
+            }
+            console.log("maxlevel = " + maxlevel);
+            console.log("maxleveli = " + maxleveli);
+
+            if (maxlevel < 1 || maxleveli < 0 || ((maxleveli > levels.length - 1) && levels.length > 0))
+            {
+                throw new Error("illegal maximum level present!");
+            }
+            //else;//do nothing
+
+            //need to know the biggest power of 10 underneath n
+            const maxlevelstr = "" + maxlevel;
+            console.log("maxlevelstr.length = " + maxlevelstr.length);
+                
+            const mypow = maxlevelstr.length;
+            console.log("FINAL mypow = " + mypow);
+            
+            let mypowoften = 1;
+            if (useonedigitforlevelsperstr)
+            {
+                for (let n = 0; n < mypow; n++) mypowoften *= 10;
+                console.log("FINAL mypowoften = " + mypowoften);
+            }
+            //else;//do nothing
+            
+            //111112222...10...22221111 to
+            //111112222...0...22221111
+            //0          010         0
+
+            //log ones place 90
+            //log tens place 01
+            //log hundreds place
+            //...
+
+            let mystrs = [];
+            for (let n = 0; n < mypow; n++)
+            {
+                console.log("n = " + n);
+
+                let mynumpow = 1;
+                if (useonedigitforlevelsperstr)
+                {
+                    for (let k = 0; k < n + 1; k++) mynumpow *= 10;
+                    console.log("mynumpow = " + mynumpow);
+                }
+                //else;//do nothing
+
+                let str = "";
+                for (let i = 0; i < levels.length; i++)
+                {
+                    if (useonedigitforlevelsperstr)
+                    {
+                        //console.log("levels[" + i + "] = " + levels[i]);
+                        //console.log("(levels[" + i + "] % " + mynumpow + ") = " +
+                        //    (levels[i] % mynumpow));
+                        //console.log(mynumpow + " / 10 = " + (mynumpow / 10));
+                        //console.log("((levels[" + i + "] % " + mynumpow + ") / (" + mynumpow +
+                        //    " / 10)) = " + ((levels[i] % mynumpow) / (mynumpow / 10)));
+                        
+                        let myval = Math.trunc((levels[i] % mynumpow) / (mynumpow / 10));
+                        //console.log("myval = " + myval);
+
+                        if (n === 0 || i === 0 || i + 1 === levels.length)
+                        {
+                            //display it...
+                            str += "" + myval;
+                        }
+                        else
+                        {
+                            if (i + 1 < levels.length)
+                            {
+                                let mynextval = Math.trunc((levels[i + 1] % mynumpow) / (mynumpow / 10));
+                                //console.log("mynextval = " + mynextval);
+
+                                let myprevval = Math.trunc((levels[i - 1] % mynumpow) / (mynumpow / 10));
+                                //console.log("myprevval = " + myprevval);
+
+                                if (myval !== mynextval || myprevval !== myval) str += "" + myval;
+                                else str += " ";
+                            }
+                            else throw new Error("this case must have been handled already above!");
+                        }
+                    }
+                    else str += "" + levels[i];
+                }//end of i for loop
+                mystrs[n] = "" + str;
+                console.log("NEW mystrs[" + n + "] = " + mystrs[n]);
+            }//end of n for loop
+            console.log("");
+
+            if (rule === undefined || rule === null) console.log("");
+            else console.log(rule);
+            for (let p = 0; p < mypow; p++)
+            {
+                console.log(mystrs[p] + " = FINAL mystrs[" + p + "]!");
+            }
+            return mystrs;
+        }
+    }
+    function getLevelsAndDisplayStrOrStrs(rule, useonedigitforlevelsperstr,
+        alltagis = getAllTagIndexes(rule))
+    {
+        return getLevelsDisplayStrOrStrs(rule, getLevelsForAllTags(rule, alltagis),
+            useonedigitforlevelsperstr);
+    }
+    function getLevelsAndDisplayStrs(rule, alltagis = getAllTagIndexes(rule))
+    {
+        return getLevelsAndDisplayStrOrStrs(rule, true, alltagis);
+    }
+    function getLevelsAndDisplayStr(rule, alltagis = getAllTagIndexes(rule))
+    {
+        return getLevelsAndDisplayStrOrStrs(rule, false, alltagis);
+    }
+    function getLevelsDisplayStrs(levels, rule = "")
+    {
+        return getLevelsDisplayStrOrStrs(rule, levels, true);
+    }
+    function getLevelsDisplayStr(levels, rule = "")
+    {
+        let mystrs = getLevelsDisplayStrOrStrs(rule, levels, false);
+        if (mystrs === null) return null;
+        else if (mystrs.length < 1) return "";
+        else return "" + mystrs[0];
+    }
 
     function isValidTagsMarkup(rule, alltagis = getAllTagIndexes(rule))
     {
@@ -579,6 +719,9 @@ function RulesNStrategies({games, gameobj})
             if (mytagis[n] === opairi);
             else throw new Error("the indexes for the pairs must match up, but they did not!");
         }
+
+        console.log(getLevelsDisplayStrs([1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,
+            9,9,9,10,100,10,9,9,9,8,8,8,7,7,7,6,6,6,5,5,5,4,4,4,4,3,3,3,3,3,2,2,2,2,2,1,1,1,1,1]));
 
         /*
         let rulemkup = "";

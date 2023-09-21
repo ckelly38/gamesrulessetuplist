@@ -1296,6 +1296,9 @@ function RulesNStrategies({games, gameobj})
         return {__html: "" + content};
     }
 
+    //when clicking the edit button we show a list of lis for each list of text areas or input texts
+    //these let you directly provide or view the encoding
+
     let mybasicrulelis = gameobj.rules.basic.map((rule, index) =>
         <li key={"basic" + gameobj.name + index}
         dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
@@ -1311,13 +1314,13 @@ function RulesNStrategies({games, gameobj})
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
             <details>
                 <summary>Rules:</summary>
-                <p>Basic:</p>
+                <p>Basic:<button>Edit Basic Rules</button></p>
                 <ul>{mybasicrulelis}</ul>
-                <p>Vegas Style:</p>
+                <p>Vegas Style:<button>Edit Vegas Style Rules</button></p>
                 <ul>{myvegasrulelis}</ul>
             </details>
             <details>
-                <summary>Strategies:</summary>
+                <summary>Strategies:<button>Edit Strategies</button></summary>
                 <ul>{mystratlis}</ul>
             </details>
         </div>

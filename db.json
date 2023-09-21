@@ -71,14 +71,14 @@
     },
     {
       "name": "name",
-      "id": 0,
+      "id": 6,
       "MinNumberOfPlayers": 0,
       "MaxNumberOfPlayers": 0,
       "NumberOfDecks": 0,
       "AverageMinutes": 0,
       "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
       "image": "url",
-      "description": "",
+      "description": "desc",
       "rules": {
         "basic": [],
         "vegasstyle": []
@@ -92,8 +92,8 @@
       "NumberOfDecks": 1,
       "AverageMinutes": 1,
       "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
-      "image": "",
-      "description": "",
+      "image": "url",
+      "description": "desc",
       "rules": {
         "basic": [],
         "vegasstyle": []

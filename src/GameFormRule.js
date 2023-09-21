@@ -25,8 +25,8 @@ function GameFormRule({rules, type, handleChange, mid})
                 id={(userules ? "nwrulelbl" : "nwstrategylbl") + mid}>
                     {userules ? "Rule" : "Strategy"} #{mid}: </label>
             <input id={(userules ? "nwrule" : "nwstrategy") + mid} type="text"
-                placeholder={userules ? "Rule:" : "Strategy:"} value={rules[mid - 1].text}
-                onChange={handleChange} /><br />
+                style={{width: "900px", height: "100px"}} placeholder={userules ? "Rule:" : "Strategy:"}
+                value={rules[mid - 1].text} onChange={handleChange} /><br />
             {userules ? (
                 <>
                     <input required={true} type="radio" id={"basicrule" + mid} name={"kindofrule" + mid}

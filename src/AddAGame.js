@@ -142,6 +142,7 @@ function AddAGame({addGame})
         let objkey = "";
         const usenumber = ((event.target.id === "minnumplayers") || (event.target.id === "maxnumplayers") ||
             (event.target.id === "numdecks") || (event.target.id === "avnummins"));
+        const usedrop = (event.target.id === "deck-type");
         
         if (event.target.id === "nwname") objkey = "name";
         else if (event.target.id === "nwurl") objkey = "image";
@@ -150,6 +151,7 @@ function AddAGame({addGame})
         else if (event.target.id === "maxnumplayers") objkey = "MaxNumberOfPlayers";
         else if (event.target.id === "numdecks") objkey = "NumberOfDecks";
         else if (event.target.id === "avnummins") objkey = "AverageMinutes";
+        else if (event.target.id === "deck-type") objkey = "KindOfDeck";
         else
         {
             throw new Error("handleChange: NEED TO DO SOMETHING HERE TO HANDLE THE ID (" +
@@ -157,11 +159,12 @@ function AddAGame({addGame})
         }
         console.log("handleChange: objkey = " + objkey);
         console.log("handleChange: usenumber = " + usenumber);
+        console.log("handleChange: usedrop = " + usedrop);
 
         if (usenumber) nwgameobj[objkey] = Number(event.target.value);
         else
         {
-            if (doesInputHaveUnnecessaryCharacters({input: "" + event.target.value}))
+            if (!usedrop && doesInputHaveUnnecessaryCharacters({input: "" + event.target.value}))
             {
                 console.error("handleChange: input (" + event.target.value +
                     ") has illegal characters in it!");
@@ -195,14 +198,14 @@ function AddAGame({addGame})
     return (
         <form onSubmit={handleSubmit}>
             <label htmlFor="nwname" id="nwnamelbl">Game Name: </label>
-            <input required={true} id="nwname" type="text" placeholder="Game Name:" value={gameobj.name}
-                onChange={handleChange} /><br />
+            <input required={true} style={{width: "200px"}} id="nwname" type="text"
+                placeholder="Game Name:" value={gameobj.name} onChange={handleChange} /><br />
             <label htmlFor="nwurl" id="nwurllbl">Image URL: </label>
-            <input id="nwurl" type="text" placeholder="Image URL: " value={gameobj.image}
-                onChange={handleChange} /><br />
+            <input required={true} id="nwurl" style={{width: "400px"}} type="text"
+                placeholder="Image URL: " value={gameobj.image} onChange={handleChange} /><br />
             <label htmlFor="nwimgdesc" id="nwimgdesclbl">Image Description: </label>
-            <input id="nwimgdesc" type="text" placeholder="Image Description: " value={gameobj.description}
-                onChange={handleChange} /><br />
+            <input id="nwimgdesc" type="text" style={{width: "400px"}} placeholder="Image Description: "
+                value={gameobj.description} onChange={handleChange} /><br />
             <label htmlFor="minnumplayers" id="minnumplayerslbl">Minimum Number of Players: </label>
             <input required={true} id="minnumplayers" type="number" min="1" placeholder="0"
                  value={gameobj.MinNumberOfPlayers} onChange={handleChange} /><br />
@@ -215,6 +218,11 @@ function AddAGame({addGame})
             <label htmlFor="avnummins" id="avnumminslbl">Average Number of Minutes: </label>
             <input required={true} id="avnummins" type="number" min="0" step="any" placeholder="0"
                 value={gameobj.AverageMinutes} onChange={handleChange} /><br />
+            <label htmlFor="deck-type" id="deck-typelbl">Deck Type: </label>
+            <select id="deck-type" value={gameobj.KindOfDeck} onChange={handleChange}>
+                <option value="A normal 52 card deck that has the 4 suits and no jokers">Normal</option>
+                <option value="Special Deck that comes with the game">Special</option>
+            </select>
             <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
                 handleChange={doesInputHaveUnnecessaryCharacters} />
             <GameFormRules type="strategies" myrules={mystrats} setMyRules={setMyStrategies}

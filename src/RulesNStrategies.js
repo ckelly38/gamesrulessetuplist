@@ -105,6 +105,59 @@ function RulesNStrategies({games, gameobj})
                                 "because i + 2 will at most equal the rule length, but it was greater!");
                         }
                     }
+                    else if (rule.charAt(i + 1) === "s")
+                    {
+                        if (i + 5 < rule.length)
+                        {
+                            let temptagnm = "";
+                            if (rule.charAt(i + 2) === "t")
+                            {
+                                if (i + 6 < rule.length) temptagnm = rule.substring(i, i + 6);
+                                else temptagnm = rule.substring(i);
+                                //console.log("temptagnm = " + temptagnm);
+
+                                if (temptagnm === "/style")
+                                {
+                                    //console.log("render the style tag here at i = " + i + "!");
+                                    tagis.push(i);
+                                }
+                                //else;//do nothing
+                            }
+                            else if (rule.charAt(i + 2) === "p")
+                            {
+                                if (i + 5 < rule.length) temptagnm = rule.substring(i, i + 5);
+                                else temptagnm = rule.substring(i);
+                                //console.log("temptagnm = " + temptagnm);
+
+                                if (temptagnm === "/span")
+                                {
+                                    //console.log("render the span tag here at i = " + i + "!");
+                                    tagis.push(i);
+                                }
+                                //else;//do nothing
+                            }
+                            //else;//do nothing
+                        }
+                        else if (i + 5 === rule.length)
+                        {
+                            let temptagnm = "";
+                            if (rule.charAt(i + 2) === "p")
+                            {
+                                if (i + 5 < rule.length) temptagnm = rule.substring(i, i + 5);
+                                else temptagnm = rule.substring(i);
+                                //console.log("temptagnm = " + temptagnm);
+
+                                if (temptagnm === "/span")
+                                {
+                                    //console.log("render the span tag here at i = " + i + "!");
+                                    tagis.push(i);
+                                }
+                                //else;//do nothing
+                            }
+                            //else;//do nothing
+                        }
+                        //else;//do nothing
+                    }
                     //else;//do nothing
                 }
                 //else;//do nothing
@@ -156,6 +209,58 @@ function RulesNStrategies({games, gameobj})
             rule.charAt(tagsi + 3) === "b")
         {
             mytagtext = "/b";
+        }
+        else if (rule.charAt(tagsi + 1) === "s")
+        {
+            if (tagsi + 5 < rule.length)
+            {
+                let temptagnm = "";
+                if (rule.charAt(tagsi + 2) === "t")
+                {
+                    if (tagsi + 6 < rule.length) temptagnm = rule.substring(tagsi, tagsi + 6);
+                    else temptagnm = rule.substring(tagsi);
+                    //console.log("temptagnm = " + temptagnm);
+
+                    if (temptagnm === "/style")
+                    {
+                        mytagtext = "/style";
+                    }
+                    //else;//do nothing
+                }
+                else if (rule.charAt(tagsi + 2) === "p")
+                {
+                    if (tagsi + 5 < rule.length) temptagnm = rule.substring(tagsi, tagsi + 5);
+                    else temptagnm = rule.substring(tagsi);
+                    //console.log("temptagnm = " + temptagnm);
+
+                    if (temptagnm === "/span")
+                    {
+                        //console.log("render the span tag here at tagsi = " + tagsi + "!");
+                        mytagtext = "/span";
+                    }
+                    //else;//do nothing
+                }
+                //else;//do nothing
+            }
+            else if (tagsi + 5 === rule.length)
+            {
+                let temptagnm = "";
+                if (rule.charAt(tagsi + 2) === "p")
+                {
+                    if (tagsi + 5 < rule.length) temptagnm = rule.substring(tagsi, tagsi + 5);
+                    else temptagnm = rule.substring(tagsi);
+                    //console.log("temptagnm = " + temptagnm);
+
+                    if (temptagnm === "/span")
+                    {
+                        //console.log("render the span tag here at tagsi = " + tagsi + "!");
+                        mytagtext = "/span";
+                    }
+                    //else;//do nothing
+                }
+                //else;//do nothing
+            }
+            //else;//do nothing
         }
         else throw new Error("illegal tag found and used here in the tag text!");
         //console.log("mytagtext = " + mytagtext);
@@ -936,7 +1041,7 @@ function RulesNStrategies({games, gameobj})
     {
         //need some way of Bolding, Underlining, Italicizing, Changing the Font Color, Changing the Font,
         //adding a new line like both br and p
-        //How about /b /i /u /br /p
+        //How about /b /i /u /br /p /span
         //when the next character is r use ///b
         // /style font-family: name; font-size: #####px; color: name or hexvalue or rgb(r,g,b,a) /style
         //and pair them like html except for br is auto closed
@@ -1088,6 +1193,89 @@ function RulesNStrategies({games, gameobj})
 
                             rulemkup += tagstr + rule.charAt(i + 1) + ">";
                             i++;
+                        }
+                        //else;//do nothing
+                    }
+                    else if (rule.charAt(i + 1) === "s")
+                    {
+                        let temptagnm = "";
+                        if (i + 5 < rule.length)
+                        {
+                            if (rule.charAt(i + 2) === "t")
+                            {
+                                if (i + 6 < rule.length) temptagnm = rule.substring(i, i + 6);
+                                else temptagnm = rule.substring(i);
+                                //console.log("temptagnm = " + temptagnm);
+
+                                if (temptagnm === "/style")
+                                {
+                                    console.log("render the style tag here at i = " + i + "!");
+                                    if (isTagIndexOnListOfIndexes(rule, i, stis))
+                                    {
+                                        let pi = getTagPairIndex(rule, i, mytagis);
+                                        console.log("pi = " + pi);
+
+                                        if (pi < i || pi > rule.length - 1)
+                                        {
+                                            throw new Error("illegal value found and used for the pair " +
+                                                "index for the style tag found at index i = " + i + "!");
+                                        }
+                                        //else;//do nothing
+
+                                        rulemkup = rulemkup.substring(0, rulemkup.length - 1) +
+                                            " style=\"" + rule.substring(i + 6, pi).trimStart().trim() +
+                                            '"' + rulemkup.substring(rulemkup.length - 1);
+                                        i = pi + 5;
+                                    }
+                                    else
+                                    {
+                                        console.log("this tag was already rendered with its pair!");
+                                    }
+                                }
+                            }
+                            else if (rule.charAt(i + 2) === "p")
+                            {
+                                if (i + 5 < rule.length) temptagnm = rule.substring(i, i + 5);
+                                else temptagnm = rule.substring(i);
+                                //console.log("temptagnm = " + temptagnm);
+
+                                if (temptagnm === "/span")
+                                {
+                                    console.log("render the span tag here at i = " + i + "!");
+                                    let tagstr = "";
+                                    if (isTagIndexOnListOfIndexes(rule, i, stis)) tagstr = "" + otag;
+                                    else tagstr = "" + ctag;
+                                    console.log("tagstr = " + tagstr);
+
+                                    rulemkup += tagstr + "span>";
+                                    i += 4;
+                                }
+                                //else;//do nothing
+                            }
+                            //else;//do nothing
+                        }
+                        else if (i + 5 === rule.length)
+                        {
+                            if (rule.charAt(i + 2) === "p")
+                            {
+                                if (i + 5 < rule.length) temptagnm = rule.substring(i, i + 5);
+                                else temptagnm = rule.substring(i);
+                                //console.log("temptagnm = " + temptagnm);
+
+                                if (temptagnm === "/span")
+                                {
+                                    console.log("render the span tag here at i = " + i + "!");
+                                    let tagstr = "";
+                                    if (isTagIndexOnListOfIndexes(rule, i, stis)) tagstr = "" + otag;
+                                    else tagstr = "" + ctag;
+                                    console.log("tagstr = " + tagstr);
+
+                                    rulemkup += tagstr + "span>";
+                                    i += 4;
+                                }
+                                //else;//do nothing
+                            }
+                            //else;//do nothing
                         }
                         //else;//do nothing
                     }

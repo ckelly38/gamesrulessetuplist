@@ -24,13 +24,35 @@ function AddAGame({addGame})
         isvegas: false,
         text: ""
     }]);
+    const[mystrats, setMyStrategies] = useState([{
+        id: "strategy1",
+        text: ""
+    }]);
 
     function handleSubmit(event)
     {
         event.preventDefault();
         console.log("AddAGame handleSubmit: event.target = ", event.target);
+        console.log("AddAGame handleSubmit: gameobj = ", gameobj);
+        console.log("AddAGame handleSubmit: myrules = ", myrules);
+        console.log("AddAGame handleSubmit: mystrats = ", mystrats);
+
+        let nwgameobj = {...gameobj};
+        for (let n = 0; n < myrules.length; n++)
+        {
+            if (myrules[n].isbasic) nwgameobj.rules.basic.push("" + myrules[n].text);
+            else if (myrules[n].isvegas) nwgameobj.rules.vegasstyle.push("" + myrules[n].text);
+            else throw new Error("invalid type of rule found here!");
+        }
+        for (let n = 0; n < mystrats.length; n++)
+        {
+            nwgameobj.strategies.push(mystrats[n].text);
+        }
+        console.log("AddAGame handleSubmit: NEW nwgameobj = ", nwgameobj);
+        setGameObject(nwgameobj);
+
         //take the new game object and call addGame(gameobj);
-        addGame(gameobj);
+        addGame(nwgameobj);
     }
     
     function doesInputHaveUnnecessaryCharacters(inputobj)
@@ -193,7 +215,9 @@ function AddAGame({addGame})
             <label htmlFor="avnummins" id="avnumminslbl">Average Number of Minutes: </label>
             <input required={true} id="avnummins" type="number" min="0" step="any" placeholder="0"
                 value={gameobj.AverageMinutes} onChange={handleChange} /><br />
-            <GameFormRules myrules={myrules} setMyRules={setMyRules}
+            <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
+                handleChange={doesInputHaveUnnecessaryCharacters} />
+            <GameFormRules type="strategies" myrules={mystrats} setMyRules={setMyStrategies}
                 handleChange={doesInputHaveUnnecessaryCharacters} />
             <input type="submit" value="Submit" />
         </form>

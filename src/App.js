@@ -29,6 +29,7 @@ function App() {
 
   function addGame(nwgameobj)
   {
+    console.log("APP: addGame: nwgameobj = ", nwgameobj);
     if (nwgameobj === undefined || nwgameobj === null)
     {
       throw new Error("the game object that we want to add to the list of games must be defined and " +

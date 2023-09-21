@@ -84,6 +84,78 @@
         "vegasstyle": []
       },
       "strategies": []
+    },
+    {
+      "name": "name",
+      "MinNumberOfPlayers": 1,
+      "MaxNumberOfPlayers": 1,
+      "NumberOfDecks": 1,
+      "AverageMinutes": 1,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "image": "",
+      "description": "",
+      "rules": {
+        "basic": [],
+        "vegasstyle": []
+      },
+      "strategies": [],
+      "id": 2
+    },
+    {
+      "name": "test",
+      "MinNumberOfPlayers": 1,
+      "MaxNumberOfPlayers": 1,
+      "NumberOfDecks": 1,
+      "AverageMinutes": 1,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "image": "url",
+      "description": "desc",
+      "rules": {
+        "basic": [],
+        "vegasstyle": []
+      },
+      "strategies": [],
+      "id": 3
+    },
+    {
+      "name": "test submit",
+      "MinNumberOfPlayers": 1,
+      "MaxNumberOfPlayers": 1,
+      "NumberOfDecks": 1,
+      "AverageMinutes": 1,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "image": "url",
+      "description": "desc",
+      "rules": {
+        "basic": [],
+        "vegasstyle": []
+      },
+      "strategies": [],
+      "id": 4
+    },
+    {
+      "name": "other test submit",
+      "MinNumberOfPlayers": 1,
+      "MaxNumberOfPlayers": 1,
+      "NumberOfDecks": 1,
+      "AverageMinutes": 1,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "image": "url",
+      "description": "desc other",
+      "rules": {
+        "basic": [
+          "I rule"
+        ],
+        "vegasstyle": [
+          "I win"
+        ]
+      },
+      "strategies": [
+        "Others lose",
+        "I pay them to lose, so I can win",
+        "something else"
+      ],
+      "id": 5
     }
   ]
 }

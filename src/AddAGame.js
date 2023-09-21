@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import GameFormRules from "./GameFormRules";
 
-function AddAGame({addGame})
+function AddAGame({addGame, screener})
 {
     const [gameobj, setGameObject] = useState({
         "name": "name",
@@ -55,75 +55,6 @@ function AddAGame({addGame})
         addGame(nwgameobj);
     }
     
-    function doesInputHaveUnnecessaryCharacters(inputobj)
-    {
-        console.log("AddAGame screener: inputobj = ", inputobj);
-        if (inputobj.input === undefined || inputobj.input === null)
-        {
-            throw new Error("AddAGame screener: the input string was null and must be defined!");
-        }
-        //else;//do nothing
-        console.log("screener: inputobj.input.length = " + inputobj.input.length);
-
-        for (let i = 0; i < inputobj.input.length; i++)
-        {
-            //need to screen for "" before end of the string
-            //need to screen for < or > or / or =
-            console.log("inputobj.input.charAt(" + i + ") = " + inputobj.input.charAt(i));
-            if (inputobj.input.charAt(i) === '<')
-            {
-                console.log("may have found a tag start here at i = " + i + "!");
-                let errmsg = "";
-                for (let k = i + 1; k < inputobj.input.length; k++)
-                {
-                    if (inputobj.input.charAt(k) === '"')
-                    {
-                        errmsg = "AddAGame screener: illegal character " +
-                            "found. Found < then \" after it!";
-                    }
-                    else if (inputobj.input.charAt(k) === '>')
-                    {
-                        errmsg = "AddAGame screener: illegal character found. " +
-                            "Found < then > after it!";
-                    }
-                    else if (inputobj.input.charAt(k) === '=')
-                    {
-                        errmsg = "AddAGame screener: illegal character found. " +
-                            "Found < then = after it!";
-                    }
-                    else
-                    {
-                        if (k === i + 1)
-                        {
-                            if (inputobj.input.charAt(k) === '/')
-                            {
-                                errmsg = "AddAGame screener: illegal character found. " +
-                                    "Found < then / after it!";
-                            }
-                            else if (inputobj.input.charAt(k) === '>')
-                            {
-                                errmsg = "AddAGame screener: illegal character found. " +
-                                    "Found < then > after it!";
-                            }
-                            //else;//do nothing
-                        }
-                        //else;//do nothing
-                    }
-
-                    if (errmsg.length > 0)
-                    {
-                        console.error(errmsg);
-                        alert("Error: input = " + inputobj.input + " is illegal! " + errmsg);
-                        return true;
-                    }
-                }//end of k for loop
-            }
-            //else;//do nothing should be safe
-        }//end of i for loop
-        console.log("AddAGame screener: input object is safe!");
-        return false;
-    }
-
     function handleChange(event)
     {
         console.log("AddAGame handleChange: event.target = ", event.target);
@@ -164,7 +95,7 @@ function AddAGame({addGame})
         if (usenumber) nwgameobj[objkey] = Number(event.target.value);
         else
         {
-            if (!usedrop && doesInputHaveUnnecessaryCharacters({input: "" + event.target.value}))
+            if (!usedrop && screener({input: "" + event.target.value}))
             {
                 console.error("handleChange: input (" + event.target.value +
                     ") has illegal characters in it!");
@@ -224,9 +155,9 @@ function AddAGame({addGame})
                 <option value="Special Deck that comes with the game">Special</option>
             </select>
             <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
-                handleChange={doesInputHaveUnnecessaryCharacters} />
+                handleChange={screener} />
             <GameFormRules type="strategies" myrules={mystrats} setMyRules={setMyStrategies}
-                handleChange={doesInputHaveUnnecessaryCharacters} />
+                handleChange={screener} />
             <input type="submit" value="Submit" />
         </form>
     );

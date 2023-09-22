@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import GameFormRules from "./GameFormRules";
+import ListOfNumbers from "./ListOfNumbers";
 
 function AddAGame({addGame, screener})
 {
@@ -7,6 +8,7 @@ function AddAGame({addGame, screener})
         "name": "name",
         "MinNumberOfPlayers": 0,
         "MaxNumberOfPlayers": 0,
+        "NumberOfPlayersExcluding": [],
         "NumberOfDecks": 0,
         "AverageMinutes": 0,
         "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
@@ -28,6 +30,12 @@ function AddAGame({addGame, screener})
         id: "strategy1",
         text: ""
     }]);
+    //{
+    //    id: "pex1",
+    //    value: 0
+    //}
+    const[myplayerexclusions, setMyPlayerExclusion] = useState([]);
+    const[myotherdecktype, setMyOtherDeckType] = useState("");
 
     function handleSubmit(event)
     {
@@ -47,6 +55,10 @@ function AddAGame({addGame, screener})
         for (let n = 0; n < mystrats.length; n++)
         {
             nwgameobj.strategies.push(mystrats[n].text);
+        }
+        for (let n = 0; n < myplayerexclusions.length; n++)
+        {
+            nwgameobj.NumberOfPlayersExcluding.push(myplayerexclusions[n].value);
         }
         console.log("AddAGame handleSubmit: NEW nwgameobj = ", nwgameobj);
         setGameObject(nwgameobj);
@@ -83,6 +95,10 @@ function AddAGame({addGame, screener})
         else if (event.target.id === "numdecks") objkey = "NumberOfDecks";
         else if (event.target.id === "avnummins") objkey = "AverageMinutes";
         else if (event.target.id === "deck-type") objkey = "KindOfDeck";
+        else if (event.target.id === "other-deck-type" || event.target.id === "otherdecktype")
+        {
+            objkey="KindOfDeck";
+        }
         else
         {
             throw new Error("handleChange: NEED TO DO SOMETHING HERE TO HANDLE THE ID (" +
@@ -103,6 +119,11 @@ function AddAGame({addGame, screener})
                 return;
             }
             else nwgameobj[objkey] = event.target.value;
+            if (event.target.id === "other-deck-type" || event.target.id === "otherdecktype")
+            {
+                setMyOtherDeckType(event.target.value);
+            }
+            //else;//do nothing
         }
         console.log("handleChange: NEW nwgameobj = ", nwgameobj);
 
@@ -114,6 +135,7 @@ function AddAGame({addGame, screener})
     "id": 0,
     "MinNumberOfPlayers": 0,
     "MaxNumberOfPlayers": 0,
+    "NumberOfPlayersExcluding": [],
     "NumberOfDecks": 0,
     "AverageMinutes": 0,
     "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
@@ -143,6 +165,8 @@ function AddAGame({addGame, screener})
             <label htmlFor="maxnumplayers" id="maxnumplayerslbl">Maximum Number of Players: </label>
             <input required={true} id="maxnumplayers" type="number" min="1" placeholder="0"
                 value={gameobj.MaxNumberOfPlayers} onChange={handleChange} /><br />
+            <ListOfNumbers label="Excluding Number of Players" myexs={myplayerexclusions}
+                setMyExs={setMyPlayerExclusion} />
             <label htmlFor="numdecks" id="numdeckslbl">Number of Decks: </label>
             <input required={true} id="numdecks" type="number" min="0" placeholder="0"
                 value={gameobj.NumberOfDecks} onChange={handleChange} /><br />
@@ -153,7 +177,10 @@ function AddAGame({addGame, screener})
             <select id="deck-type" value={gameobj.KindOfDeck} onChange={handleChange}>
                 <option value="A normal 52 card deck that has the 4 suits and no jokers">Normal</option>
                 <option value="Special Deck that comes with the game">Special</option>
+                <option value={myotherdecktype}>Other</option>
             </select>
+            <input id="otherdecktype" type="text"  style={{width: "400px"}}
+                placeholder="other deck type..." value={myotherdecktype} onChange={handleChange} />
             <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
                 handleChange={screener} />
             <GameFormRules type="strategies" myrules={mystrats} setMyRules={setMyStrategies}

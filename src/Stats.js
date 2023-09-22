@@ -21,6 +21,7 @@ function Stats({games, gameobj})
     "id": 0,
     "MinNumberOfPlayers": 0,
     "MaxNumberOfPlayers": 0,
+    "NumberOfPlayersExcluding": [],
     "NumberOfDecks": 0,
     "AverageMinutes": 0,
     "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
@@ -32,6 +33,8 @@ function Stats({games, gameobj})
     },
     "strategies": []
     */
+
+    const myexps = gameobj.NumberOfPlayersExcluding;
 
     return (
         <div>
@@ -46,6 +49,10 @@ function Stats({games, gameobj})
                 <tr>
                     <td className="tabletextright"># of Players:</td>
                     <td>{gameobj.MinNumberOfPlayers} - {gameobj.MaxNumberOfPlayers} (inclusive)</td>
+                </tr>
+                <tr>
+                    <td className="tabletextright">Excluding:</td>
+                    <td>{myexps.length < 1 ? "None": myexps}</td>
                 </tr>
                 <tr>
                     <td className="tabletextright"># of Decks:</td><td>{gameobj.NumberOfDecks}</td>

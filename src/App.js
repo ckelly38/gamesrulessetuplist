@@ -26,7 +26,7 @@ function App() {
       {
           //need to screen for "" before end of the string
           //need to screen for < or > or / or =
-          console.log("inputobj.input.charAt(" + i + ") = " + inputobj.input.charAt(i));
+          //console.log("inputobj.input.charAt(" + i + ") = " + inputobj.input.charAt(i));
           if (inputobj.input.charAt(i) === '<')
           {
               console.log("may have found a tag start here at i = " + i + "!");
@@ -226,28 +226,36 @@ function App() {
           </>
         </Route>
         <Route exact path="/about">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+          <GameRulesStatsSetupRenderer games={games} type="STATS"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/about">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+          <GameRulesStatsSetupRenderer games={games} type="STATS"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route exact path="/stats">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+          <GameRulesStatsSetupRenderer games={games} type="STATS"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/stats">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" />
+          <GameRulesStatsSetupRenderer games={games} type="STATS"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route exact path="/setup">
-          <GameRulesStatsSetupRenderer games={games} type="SETUP" />
+          <GameRulesStatsSetupRenderer games={games} type="SETUP"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/setup">
-          <GameRulesStatsSetupRenderer games={games} type="SETUP" />
+          <GameRulesStatsSetupRenderer games={games} type="SETUP"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route exact path="/rules">
-          <GameRulesStatsSetupRenderer games={games} type="RULES" />
+          <GameRulesStatsSetupRenderer games={games} type="RULES"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/rules">
-          <GameRulesStatsSetupRenderer games={games} type="RULES" />
+          <GameRulesStatsSetupRenderer games={games} type="RULES"
+            screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="*/*">
           <>

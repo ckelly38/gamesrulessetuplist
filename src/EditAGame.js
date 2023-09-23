@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
+import "./App.css";
 
 function EditAGame(props)
 {
     return (
         <div>
-            <div>
+            <div style={{fontSize: "18px"}}>
                 <select id="fonts-drop-down">{null}</select>
-                <input type="number" step="0.25" id="fontsize" placeholder="font size" />
-                <button id="bold" className="">B</button>
+                <input type="number" step="0.25" style={{width: "50px"}} id="fontsize"
+                    placeholder="size" />
+                <button id="bold" className="styleused">B</button>
                 <button id="italics" className="">I</button>
                 <button id="underline" className="">U</button>
                 <select id="font-color">{null}</select>

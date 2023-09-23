@@ -5,7 +5,7 @@ import Stats from "./Stats";
 import GameSetup from "./GameSetup";
 import RulesNStrategies from "./RulesNStrategies";
 
-function GameRulesStatsSetupRenderer({games, type})
+function GameRulesStatsSetupRenderer({games, type, screener})
 {
     const params = useParams();
     console.log("params = ", params);
@@ -130,7 +130,7 @@ function GameRulesStatsSetupRenderer({games, type})
                 else if (boolsobj.userules)
                 {
                     return (
-                        <RulesNStrategies key={game.id} games={games} gameobj={game} />
+                        <RulesNStrategies key={game.id} games={games} gameobj={game} screener={screener} />
                     );
                 }
                 else throw new Error("illegal key found and used in the bools object");
@@ -152,7 +152,7 @@ function GameRulesStatsSetupRenderer({games, type})
                         (boolsobj.usestats ? (
                             <Stats games={games} gameobj={mygameobj} />
                         ) : (boolsobj.userules ? (
-                            <RulesNStrategies games={games} gameobj={mygameobj} />
+                            <RulesNStrategies games={games} gameobj={mygameobj} screener={screener} />
                         ) : null))
                     )}
                 </>

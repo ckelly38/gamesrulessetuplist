@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './App.css';
+import EditAGame from "./EditAGame";
 
-function RulesNStrategies({games, gameobj})
+function RulesNStrategies({games, gameobj, screener})
 {
     if (games === undefined || games === null || games.length < 1)
     {
@@ -10,6 +11,16 @@ function RulesNStrategies({games, gameobj})
     //else;//do nothing
 
     console.log("gameobj = ", gameobj);
+    let myinitbasicrules = gameobj.rules.basic.map((rule) => "" + rule);
+    let myinitvegasrules = gameobj.rules.vegasstyle.map((rule) => "" + rule);
+    let myinitstrats = gameobj.strategies.map((strat) => "" + strat);
+
+    const [basicrules, setBasicRules] = useState(myinitbasicrules);
+    const [vegasrules, setVegasRules] = useState(myinitvegasrules);
+    const [strats, setStrats] = useState(myinitstrats);
+    const [editbasic, setEditBasic] = useState(false);
+    const [editvegas, setEditVegas] = useState(false);
+    const [editstrats, setEditStrats] = useState(false);
     
     //# of Players: {min}-{max} (inclusive)
     //Average Number of Minutes: {time}
@@ -492,6 +503,7 @@ function RulesNStrategies({games, gameobj})
         return getStartingOrEndingTagIndexes(rule, alltagis, false);
     }
 
+
     function getTagPairIndex(rule, tagindx, alltagis = getAllTagIndexes(rule))
     {
         const stis = getStartingTagIndexs(rule, alltagis);
@@ -605,6 +617,7 @@ function RulesNStrategies({games, gameobj})
             return pi;
         }
     }
+
 
     function areAllTagsStartingOrEndingTags(rule, usestart, alltagis = getAllTagIndexes(rule))
     {
@@ -1063,6 +1076,15 @@ function RulesNStrategies({games, gameobj})
         else if (rule.length < 1) return "";
         //else;//do nothing
 
+        if (screener({input: "" + rule}))
+        {
+            //revert to orig
+            console.error("No HTML!");
+            alert("HTML forbidden here!");
+            throw new Error("No HTML allowed!");
+        }
+        //else;//do nothing safe
+
         //we can see anyone above, but the style must be after one of them.
         let mytagis = getAllTagIndexes(rule);
         console.log("genmarkup: mytagis = ", mytagis);
@@ -1080,6 +1102,12 @@ function RulesNStrategies({games, gameobj})
         {
             let pairi = getTagPairIndex(rule, mytagis[n], mytagis);
             console.log("genmarkup call 1: pair tag index for indx (" + mytagis[n] + ") = " + pairi);
+
+            if (pairi < 0 || (pairi > rule.length - 1 && rule.length > 0) || rule.length === 0)
+            {
+                throw new Error("the tag found at index " + mytagis[n] + " has an invalid pair index!");
+            }
+            //else;//do nothing
             
             let opairi = getTagPairIndex(rule, pairi, mytagis);
             console.log("genmarkup call 2: pair tag index for indx (" + mytagis[n] + ") = " + pairi);
@@ -1297,32 +1325,229 @@ function RulesNStrategies({games, gameobj})
         return {__html: "" + content};
     }
 
+    function generateAndCreateMarkUpForDisplayFrom(rule, throwerrors = true)
+    {
+        if (throwerrors) return createMarkUp(generateMarkUpForDisplayFromRule(rule));
+        else
+        {
+            try{
+                return createMarkUp(generateMarkUpForDisplayFromRule(rule));
+            }
+            catch(err)
+            {
+                console.error(err);
+                debugger;
+                let errindxstr = "";
+                if (err.message.indexOf("the tag found at index ") === 0)
+                {
+                    let myopartmsgi = err.message.indexOf(" has an invalid pair index!");
+                    let mynumstr = err.message.substring(23, myopartmsgi);
+                    const mynumfromstr = Number(mynumstr);
+                    for (let n = 0; n < mynumfromstr * 1.55; n++) errindxstr += "&nbsp;";
+                    errindxstr += "^<br />";
+                }
+                else if (err.message === "No HTML allowed!")
+                {
+                    return createMarkUp('<div style="color: red">Attempted to enter HTML and ' +
+                        'it is not allowed!</div>');
+                }
+                //else;//do nothing
+                return createMarkUp('<div style="color: red">' + rule + "<br /><span>" + errindxstr +
+                    "</span>" + err + "</div>");
+            }
+            //return null;
+        }
+    }
+
+
+    function genLisForBasicOrVegasRulesOrStats(userules, usebasic, useedit, arr)
+    {
+        let mytypestr = "";
+        if (userules)
+        {
+            if (usebasic) mytypestr = "basic";
+            else mytypestr = "vegas";
+        }
+        else mytypestr = "strats";
+
+        let mylis = null;
+        if (useedit)
+        {
+            mylis = arr.map((rule, index) =>
+                <li key={mytypestr + gameobj.name + index}
+                    dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
+        }
+        else
+        {
+            mylis = arr.map((rule, index) =>
+                <ul key={"edit" + mytypestr + gameobj.name + index}>
+                    <li key={"current" + mytypestr + gameobj.name + index}>
+                        <textarea key={"current" + mytypestr + "rawtext" + gameobj.name + index}
+                            id={"current" + mytypestr + "rawtext" + gameobj.name + index}
+                            value={rule} style={{width: "1100px"}}
+                            onChange={(event) => handleEditChange(event, userules, usebasic)} />
+                    </li>
+                    <li key={mytypestr + gameobj.name + index}
+                        dangerouslySetInnerHTML={generateAndCreateMarkUpForDisplayFrom(rule, false)} />
+                </ul>
+            );
+        }
+        return mylis;
+    }
+
+    function changeEditingMode(event, userules, usebasic)
+    {
+        console.log("event.target = ", event.target);
+        console.log("event.target.id = " + event.target.id);
+        console.log("event.target.value = ", event.target.value);
+        console.log("userules = " + userules);
+        console.log("usebasic = " + usebasic);
+
+        if (userules)
+        {
+            if (usebasic) setEditBasic(!editbasic);
+            else setEditVegas(!editvegas);
+        }
+        else setEditStrats(!editstrats);
+
+        //state will still hold the previous state here because of the way I did it
+        //I can figure out which one I changed then useing the other values
+        //I can figure out if they changed to all being false
+
+        let notediting = false;
+        if (!editvegas && !editstrats && editbasic && usebasic && userules)
+        {
+            //one case where all are false
+            notediting = true;
+        }
+        else if (editvegas && !editstrats && !editbasic && !usebasic && userules)
+        {
+            //another case where all are false
+            notediting = true;
+        }
+        else if (!editvegas && editstrats && !editbasic && !userules)
+        {
+            //another case where all are false
+            notediting = true;
+        }
+        //else;//do nothing at least one of them is true
+        console.log("notediting = " + notediting);
+
+        if (notediting)
+        {
+            //now save all of the changes to state...
+            //need to update the games object
+            //also need to call setGames method
+            //need access to it...
+            //need to rebuild the games object before calling setGames
+            //need to get all of the updates and then overrite state with the new rules...
+            //need a way to add rules in editing mode...
+            throw new Error("NOT DONE YET 9-23-2023 4:15 AM!");
+        }
+        //else;//do nothing
+    }
+
+    function handleEditChange(event, userules, usebasic)
+    {
+        console.log("event.target = ", event.target);
+        console.log("event.target.id = " + event.target.id);
+        console.log("event.target.value = ", event.target.value);
+        console.log("userules = " + userules);
+        console.log("usebasic = " + usebasic);
+
+        let pidstrs = ["currentbasicrawtext", "currentvegasrawtext", "currentstratsrawtext"];
+        let myidindx = -1;
+        for (let n = 0; n < pidstrs.length; n++)
+        {
+            if (event.target.id.indexOf(pidstrs[n]) === 0)
+            {
+                myidindx = n;
+                break;
+            }
+            //else;//do nothing
+        }//end of n for loop
+        console.log("myidindx = " + myidindx);
+
+        if (myidindx < 0 || myidindx > pidstrs.length - 1)
+        {
+            throw new Error("illegal index found and used for the partial id string index!");
+        }
+        //else;//do nothing
+
+        const fpidstr = pidstrs[myidindx] + gameobj.name;
+        console.log("fpidstr = " + fpidstr);
+
+        const midstr = event.target.id.substring(fpidstr.length);
+        console.log("midstr = " + midstr);
+
+        if (midstr === undefined || midstr === null || isNaN(midstr))
+        {
+            throw new Error("illegal id found and used for the edit text rule object!");
+        }
+        //else;//do nothing
+
+        const mynumid = Number(midstr);
+        let mystatearr = null;
+        if (userules)
+        {
+            if (usebasic) mystatearr = basicrules;
+            else mystatearr = vegasrules;
+        }
+        else mystatearr = strats;
+
+        if (screener({input: event.target.value}))
+        {
+            console.error("attempted to enter invalid HTML input stopped!");
+            console.log("changes aborted!");
+            return;
+        }
+        //else;//do nothing safe to proceed
+
+        let mynwrules = mystatearr.map((rule, index) => {
+            if (index === mynumid) return event.target.value;
+            else return rule;
+        });
+        
+        if (userules)
+        {
+            if (usebasic) setBasicRules(mynwrules);
+            else setVegasRules(mynwrules);
+        }
+        else setStrats(mynwrules);
+    }
+
     //when clicking the edit button we show a list of lis for each list of text areas or input texts
     //these let you directly provide or view the encoding
 
-    let mybasicrulelis = gameobj.rules.basic.map((rule, index) =>
-        <li key={"basic" + gameobj.name + index}
-        dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
-    let myvegasrulelis = gameobj.rules.vegasstyle.map((rule, index) =>
-        <li key={"vegas" + gameobj.name + index}
-        dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
-    let mystratlis = gameobj.strategies.map((rule, index) =>
-        <li key={"strats" + gameobj.name + index}
-        dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
+    let mybasicrulelis = genLisForBasicOrVegasRulesOrStats(true, true, false, gameobj.rules.basic);
+    let myvegasrulelis = genLisForBasicOrVegasRulesOrStats(true, false, false, gameobj.rules.vegasstyle);
+    let mystratlis = genLisForBasicOrVegasRulesOrStats(false, false, false, gameobj.strategies);
+
+    console.log("basicrules = ", basicrules);
+    console.log("myinitbasicrules = ", myinitbasicrules);
     
+    let mybasicruleeditlis = genLisForBasicOrVegasRulesOrStats(true, true, true, basicrules);
+    let myvegasruleeditlis = genLisForBasicOrVegasRulesOrStats(true, false, true, vegasrules);
+    let mystratsruleeditlis = genLisForBasicOrVegasRulesOrStats(false, false, true, strats);
+
     return (
         <div>
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
             <details>
                 <summary>Rules:</summary>
-                <p>Basic:<button>Edit Basic Rules</button></p>
-                <ul>{mybasicrulelis}</ul>
-                <p>Vegas Style:<button>Edit Vegas Style Rules</button></p>
-                <ul>{myvegasrulelis}</ul>
+                <p>Basic:<button
+                    onClick={(event) => changeEditingMode(event, true, true)}>Edit Basic Rules</button></p>
+                <ul>{editbasic ? mybasicruleeditlis : mybasicrulelis}</ul>
+                <p>Vegas Style:<button
+                    onClick={(event) => changeEditingMode(event, true, false)}>
+                        Edit Vegas Style Rules</button></p>
+                <ul>{editvegas ? myvegasruleeditlis : myvegasrulelis}</ul>
             </details>
             <details>
-                <summary>Strategies:<button>Edit Strategies</button></summary>
-                <ul>{mystratlis}</ul>
+                <summary>Strategies:<button
+                    onClick={(event) => changeEditingMode(event, false, false)}>Edit Strategies</button>
+                </summary>
+                <ul>{editstrats ? mystratsruleeditlis : mystratlis}</ul>
             </details>
         </div>
     );

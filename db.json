@@ -18,7 +18,7 @@
           "You must follow suit, and play it if you have it.",
           "/b/uIf you cannot follow suit/u/b: if you have the /b/uQueen of Spades/u/b in your hand: you must drop it; otherwise you can play any card/p/p",
           "To take the /utrick/u and the /ulead/u (if you did not already have it), you must play a card in suit, in your hand, that ranks above all of the other cards played in suit.",
-          "After taking a /utrick/u and the lead, you get to pick the next card and suit, from your hand, to lead with.",
+          "After taking a /utrick/u and the /ulead/u, you get to pick the next card and suit, from your hand, to /ulead/u with.",
           "A /utrick/u is when all players have each played one card face up in the middle of the table for all to see.",
           "/b/uThe First Trick NOTE/u/b: When 52 is not evenly divisible by the number of players (52 divided by 3 = 17 remainder 1), the extra card(s) are face down and will be awarded to the person who took the first trick. Only they can see these.",
           "Only the last played trick is allowed to be shown to all players if one requests it minus any extra cards or other tricks./p/p",

@@ -308,35 +308,35 @@ function App() {
           </>
         </Route>
         <Route exact path="/about">
-          <GameRulesStatsSetupRenderer games={games} type="STATS"
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/about">
-          <GameRulesStatsSetupRenderer games={games} type="STATS"
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route exact path="/stats">
-          <GameRulesStatsSetupRenderer games={games} type="STATS"
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/stats">
-          <GameRulesStatsSetupRenderer games={games} type="STATS"
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route exact path="/setup">
-          <GameRulesStatsSetupRenderer games={games} type="SETUP"
+          <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/setup">
-          <GameRulesStatsSetupRenderer games={games} type="SETUP"
+          <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route exact path="/rules">
-          <GameRulesStatsSetupRenderer games={games} type="RULES"
+          <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="/:id/rules">
-          <GameRulesStatsSetupRenderer games={games} type="RULES"
+          <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame}
             screener={doesInputHaveUnnecessaryCharacters} />
         </Route>
         <Route path="*/*">

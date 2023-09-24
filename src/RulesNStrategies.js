@@ -3,7 +3,7 @@ import './App.css';
 import EditAGame from "./EditAGame";
 import TagLevelsClass from "./TagLevelsClass";
 
-function RulesNStrategies({games, gameobj, screener})
+function RulesNStrategies({games, gameobj, screener, updateGame})
 {
     if (games === undefined || games === null || games.length < 1)
     {
@@ -458,6 +458,8 @@ function RulesNStrategies({games, gameobj, screener})
             //need to rebuild the games object before calling setGames
             //need to get all of the updates and then overrite state with the new rules...
             //need a way to add rules in editing mode...
+            
+            //updateGame(nwgameobj);
             debugger;
             throw new Error("CHANGE-EDIT-MODE: NOT DONE YET 9-23-2023 4:15 AM!");
         }

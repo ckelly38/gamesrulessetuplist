@@ -1374,12 +1374,6 @@ function RulesNStrategies({games, gameobj, screener})
         if (useedit)
         {
             mylis = arr.map((rule, index) =>
-                <li key={mytypestr + gameobj.name + index}
-                    dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
-        }
-        else
-        {
-            mylis = arr.map((rule, index) =>
                 <ul key={"edit" + mytypestr + gameobj.name + index}>
                     <li key={"current" + mytypestr + gameobj.name + index}>
                         <textarea key={"current" + mytypestr + "rawtext" + gameobj.name + index}
@@ -1392,16 +1386,25 @@ function RulesNStrategies({games, gameobj, screener})
                 </ul>
             );
         }
+        else
+        {
+            mylis = arr.map((rule, index) =>
+                <li key={mytypestr + gameobj.name + index}
+                    dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
+        }
         return mylis;
     }
 
     function changeEditingMode(event, userules, usebasic)
     {
-        console.log("event.target = ", event.target);
-        console.log("event.target.id = " + event.target.id);
-        console.log("event.target.value = ", event.target.value);
-        console.log("userules = " + userules);
-        console.log("usebasic = " + usebasic);
+        console.log("CHANGE-EDIT-MODE: event.target = ", event.target);
+        console.log("CHANGE-EDIT-MODE: event.target.id = " + event.target.id);
+        console.log("CHANGE-EDIT-MODE: event.target.value = ", event.target.value);
+        console.log("CHANGE-EDIT-MODE: userules = " + userules);
+        console.log("CHANGE-EDIT-MODE: usebasic = " + usebasic);
+        console.log("CHANGE-EDIT-MODE: OLD editbasic = " + editbasic);
+        console.log("CHANGE-EDIT-MODE: OLD editvegas = " + editvegas);
+        console.log("CHANGE-EDIT-MODE: OLD editstrats = " + editstrats);
 
         if (userules)
         {
@@ -1409,6 +1412,10 @@ function RulesNStrategies({games, gameobj, screener})
             else setEditVegas(!editvegas);
         }
         else setEditStrats(!editstrats);
+
+        console.log("CHANGE-EDIT-MODE: NEW editbasic = " + editbasic);
+        console.log("CHANGE-EDIT-MODE: NEW editvegas = " + editvegas);
+        console.log("CHANGE-EDIT-MODE: NEW editstrats = " + editstrats);
 
         //state will still hold the previous state here because of the way I did it
         //I can figure out which one I changed then useing the other values
@@ -1431,7 +1438,7 @@ function RulesNStrategies({games, gameobj, screener})
             notediting = true;
         }
         //else;//do nothing at least one of them is true
-        console.log("notediting = " + notediting);
+        console.log("CHANGE-EDIT-MODE: notediting = " + notediting);
 
         if (notediting)
         {
@@ -1442,7 +1449,7 @@ function RulesNStrategies({games, gameobj, screener})
             //need to rebuild the games object before calling setGames
             //need to get all of the updates and then overrite state with the new rules...
             //need a way to add rules in editing mode...
-            throw new Error("NOT DONE YET 9-23-2023 4:15 AM!");
+            throw new Error("CHANGE-EDIT-MODE: NOT DONE YET 9-23-2023 4:15 AM!");
         }
         //else;//do nothing
     }
@@ -1529,6 +1536,10 @@ function RulesNStrategies({games, gameobj, screener})
     let mybasicruleeditlis = genLisForBasicOrVegasRulesOrStats(true, true, true, basicrules);
     let myvegasruleeditlis = genLisForBasicOrVegasRulesOrStats(true, false, true, vegasrules);
     let mystratsruleeditlis = genLisForBasicOrVegasRulesOrStats(false, false, true, strats);
+
+    console.log("EDIT-MODE: editbasic = " + editbasic);
+    console.log("EDIT-MODE: editvegas = " + editvegas);
+    console.log("EDIT-MODE: editstrats = " + editstrats);
 
     return (
         <div>

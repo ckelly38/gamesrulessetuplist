@@ -409,8 +409,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     function changeEditingMode(event, userules, usebasic)
     {
         console.log("CHANGE-EDIT-MODE: event.target = ", event.target);
-        console.log("CHANGE-EDIT-MODE: event.target.id = " + event.target.id);
-        console.log("CHANGE-EDIT-MODE: event.target.value = ", event.target.value);
         console.log("CHANGE-EDIT-MODE: userules = " + userules);
         console.log("CHANGE-EDIT-MODE: usebasic = " + usebasic);
         console.log("CHANGE-EDIT-MODE: OLD editbasic = " + editbasic);
@@ -523,6 +521,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }
             console.log("CHANGE-EDIT-MODE: FINAL nwgameobj.strategies = ", nwgameobj.strategies);
             console.log("FINAL nwgameobj = ", nwgameobj);
+            debugger;
             
             updateGame(nwgameobj);
         }
@@ -598,6 +597,29 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         else setStrats(mynwrules);
     }
 
+    function handleAddRuleClick(event, userules, usebasic)
+    {
+        console.log("event.target = ", event.target);
+        console.log("userules = " + userules);
+        console.log("usebasic = " + usebasic);
+
+        let myrulesarr = null;
+        if (userules)
+        {
+            if (usebasic) myrulesarr = basicrules;
+            else myrulesarr = vegasrules;
+        }
+        else myrulesarr = strats;
+
+        let mynwrules = [...myrulesarr, ""];
+        if (userules)
+        {
+            if (usebasic) setBasicRules(mynwrules);
+            else setVegasRules(mynwrules);
+        }
+        else setStrats(mynwrules);
+    }
+
     function cancelChangesClick(event, userules, usebasic)
     {
         console.log("CANCEL-CHANGES: event.target = ", event.target);
@@ -605,6 +627,9 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("CANCEL-CHANGES: event.target.value = ", event.target.value);
         console.log("CANCEL-CHANGES: userules = " + userules);
         console.log("CANCEL-CHANGES: usebasic = " + usebasic);
+        console.log("CANCEL-CHANGES: OLD basicrules = ", basicrules);
+        console.log("CANCEL-CHANGES: OLD vegasrules = ", vegasrules);
+        console.log("CANCEL-CHANGES: OLD strats = ", strats);
 
         //using the booleans we can determine which one it is and reset it
         let myarr = null;
@@ -616,6 +641,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         else myarr = gameobj.strategies;
 
         const mynwrls = myarr.map((rule) => "" + rule);
+        console.log("CANCEL-CHANGES: mynwrls = ", mynwrls);
         
         if (userules)
         {
@@ -627,6 +653,11 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("CANCEL-CHANGES: changes cleared!");
 
         changeEditingMode(event, userules, usebasic);
+        //BUG FOUND 9-24-2023
+        //(STEPS TO REPRODUCE: ADD A RULE, CANCEL AND ON CANCEL IMMEDIATELY EXIT EDITING MODE)
+        //(IT KEPT THE OLD STATE, BECAUSE THE COMPONENT DID NOT RE-RENDER YET DUE TO CALL, OLD STATE USED)
+        //NEEDS THE NEW STATE OF THE RULES
+        //BUT IT CAN ALSO BE CALLED BY SOMETHING ELSE THAT WOULD NOT REQUIRE THAT...
     }
 
     //when clicking the edit button we show a list of lis for each list of text areas or input texts
@@ -649,6 +680,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
 
     const iseditingmode = (editbasic || editvegas || editstrats);
 
+    console.log("EDIT-MODE: " + iseditingmode);
+
     return (
         <div>
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
@@ -662,7 +695,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                         Cancel Changes For Basic Rules</button> : null}
                 </p>
                 <ul>{editbasic ? mybasicruleeditlis : mybasicrulelis}</ul>
-                {editbasic ? <button onClick={null}>Add Basic Rule</button> : null}
+                {editbasic ? <button onClick={(event) => handleAddRuleClick(event, true, true)}>
+                    Add Basic Rule</button> : null}
                 <p>Vegas Style:<button
                     onClick={(event) => changeEditingMode(event, true, false)}>
                         {editvegas ? "Save" : "Edit"} Vegas Style Rules</button>
@@ -670,7 +704,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                         Cancel Changes For Vegas Rules</button> : null}
                 </p>
                 <ul>{editvegas ? myvegasruleeditlis : myvegasrulelis}</ul>
-                {editvegas ? <button onClick={null}>Add Vegas Rule</button> : null}
+                {editvegas ? <button onClick={(event) => handleAddRuleClick(event, true, false)}>
+                    Add Vegas Rule</button> : null}
             </details>
             <details>
                 <summary>Strategies:<button
@@ -680,7 +715,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                         Cancel Changes For Strategies</button> : null}
                 </summary>
                 <ul>{editstrats ? mystratsruleeditlis : mystratlis}</ul>
-                {editstrats ? <button onClick={null}>Add Strategy</button> : null}
+                {editstrats ? <button onClick={(event) => handleAddRuleClick(event, false, false)}>
+                    Add Strategy</button> : null}
             </details>
         </div>
     );

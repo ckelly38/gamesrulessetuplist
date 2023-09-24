@@ -174,31 +174,101 @@ function App() {
   console.log("loaded = " + loaded);
   console.log("games = ", games);
 
-  function addGame(nwgameobj)
+  function varMustBeDefinedBool(myvar, myvarname = "myvar")
+  {
+    if (myvar === undefined || myvar === null)
+    {
+      throw new Error("" + myvarname + " must be a defined boolean variable, but it was not defined!");
+    }
+    else
+    {
+      if (myvar === true || myvar === false) return true;
+      else
+      {
+        throw new Error("" + myvarname + " must be a defined boolean variable, but it was not a boolean!");
+      }
+    }
+  }
+
+  function updateOrAddOrDeleteGame(nwgameobj, useupdate, usedelgame)
   {
     console.log("APP: addGame: nwgameobj = ", nwgameobj);
+    console.log("APP: addGame: useupdate = " + useupdate);
+    console.log("APP: addGame: usedelgame = " + usedelgame);
     if (nwgameobj === undefined || nwgameobj === null)
     {
       throw new Error("the game object that we want to add to the list of games must be defined and " +
         "not null!");
     }
     //else;//do nothing
+
+    varMustBeDefinedBool(useupdate, "useupdate");
+    varMustBeDefinedBool(usedelgame, "usedelgame");
+
+    if (useupdate === usedelgame)
+    {
+      if (useupdate)
+      {
+        throw new Error("both useupdate and usedelgame cannot be true because we cannot both update " +
+          "and delete the same game!");
+      }
+      //else;//do nothing valid adding the game
+    }
+    //else;//do nothing valid must be either updating or deleting the game
     setIsLoaded(false);
+
+    let mthdstr = "";
+    if (usedelgame) mthdstr = "DELETE";
+    else
+    {
+      if (useupdate) mthdstr = "PATCH";
+      else mthdstr = "POST";
+    }
+    console.log("APP: addGame: mthdstr = " + mthdstr);
+
+    let myidstr = "";
+    if (usedelgame || useupdate) myidstr = "" + nwgameobj.id;
+    //else;//do nothing
+    console.log("APP: addGame: myidstr = " + myidstr);
     
     let configobj = {
-      method: "POST",
+      method: mthdstr,
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
       body: JSON.stringify(nwgameobj)
     };
-    fetch("http://localhost:3000/games", configobj).then((response) => response.json())
+    fetch("http://localhost:3000/games/" + myidstr, configobj).then((response) => response.json())
     .then((response) => {
-      console.log("response = ", response);
+      console.log("APP: addGame: response = ", response);
+      console.log("APP: addGame: useupdate = " + useupdate);
+      console.log("APP: addGame: usedelgame = " + usedelgame);
       const mynwgameobj = response;
-      let nwgames = [...games];
-      nwgames.push(mynwgameobj);
+      let nwgames = null;
+      if (usedelgame)
+      {
+        //update the state here, but take the idstr and find it then filter it out keep the rest
+        nwgames = games.filter((game) => (game.id !== Number(myidstr)));
+      }
+      else
+      {
+        if (useupdate)
+        {
+          //updating a specific game, like deleting a game:
+          //take the id and find it, then change it, and return updated list with map, then set it
+          nwgames = games.map((game) => {
+            if (game.id === Number(myidstr)) return nwgameobj;
+            else return game;
+          });
+        }
+        else
+        {
+          //adding a new game
+          nwgames = [...games];
+          nwgames.push(mynwgameobj);
+        }
+      }
       setGames(nwgames);
       setIsLoaded(true);
     }).catch((err) => {
@@ -206,6 +276,18 @@ function App() {
       console.error(err);
       alert("Error: there was a problem puting the new game on the server!");
     });
+  }
+  function addGame(nwgameobj)
+  {
+    updateOrAddOrDeleteGame(nwgameobj, false, false);
+  }
+  function updateGame(nwgameobj)
+  {
+    updateOrAddOrDeleteGame(nwgameobj, true, false);
+  }
+  function deleteGame(nwgameobj)
+  {
+    updateOrAddOrDeleteGame(nwgameobj, false, true);
   }
 
   if (loaded)

@@ -12,6 +12,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     //else;//do nothing
 
     console.log("gameobj = ", gameobj);
+    
     let myinitbasicrules = gameobj.rules.basic.map((rule) => "" + rule);
     let myinitvegasrules = gameobj.rules.vegasstyle.map((rule) => "" + rule);
     let myinitstrats = gameobj.strategies.map((strat) => "" + strat);
@@ -23,6 +24,10 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     const [editbasic, setEditBasic] = useState(false);
     const [editvegas, setEditVegas] = useState(false);
     const [editstrats, setEditStrats] = useState(false);
+
+    //const [selectedtext, setSelectedText] = useState("" + window.getSelection().toString());
+
+    const iseditingmode = (editbasic || editvegas || editstrats);
     
 
     //# of Players: {min}-{max} (inclusive)
@@ -47,6 +52,25 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     },
     "strategies": []
     */
+
+    //useEffect(() => {
+    //    window.addEventListener("select", handleSelect);
+    //
+    //    setSelectedText("" + window.getSelection().toString());
+    //});
+
+    //function handleSelect(event)
+    //{
+    //    console.log(window.getSelection().toString());
+    //    alert("some text was selected!");
+    //}
+    
+    //function componentWillUnmount()
+    //{
+    //    console.log("cleaing up!");
+    //    alert("inside cleanup!");
+    //    window.removeEventListener("select", handleSelect);
+    //}
 
     function generateMarkUpForDisplayFromRule(rule)
     {
@@ -660,11 +684,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("CANCEL-CHANGES: changes cleared!");
 
         changeEditingMode(event, userules, usebasic, mynwrls);
-        //BUG FOUND 9-24-2023 4:30 AM
-        //(STEPS TO REPRODUCE: ADD A RULE, CANCEL AND ON CANCEL IMMEDIATELY EXIT EDITING MODE)
-        //(IT KEPT THE OLD STATE, BECAUSE THE COMPONENT DID NOT RE-RENDER YET DUE TO CALL, OLD STATE USED)
-        //NEEDS THE NEW STATE OF THE RULES
-        //BUT IT CAN ALSO BE CALLED BY SOMETHING ELSE THAT WOULD NOT REQUIRE THAT...
     }
 
     //when clicking the edit button we show a list of lis for each list of text areas or input texts
@@ -684,15 +703,12 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     console.log("EDIT-MODE: editbasic = " + editbasic);
     console.log("EDIT-MODE: editvegas = " + editvegas);
     console.log("EDIT-MODE: editstrats = " + editstrats);
-
-    const iseditingmode = (editbasic || editvegas || editstrats);
-
     console.log("EDIT-MODE: " + iseditingmode);
 
     return (
         <div>
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
-            <h3>{iseditingmode ? "Editing" : "Viewing"} Mode</h3>
+            <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? <EditAGame /> : null}</h3>
             <details>
                 <summary>Rules:</summary>
                 <p>Basic:<button

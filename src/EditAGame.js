@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-function EditAGame(props)
+function EditAGame({mid, strats, basicrules, vegasrules})
 {
+    if (mid === undefined || mid === null)
+    {
+        throw new Error("mid must be defined!");
+    }
+    //else;//do nothing
+
     const [mycolor, setMyColor] = useState("#000000");
 
     function listFonts()
@@ -11,9 +17,28 @@ function EditAGame(props)
         //https://stackoverflow.com/questions/3368837/list-every-font-a-users-browser-can-display
         const fontCheck = new Set([
             // Windows 10
-          'Arial', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara', 'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima', 'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact', 'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode', 'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue', 'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei', 'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text', 'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script', 'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji', 'Segoe UI Symbol', 'SimSun', 'Sitka', 'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana', 'Webdings', 'Wingdings', 'Yu Gothic',
+          'Arial', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara',
+          'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima',
+          'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact',
+          'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode',
+          'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue',
+          'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei',
+          'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text',
+          'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script',
+          'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji', 'Segoe UI Symbol', 'SimSun', 'Sitka',
+          'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman', 'Trebuchet MS', 'Verdana', 'Webdings',
+          'Wingdings', 'Yu Gothic',
             // macOS
-            'American Typewriter', 'Andale Mono', 'Arial', 'Arial Black', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter', 'Cochin', 'Comic Sans MS', 'Copperplate', 'Courier', 'Courier New', 'Didot', 'DIN Alternate', 'DIN Condensed', 'Futura', 'Geneva', 'Georgia', 'Gill Sans', 'Helvetica', 'Helvetica Neue', 'Herculanum', 'Hoefler Text', 'Impact', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo', 'Microsoft Sans Serif', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate', 'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Tahoma', 'Times', 'Times New Roman', 'Trattatello', 'Trebuchet MS', 'Verdana', 'Zapfino',
+            'American Typewriter', 'Andale Mono', 'Arial', 'Arial Black', 'Arial Narrow',
+            'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed',
+            'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps',
+            'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter',
+            'Cochin', 'Comic Sans MS', 'Copperplate', 'Courier', 'Courier New', 'Didot', 'DIN Alternate',
+            'DIN Condensed', 'Futura', 'Geneva', 'Georgia', 'Gill Sans', 'Helvetica', 'Helvetica Neue',
+            'Herculanum', 'Hoefler Text', 'Impact', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo',
+            'Microsoft Sans Serif', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate',
+            'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Tahoma', 'Times',
+            'Times New Roman', 'Trattatello', 'Trebuchet MS', 'Verdana', 'Zapfino'
           ].sort());
           
           (async() => {
@@ -442,16 +467,18 @@ function EditAGame(props)
         <option key={family} value={family}>{family}</option>);
     console.log("EDIT-A-GAME: myfontsoptsarr = ", myfontsoptsarr);
 
+    //refresh emoji button from: https://emojicombos.com/refresh
     return (
         <div style={{fontSize: "18px", display: "inline"}}>
-            <select id="fonts-drop-down" value={"Times New Roman"}>{myfontsoptsarr}</select>
-            <input type="number" step="0.25" style={{width: "50px"}} id="fontsize"
+            <select id={"fonts-drop-down"+mid} value={"Times New Roman"}>{myfontsoptsarr}</select>
+            <input type="number" step="0.25" style={{width: "50px"}} id={"fontsize"+mid}
                 placeholder="size" value={"12"} />
-            <button id="bold" className=""><b>B</b></button>
-            <button id="italics" className=""><i>I</i></button>
-            <button id="underline" className=""><u>U</u></button>
-            <select id="font-color" value={mycolor} style={{color: mycolor}}
+            <button id={"bold"+mid} className=""><b>B</b></button>
+            <button id={"italics"+mid} className=""><i>I</i></button>
+            <button id={"underline"+mid} className=""><u>U</u></button>
+            <select id={"font-color"+mid} value={mycolor} style={{color: mycolor}}
                 onChange={handleColorChange}>{mycoloropts}</select>
+            <button id={"refresh"+mid} onClick={null}>🔄</button>
         </div>
     );
 }

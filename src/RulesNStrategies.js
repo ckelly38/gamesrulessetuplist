@@ -53,24 +53,211 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     "strategies": []
     */
 
-    //useEffect(() => {
-    //    window.addEventListener("select", handleSelect);
-    //
-    //    setSelectedText("" + window.getSelection().toString());
-    //});
+    function handleSelectionChange(event)
+    {
+        console.log("event = ", event);
+        console.log("event.target.id = " + event.target.id);
+        console.log("event.target.value = " + event.target.value);
+        console.log("event.target.selectionStart = " + event.target.selectionStart);
+        console.log("event.target.selectionEnd = " + event.target.selectionEnd);
+        
+        const myseltext = event.target.value.substring(event.target.selectionStart,
+            event.target.selectionEnd);
+        
+        console.log("myseltext = \"" + myseltext + "\"");
 
-    //function handleSelect(event)
-    //{
-    //    console.log(window.getSelection().toString());
-    //    alert("some text was selected!");
-    //}
-    
-    //function componentWillUnmount()
-    //{
-    //    console.log("cleaing up!");
-    //    alert("inside cleanup!");
-    //    window.removeEventListener("select", handleSelect);
-    //}
+        //this will always be raw text
+        //domnd is the event.target
+        //the rule text is event.target.value
+        
+        debugger;
+        throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
+    }
+
+    function handleMouseUp(event)
+    {
+        console.log("event = ", event);
+        console.log("event.target = ", event.target);
+        
+        let myselect = window.getSelection();
+        let docselect = document.selection;
+        let usedocselect = false;
+        console.log("myselect = ", myselect);
+        console.log("docselect = ", docselect);
+        
+        if (myselect === undefined || myselect === null || myselect.toString().length < 1)
+        {
+            if (docselect === undefined || docselect === null) return;
+            else
+            {
+                if (docselect.createRange().text.length < 1) return;
+                else usedocselect = true;
+            }
+        }
+        //else;//do nothing safe to proceed below
+
+        let myseltext = null;
+        let mydomnd = null;
+        if (usedocselect)
+        {
+            myseltext = docselect.createRange().text;
+            mydomnd = docselect.anchorNode.parentNode;
+        }
+        else
+        {
+            myseltext = myselect.toString();
+            mydomnd = myselect.anchorNode.parentNode;
+        }
+        console.log("myseltext = " + myseltext);
+        console.log("mydomnd = ", mydomnd);
+        console.log("mydomnd.id = " + mydomnd.id);
+
+        while (mydomnd.id === undefined || mydomnd.id === null || mydomnd.id.length < 1)
+        {
+            mydomnd = mydomnd.parentNode;
+            console.log("NEW mydomnd = ", mydomnd);
+            console.log("NEW mydomnd.id = " + mydomnd.id);
+
+            if (mydomnd.tagName === "body") throw new Error("no DOM node with an id was found!");
+            //else;//do nothing
+        }
+        console.log("FINAL mydomnd = ", mydomnd);
+        console.log("FINAL mydomnd.id = " + mydomnd.id);
+
+        //use the event target to get the dom node to get the rule index to get the rule
+        //or we could use the selection to get the dom node to get the rule index to get the rule
+
+        //unless it is in the raw text, if it is the rendered version, it will be text only,
+        //styleing info will not be visible or even part of it
+
+        //we always want to use the selected text to determine against the raw text
+        //unless we are on the raw text
+        const myrulestratstypes = ["basic", "vegas", "strats"];
+        
+        //the id is in this format: "current" + mytypestr + "rawtext" + gameobj.name + index
+        let mybeginsrawidstrs = [];
+        for (let k = 0; k < myrulestratstypes.length; k++)
+        {
+            mybeginsrawidstrs[k] = "current" + myrulestratstypes[k] + "rawtext" + gameobj.name;
+        }
+        
+        //the id is in this format: mytypestr + gameobj.name + index
+        let mybeginsdispidstrs = [];
+        for (let k = 0; k < myrulestratstypes.length; k++)
+        {
+            mybeginsdispidstrs[k] = myrulestratstypes[k] + gameobj.name;
+        }
+
+        let israwtext = false;
+        let myrawidindx = -1;
+        for (let k = 0; k < mybeginsrawidstrs.length; k++)
+        {
+            let myindx = mydomnd.id.indexOf(mybeginsrawidstrs[k]);
+            //console.log("myindx = " + myindx);
+
+            if (myindx === 0)
+            {
+                myrawidindx = k;
+                israwtext = true;
+                break;
+            }
+            //else;//do nothing
+        }
+        console.log("israwtext = " + israwtext);
+        console.log("myrawidindx = " + myrawidindx);
+        
+        let mydispidindx = -1;
+        for (let k = 0; k < mybeginsdispidstrs.length; k++)
+        {
+            let myindx = mydomnd.id.indexOf(mybeginsdispidstrs[k]);
+            //console.log("myindx = " + myindx);
+
+            if (myindx === 0)
+            {
+                mydispidindx = k;
+                break;
+            }
+            //else;//do nothing
+        }
+        console.log("mydispidindx = " + mydispidindx);
+
+        if (israwtext)
+        {
+            if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1)
+            {
+                throw new Error("invalid value found and used for the myrawidindx index!");
+            }
+            //else;//do nothing
+
+            if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1);
+            else
+            {
+                throw new Error("invalid value found and used for the mydispidindx index!");
+            }
+        }
+        else
+        {
+            if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1);
+            else
+            {
+                throw new Error("invalid value found and used for the myrawidindx index!");
+            }
+
+            if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1)
+            {
+                throw new Error("invalid value found and used for the mydispidindx index!");
+            }
+            //else;//do nothing
+        }
+        
+        let mypartidstr = null;
+        if (israwtext) mypartidstr = mybeginsrawidstrs[myrawidindx];
+        else mypartidstr = mybeginsdispidstrs[mydispidindx];
+        console.log("mypartidstr = " + mypartidstr);
+
+        const myruleidnumstr = mydomnd.id.substring(mypartidstr.length);
+        console.log("myruleidnumstr = " + myruleidnumstr);
+
+        if (myruleidnumstr.length < 1 || isNaN(myruleidnumstr))
+        {
+            throw new Error("illegal value found and used for the rule index here!");
+        }
+        //else;//do nothing
+
+        let mytypestr = null;
+        if (israwtext) mytypestr = myrulestratstypes[myrawidindx];
+        else mytypestr = myrulestratstypes[mydispidindx];
+        console.log("mytypestr = " + mytypestr);
+
+        const ruleindx = Number(myruleidnumstr);
+        console.log("ruleindx = " + ruleindx);
+
+        let myrulesarr = null;
+        if (mytypestr === "basic") myrulesarr = basicrules;
+        else if (mytypestr === "vegas") myrulesarr = vegasrules;
+        else if (mytypestr === "strats") myrulesarr = strats;
+        else throw new Error("invalid rule type was found and used here!");
+
+        const myruletext = myrulesarr[ruleindx];
+        console.log("myruletext = " + myruletext);
+
+        if (israwtext)
+        {
+            //best case position for selection is absolute
+            //the rule text is mydomnd.textContent
+        }
+        else
+        {
+            //worst case, positions need to be recalculated
+            //and we need to be careful if it contains formatting code around it
+            //it would be nice if starting positions line up... cannot be guranteed...
+            //word count would hold if formatting code is skipped...
+            //the rules and strats come in from state and from the gameobj
+        }
+
+        debugger;
+        throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
+    }
 
     function generateMarkUpForDisplayFromRule(rule)
     {
@@ -416,7 +603,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                             value={rule} style={{width: "1100px"}}
                             onChange={(event) => handleEditChange(event, userules, usebasic)} />
                     </li>
-                    <li key={mytypestr + gameobj.name + index}
+                    <li key={mytypestr + gameobj.name + index} id={mytypestr + gameobj.name + index}
                         dangerouslySetInnerHTML={generateAndCreateMarkUpForDisplayFrom(rule, false)} />
                 </ul>
             );
@@ -424,11 +611,12 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         else
         {
             mylis = arr.map((rule, index) =>
-                <li key={mytypestr + gameobj.name + index}
+                <li key={mytypestr + gameobj.name + index} id={mytypestr + gameobj.name + index}
                     dangerouslySetInnerHTML={createMarkUp(generateMarkUpForDisplayFromRule(rule))} />);
         }
         return mylis;
     }
+
 
     function changeEditingMode(event, userules, usebasic, nwstate = null)
     {
@@ -706,9 +894,12 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     console.log("EDIT-MODE: " + iseditingmode);
 
     return (
-        <div>
+        <div onSelectCapture={handleSelectionChange} onMouseUp={handleMouseUp}>
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
-            <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? <EditAGame /> : null}</h3>
+            <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? (
+                <EditAGame mid={gameobj.id} basicrules={basicrules} vegasrules={vegasrules}
+                    strats={strats} />
+                ) : null}</h3>
             <details>
                 <summary>Rules:</summary>
                 <p>Basic:<button

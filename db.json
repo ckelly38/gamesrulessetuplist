@@ -65,7 +65,8 @@
       "rules": {
         "basic": [
           "test: /span/style font-family: Times-New-Roman; font-size: 30px; color: rgb(256, 0, 0, 0.5) /styleHearts/span, Spades, Clubs, and /span/style color: red /styleDiamonds/span",
-          "test ///breally/b"
+          "test ///breally/b escapes pull//push the rope",
+          "test escapes pull//push the rope or people"
         ],
         "vegasstyle": []
       },

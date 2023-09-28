@@ -77,6 +77,93 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
     }
 
+    function getRawIndexRelativeToParts(myparts, txtonlyindx, myformattingparts)
+    {
+        //now compute the new indexes using the parts and formatting parts as guides
+        //everything on parts[n] will count on the original indexes
+        //everything on myformattingparts[n] was not counted originally
+        //it is parts[n] then myformattingparts[n] then n advances...
+
+        if ((myparts === undefined || myparts === null || myparts.length < 1) ||
+        (myformattingparts === undefined || myformattingparts === null || myformattingparts.length < 1))
+        {
+            throw new Error("the text only and formatting only parts must be defined!");
+        }
+        //else;//do nothing
+
+        if (txtonlyindx < 0)
+        {
+            throw new Error("invalid value found and used here for the textonlyindx index!");
+        }
+        //else;//do nothing
+        
+        let cumpartslen = -1;
+        let mysparti = -1;
+        let mysireltoparti = -1;
+        for (let n = 0; n < myparts.length; n++)
+        {
+            if (n === 0) cumpartslen = myparts[n].length;
+            else if (n > 0 && n < myparts.length) cumpartslen += myparts[n].length;
+            else throw new Error("invalid value found and used for index n here!");
+
+            if (cumpartslen - myparts[n].length < txtonlyindx &&
+                (txtonlyindx < cumpartslen || txtonlyindx === cumpartslen))
+            {
+                //this is the part we want...
+                console.log("found the part we want!");
+                console.log("cumpartslen - myparts[" + n + "].length = " +
+                    (cumpartslen - myparts[n].length));
+                console.log("txtonlyindx = " + txtonlyindx);
+                console.log("cumpartslen = " + cumpartslen);
+                
+                mysireltoparti = txtonlyindx - (cumpartslen - myparts[n].length);
+                mysparti = n;
+                break;
+            }
+            //else;//do nothing
+        }//end of n for loop
+        console.log("mysparti = " + mysparti);
+        console.log("mysireltoparti = " + mysireltoparti);
+
+        if (mysparti < 0 || mysparti > myparts.length - 1)
+        {
+            throw new Error("illegal value found and used here for mysparti index!");
+        }
+        //else;//do nothing
+        
+        console.log("myparts[" + mysparti + "] = " + myparts[mysparti]);
+        console.log("myparts[" + mysparti + "].length = " + myparts[mysparti].length);
+
+        if (mysireltoparti > 0 && mysireltoparti < myparts[mysparti].length);
+        else
+        {
+            throw new Error("illegal value found and used here for mysireltoparti start index!");
+        }
+
+        //we know the start si is between or equal to the length of the part
+        //if equal the calculations are easiser
+        //if not equal, then it is harder...
+
+        let rawtexti = 0;
+        for (let n = 0; n < mysparti && n < myparts.length; n++)
+        {
+            if (n === 0) rawtexti = 0;
+            //else;//do nothing
+
+            rawtexti += myparts[n].length + myformattingparts[n].length;
+        }
+        rawtexti += mysireltoparti;
+        console.log("NEW rawtexti = " + rawtexti);
+
+        if (rawtexti < 0 || rawtexti < mysireltoparti || rawtexti < txtonlyindx)
+        {
+            throw new Error("the text index was invalid!");
+        }
+        //else;//do nothing
+
+        return rawtexti;
+    }
+
     function handleMouseUp(event)
     {
         console.log("event = ", event);
@@ -396,343 +483,256 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             console.log("mytagnms = ", mytagnms);
 
 
-            //this will tell you if you are far enough away from the tags or not
-            //but if you are inside of the maxdiff range to the nearest one, the value may be wrong
+            
+            //do at lot here to handle this case...
+            //we are near or selecting formatting code or over it as well
+            //
+            //GOAL: compute the start and end indexes based on similarities of the two rules
+            //one rule being raw formatting code and data and the other is text only
+            //GIVEN: two rules and the starting and ending indexes according to the text only rule
+            //WE WANT TO TAKE THOSE POINTS: and get them according to the raw formatting code rule
+            //
+            //
+            //all tags and anything between the two style tags will not be displayed
+            //that accounts as for why the rules are different
+            //
+            //in this case, one rule is displayed text only (mydomnd.textContent)
+            //and the other rule has the formatting code (myruletext)
+            
+            //go until the first difference is found between the two rules
+            //then determine if it is a tag index
+            //what we want to do is split the text only rule by the nonformatted rule
+            //so we can see where the formatting code is inserted...
+            //then we can go over that
 
-            let arealltagisbeforeselsi = false;
-            for (let n = 0; n < mytagis.length; n++)
+            let myparts = [];
+            let myformattingparts = [];
+            let mytxtonlyi = 0;
+            let mytxtonlysi = 0;
+            let myformattingpartstr = "";
+            let useformat = false;
+            for (let i = 0; i < myruletext.length; i++)
             {
-                if (mytagis[n] < myhtmlsi)
+                console.log("myruletext.charAt(i=" + i + ") = " + myruletext.charAt(i));
+                console.log("mydomnd.textContent.charAt(mytxtonlyi=" + mytxtonlyi + ") = " +
+                    mydomnd.textContent.charAt(mytxtonlyi));
+                if (myruletext.charAt(i) === mydomnd.textContent.charAt(mytxtonlyi))
                 {
-                    if (n === 0) arealltagisbeforeselsi = true;
+                    mytxtonlyi++;
+
+                    if (useformat)
+                    {
+                        myformattingparts.push("" + myformattingpartstr);
+                        myformattingpartstr = "";
+                        useformat = false;
+                        mytxtonlysi = i;
+
+                        console.log("NEW myformattingpartstr = " + myformattingpartstr);
+                        console.log("NEW useformat = " + useformat);
+                        console.log("NEW mytxtonlysi = " + mytxtonlysi);
+                    }
+                    //else;//do nothing
+
+                    if (i + 1 === myruletext.length)
+                    {
+                        myparts.push(myruletext.substring(mytxtonlysi));
+                        myformattingparts.push("");
+                    }
                     //else;//do nothing
                 }
                 else
                 {
-                    arealltagisbeforeselsi = false;
-                    break;
-                }
-            }
-            console.log("arealltagisbeforeselsi = " + arealltagisbeforeselsi);
+                    console.log("diff found at i = " + i + "!");
+                    console.log("OLD useformat = " + useformat);
 
-            if (arealltagisbeforeselsi)
-            {
-                //in order to get the indexes that we want, we need to compute the length of all tags
-                //then if the style tag is encountered, then skip to its pair index and count the
-                //distance between these two tags also, then all of that added to the given start index
-                //will become the new computed start index
-                //we will also add this to the end index to become the new computed end index
-                let myoffst = -1;
-                for (let n = 0; n < mytagis.length; n++)
-                {
-                    if (n === 0) myoffst = 0;
-                    //else;//do nothing
-
-                    if (mytagnms[n] === "/style")
+                    if (useformat);
+                    else
                     {
-                        console.log("n = " + n);
-                        console.log("style tag found at i = " + mytagis[n]);
-                        console.log("stagis[" + n + "] = " + stagis[n]);
-
-                        if (stagis[n])
-                        {
-                            let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[n], mytagis);
-                            console.log("pi = " + pi);
-
-                            if (n + 1 < mytagis.length)
-                            {
-                                if (mytagis[n + 1] === pi && etagis[n + 1])
-                                {
-                                    myoffst += (pi - mytagis[n]) + mytagnms[n + 1].length;
-                                }
-                                else
-                                {
-                                    throw new Error("invalid pair index found and used or tag was " +
-                                        "wrongly identified as a starting style tag (wrong pair index)!");
-                                }
-                            }
-                            else
-                            {
-                                throw new Error("invalid pair index found and used or tag was wrongly " +
-                                    "identified as a starting style tag!");
-                            }
-                        }
-                        else
-                        {
-                            console.log("this ending style tag was already counted!");
-
-                            if (etagis[n]);
-                            else throw new Error("this tag must be an ending style tag, but it was not!");
-                        }
+                        myparts.push(myruletext.substring(mytxtonlysi, i));
+                        useformat = true;
+                        console.log("NEW useformat = " + useformat);
                     }
-                    else myoffst += mytagnms[n].length;
-                }//end of n for loop
-                console.log("myoffst = " + myoffst);
+                    
 
-                if (myoffst < 0 || myoffst > maxdiff || myoffst % 2 !== 0)
-                {
-                    throw new Error("the offset value was too big or too small!");
-                }
-                //else;//do nothing
-
-                rawtextsi = myoffst + myhtmlsi;
-                rawtextei = myoffst + myhtmlei;
-                console.log("NEW rawtextsi = " + rawtextsi);
-                console.log("NEW rawtextei = " + rawtextei);
-            }
-            else
-            {
-                //do at lot here to handle this case...
-                //we are near or selecting formatting code or over it as well
-                //
-                //GOAL: compute the start and end indexes based on similarities of the two rules
-                //one rule being raw formatting code and data and the other is text only
-                //GIVEN: two rules and the starting and ending indexes according to the text only rule
-                //WE WANT TO TAKE THOSE POINTS: and get them according to the raw formatting code rule
-                //
-                //
-                //all tags and anything between the two style tags will not be displayed
-                //that accounts as for why the rules are different
-                //
-                //in this case, one rule is displayed text only (mydomnd.textContent)
-                //and the other rule has the formatting code (myruletext)
-                
-                //go until the first difference is found between the two rules
-                //then determine if it is a tag index
-                //what we want to do is split the text only rule by the nonformatted rule
-                //so we can see where the formatting code is inserted...
-                //then we can go over that
-
-                let myparts = [];
-                let myformattingparts = [];
-                let mytxtonlyi = 0;
-                let mytxtonlysi = 0;
-                let myformattingpartstr = "";
-                let useformat = false;
-                for (let i = 0; i < myruletext.length; i++)
-                {
-                    console.log("myruletext.charAt(i=" + i + ") = " + myruletext.charAt(i));
-                    console.log("mydomnd.textContent.charAt(mytxtonlyi=" + mytxtonlyi + ") = " +
-                        mydomnd.textContent.charAt(mytxtonlyi));
-                    if (myruletext.charAt(i) === mydomnd.textContent.charAt(mytxtonlyi))
+                    //determine if we are at a tag index
+                    let attagi = false;
+                    let mytagi = -1;
+                    for (let k = 0; k < mytagis.length; k++)
                     {
-                        mytxtonlyi++;
-
-                        if (useformat)
+                        if (mytagis[k] === i)
                         {
-                            myformattingparts.push("" + myformattingpartstr);
-                            myformattingpartstr = "";
-                            useformat = false;
-                            mytxtonlysi = i;
-
-                            console.log("NEW myformattingpartstr = " + myformattingpartstr);
-                            console.log("NEW useformat = " + useformat);
-                            console.log("NEW mytxtonlysi = " + mytxtonlysi);
+                            attagi = true;
+                            mytagi = k;
+                            break;
                         }
                         //else;//do nothing
+                    }//end of k for loop
+                    console.log("attagi = " + attagi);
+                    console.log("mytagi = " + mytagi);
 
-                        if (i + 1 === myruletext.length)
+                    if (attagi)
+                    {
+                        if (mytagi < 0 || mytagi > mytagis.length - 1)
                         {
-                            myparts.push(myruletext.substring(mytxtonlysi));
-                            myformattingparts.push("");
+                            throw new Error("invalid tag index found and used here! We are at a " +
+                                "tag, but index not set correctly!");
                         }
                         //else;//do nothing
                     }
                     else
                     {
-                        console.log("diff found at i = " + i + "!");
-                        console.log("OLD useformat = " + useformat);
-
-                        if (useformat);
+                        if (mytagi < 0 || mytagi > mytagis.length - 1);
                         else
                         {
-                            myparts.push(myruletext.substring(mytxtonlysi, i));
-                            useformat = true;
-                            console.log("NEW useformat = " + useformat);
-                        }
-                        
-
-                        //determine if we are at a tag index
-                        let attagi = false;
-                        let mytagi = -1;
-                        for (let k = 0; k < mytagis.length; k++)
-                        {
-                            if (mytagis[k] === i)
-                            {
-                                attagi = true;
-                                mytagi = k;
-                                break;
-                            }
-                            //else;//do nothing
-                        }//end of k for loop
-                        console.log("attagi = " + attagi);
-                        console.log("mytagi = " + mytagi);
-
-                        if (attagi)
-                        {
-                            if (mytagi < 0 || mytagi > mytagis.length - 1)
-                            {
-                                throw new Error("invalid tag index found and used here! We are at a " +
-                                    "tag, but index not set correctly!");
-                            }
-                            //else;//do nothing
-                        }
-                        else
-                        {
-                            if (mytagi < 0 || mytagi > mytagis.length - 1);
-                            else
-                            {
-                                throw new Error("invalid tag index found and used here! We are not " +
-                                    "at a tag, but the tag index suggests otherwise!");
-                            }
-                        }
-
-                        if (attagi)
-                        {
-                            //determine if it is style or not
-                            //if it is not style just add the tag name, then move on
-                            //if it is style skip to the style pair index
-
-                            if (mytagnms[mytagi] === "/style")
-                            {
-                                console.log("style tag found at i = " + i + "!");
-                                
-                                if (stagis[mytagi])
-                                {
-                                    let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[mytagi], mytagis);
-                                    console.log("pi = " + pi);
-
-                                    if (mytagi + 1 < mytagis.length)
-                                    {
-                                        if (mytagis[mytagi + 1] === pi && etagis[mytagi + 1])
-                                        {
-                                            myformattingpartstr += myruletext.substring(i, pi + 6);
-                                            i = pi + 6 - 1;
-                                        }
-                                        else
-                                        {
-                                            throw new Error("invalid pair index found and used or tag " +
-                                                "was wrongly identified as a starting style tag (wrong " +
-                                                "pair index)!");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new Error("invalid pair index found and used or tag was " +
-                                            "wrongly identified as a starting style tag!");
-                                    }
-                                }
-                                else
-                                {
-                                    console.log("this ending style tag was already counted!");
-
-                                    if (etagis[mytagi]);
-                                    else
-                                    {
-                                        throw new Error("this tag must be an ending style tag, but it " +
-                                            "was not!");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                console.log("non-style tag formatting code found at i = " + i + "!");
-
-                                let isspecialbtag = false;
-                                if (mytagnms[mytagi] === "/b")
-                                {
-                                    if (i + 1 < myruletext.length)
-                                    {
-                                        if (myruletext.charAt(i + 1) === 'b');
-                                        else isspecialbtag = true;
-                                    }
-                                    else
-                                    {
-                                        throw new Error("this claimed to be a tag, but it has an " +
-                                            "illegal index!");
-                                    }
-                                }
-                                //else;//do nothing
-                                console.log("isspecialbtag = " + isspecialbtag);
-
-                                if (isspecialbtag)
-                                {
-                                    myformattingpartstr += "//" + mytagnms[mytagi];
-                                    i += 2 + mytagnms[mytagi].length - 1;
-                                }
-                                else
-                                {
-                                    //add the tag name to the formatting code
-                                    myformattingpartstr += mytagnms[mytagi];
-                                    i += mytagnms[mytagi].length - 1;
-                                }
-                            }
-                            console.log("NEW myformattingpartstr = " + myformattingpartstr);
-                            console.log("NEW i = " + i);
-
-                            if (i + 1 === myruletext.length)
-                            {
-                                myformattingparts.push("" + myformattingpartstr);
-                                myformattingpartstr = "";
-                                useformat = false;
-                                mytxtonlysi = i;
-                            }
-                            //else;//do nothing
-                        }
-                        else
-                        {
-                            if (myruletext.charAt(i) === '/')
-                            {
-                                console.log("this is an escape character found at i = " + i + "!");
-                                
-                                myformattingpartstr += "/";
-                                
-                                console.log("NEW myformattingpartstr = " + myformattingpartstr);
-                                console.log("NEW i = " + i);
-                            }
-                            else
-                            {
-                                throw new Error("illegal formating characters found at i = " + i +
-                                    " on the rule (" + myruletext + ")!");
-                            }
+                            throw new Error("invalid tag index found and used here! We are not " +
+                                "at a tag, but the tag index suggests otherwise!");
                         }
                     }
-                }//end of i for loop
-                console.log("myparts = ", myparts);
-                console.log("myformattingparts = ", myformattingparts);
 
-                if (myparts.length === myformattingparts.length);
-                else
-                {
-                    throw new Error("there must be the same number of text only parts as the formatting " +
-                        "parts!");
+                    if (attagi)
+                    {
+                        //determine if it is style or not
+                        //if it is not style just add the tag name, then move on
+                        //if it is style skip to the style pair index
+
+                        if (mytagnms[mytagi] === "/style")
+                        {
+                            console.log("style tag found at i = " + i + "!");
+                            
+                            if (stagis[mytagi])
+                            {
+                                let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[mytagi], mytagis);
+                                console.log("pi = " + pi);
+
+                                if (mytagi + 1 < mytagis.length)
+                                {
+                                    if (mytagis[mytagi + 1] === pi && etagis[mytagi + 1])
+                                    {
+                                        myformattingpartstr += myruletext.substring(i, pi + 6);
+                                        i = pi + 6 - 1;
+                                    }
+                                    else
+                                    {
+                                        throw new Error("invalid pair index found and used or tag " +
+                                            "was wrongly identified as a starting style tag (wrong " +
+                                            "pair index)!");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Error("invalid pair index found and used or tag was " +
+                                        "wrongly identified as a starting style tag!");
+                                }
+                            }
+                            else
+                            {
+                                console.log("this ending style tag was already counted!");
+
+                                if (etagis[mytagi]);
+                                else
+                                {
+                                    throw new Error("this tag must be an ending style tag, but it " +
+                                        "was not!");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            console.log("non-style tag formatting code found at i = " + i + "!");
+
+                            let isspecialbtag = false;
+                            if (mytagnms[mytagi] === "/b")
+                            {
+                                if (i + 1 < myruletext.length)
+                                {
+                                    if (myruletext.charAt(i + 1) === 'b');
+                                    else isspecialbtag = true;
+                                }
+                                else
+                                {
+                                    throw new Error("this claimed to be a tag, but it has an " +
+                                        "illegal index!");
+                                }
+                            }
+                            //else;//do nothing
+                            console.log("isspecialbtag = " + isspecialbtag);
+
+                            if (isspecialbtag)
+                            {
+                                myformattingpartstr += "//" + mytagnms[mytagi];
+                                i += 2 + mytagnms[mytagi].length - 1;
+                            }
+                            else
+                            {
+                                //add the tag name to the formatting code
+                                myformattingpartstr += mytagnms[mytagi];
+                                i += mytagnms[mytagi].length - 1;
+                            }
+                        }
+                        console.log("NEW myformattingpartstr = " + myformattingpartstr);
+                        console.log("NEW i = " + i);
+
+                        if (i + 1 === myruletext.length)
+                        {
+                            myformattingparts.push("" + myformattingpartstr);
+                            myformattingpartstr = "";
+                            useformat = false;
+                            mytxtonlysi = i;
+                        }
+                        //else;//do nothing
+                    }
+                    else
+                    {
+                        if (myruletext.charAt(i) === '/')
+                        {
+                            console.log("this is an escape character found at i = " + i + "!");
+                            
+                            myformattingpartstr += "/";
+                            
+                            console.log("NEW myformattingpartstr = " + myformattingpartstr);
+                            console.log("NEW i = " + i);
+                        }
+                        else
+                        {
+                            throw new Error("illegal formating characters found at i = " + i +
+                                " on the rule (" + myruletext + ")!");
+                        }
+                    }
                 }
+            }//end of i for loop
+            console.log("myparts = ", myparts);
+            console.log("myformattingparts = ", myformattingparts);
 
-                let myresstr = "";
-                for (let n = 0; n < myparts.length; n++)
-                {
-                    myresstr += "" + myparts[n] + myformattingparts[n];
-                }
-                console.log("  myresstr = " + myresstr);
-                console.log("myruletext = " + myruletext);
-
-                if (myresstr === myruletext);
-                else
-                {
-                    throw new Error("the rule text only plus formatting parts in the correct order must " +
-                        "be the same as the original rule text, but it was not!");
-                }
-                console.log("no data integrity violation!");
-
-                //now compute the new indexes using the parts and formatting parts as guides
-                //
-                //
-                //
-                console.error("NOT DONE YET 9-28-2023 4:45 AM!");
-
-                console.log("NEW rawtextsi = " + rawtextsi);
-                console.log("NEW rawtextei = " + rawtextei);
+            if (myparts.length === myformattingparts.length);
+            else
+            {
+                throw new Error("there must be the same number of text only parts as the formatting " +
+                    "parts!");
             }
+
+            let myresstr = "";
+            for (let n = 0; n < myparts.length; n++)
+            {
+                myresstr += "" + myparts[n] + myformattingparts[n];
+            }
+            console.log("  myresstr = " + myresstr);
+            console.log("myruletext = " + myruletext);
+
+            if (myresstr === myruletext);
+            else
+            {
+                throw new Error("the rule text only plus formatting parts in the correct order must " +
+                    "be the same as the original rule text, but it was not!");
+            }
+            console.log("no data integrity violation!");
+
+
+            //now compute the new indexes here
+            console.log("myhtmlsi = " + myhtmlsi);
+            console.log("myhtmlei = " + myhtmlei);
+            rawtextsi = getRawIndexRelativeToParts(myparts, myhtmlsi, myformattingparts);
+            rawtextei = getRawIndexRelativeToParts(myparts, myhtmlei, myformattingparts);
+
             console.log("FINAL rawtextsi = " + rawtextsi);
             console.log("FINAL rawtextei = " + rawtextei);
 
@@ -742,6 +742,10 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 throw new Error("invalid start or end index found and used for the rule text here!");
             }
             //else;//do nothing
+
+            console.log("myruletext.substring(rawtextsi=" + rawtextsi + ", rawtextei=" + rawtextei +
+                ") = " + myruletext.substring(rawtextsi, rawtextei));
+            console.log("myseltext = " + myseltext);
         }
 
         debugger;

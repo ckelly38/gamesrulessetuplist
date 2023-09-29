@@ -25,9 +25,9 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     const [editvegas, setEditVegas] = useState(false);
     const [editstrats, setEditStrats] = useState(false);
 
-    //const [selectedtext, setSelectedText] = useState("" + window.getSelection().toString());
-
     const iseditingmode = (editbasic || editvegas || editstrats);
+
+    const [mycolor, setMyColor] = useState("#000000");
     
 
     //# of Players: {min}-{max} (inclusive)
@@ -105,6 +105,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             if (n === 0) cumpartslen = myparts[n].length;
             else if (n > 0 && n < myparts.length) cumpartslen += myparts[n].length;
             else throw new Error("invalid value found and used for index n here!");
+            //console.log("cumpartslen = " + cumpartslen);
 
             if (cumpartslen - myparts[n].length < txtonlyindx &&
                 (txtonlyindx < cumpartslen || txtonlyindx === cumpartslen))
@@ -134,7 +135,11 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("myparts[" + mysparti + "] = " + myparts[mysparti]);
         console.log("myparts[" + mysparti + "].length = " + myparts[mysparti].length);
 
-        if (mysireltoparti > 0 && mysireltoparti < myparts[mysparti].length);
+        if ((mysireltoparti > 0 || mysireltoparti === 0) &&
+        ((mysireltoparti < myparts[mysparti].length) || (mysireltoparti === myparts[mysparti].length)))
+        {
+            //do nothing
+        }
         else
         {
             throw new Error("illegal value found and used here for mysireltoparti start index!");
@@ -167,7 +172,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     function handleMouseUp(event)
     {
         console.log("event = ", event);
-        console.log("event.target = ", event.target);
 
         if (iseditingmode);
         else return;
@@ -448,6 +452,14 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         //or delete it, the event is recognized as selecting text and it become next to impossible to
         //copy or delete the text....
 
+        const stagis = mytaglvs.areAllTagsStartingTags(myruletext, mytagis);
+        const etagis = mytaglvs.areAllTagsEndingTags(myruletext, mytagis);
+        const mytagnms = mytaglvs.getAllTags(myruletext, mytagis);
+        console.log("stagis = ", stagis);
+        console.log("etagis = ", etagis);
+        console.log("mytagnms = ", mytagnms);
+
+
         let rawtextsi = -1;
         let rawtextei = -1;
         if (israwtext || treatasrawtext)
@@ -475,12 +487,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             //and stuff between them...
             //if there are any style tags, we count the stuff between them
 
-            const stagis = mytaglvs.areAllTagsStartingTags(myruletext, mytagis);
-            const etagis = mytaglvs.areAllTagsEndingTags(myruletext, mytagis);
-            const mytagnms = mytaglvs.getAllTags(myruletext, mytagis);
-            console.log("stagis = ", stagis);
-            console.log("etagis = ", etagis);
-            console.log("mytagnms = ", mytagnms);
+            
 
 
             
@@ -733,20 +740,229 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             rawtextsi = getRawIndexRelativeToParts(myparts, myhtmlsi, myformattingparts);
             rawtextei = getRawIndexRelativeToParts(myparts, myhtmlei, myformattingparts);
 
-            console.log("FINAL rawtextsi = " + rawtextsi);
-            console.log("FINAL rawtextei = " + rawtextei);
+            console.log("NEW rawtextsi = " + rawtextsi);
+            console.log("NEW rawtextei = " + rawtextei);
+        }
+        console.log("FINAL rawtextsi = " + rawtextsi);
+        console.log("FINAL rawtextei = " + rawtextei);
 
-            if (rawtextsi < 0 || rawtextei < 0 || rawtextei < rawtextsi ||
-                rawtextei > myruletext.length - 1 || rawtextsi > myruletext.length - 1)
+        if (rawtextsi < 0 || rawtextei < 0 || rawtextei < rawtextsi ||
+            rawtextei > myruletext.length - 1 || rawtextsi > myruletext.length - 1)
+        {
+            throw new Error("invalid start or end index found and used for the rule text here!");
+        }
+        //else;//do nothing
+
+        const fmtseltextstr = myruletext.substring(rawtextsi, rawtextei);
+        console.log("myruletext.substring(rawtextsi=" + rawtextsi + ", rawtextei=" + rawtextei +
+            ") = fmtseltextstr = " + fmtseltextstr);
+        console.log("myseltext = " + myseltext);
+        console.log("myruletext = " + myruletext);
+        console.log("mytagis = ", mytagis);
+        console.log("stagis = ", stagis);
+        console.log("etagis = ", etagis);
+        console.log("mytagnms = ", mytagnms);
+
+        //now we need to take the formatted selected text and load in the defaults to the editgame
+        //need to change the colors, the size, etc...
+        //
+        //need to take the rule text and figure out if these are inside any tags...
+        //bold, underline, italics, and if it is inside anything that would change the font, size, color
+        //setMyColor();
+        //
+
+        //we want to know starting tags and ending tags around the selected text
+        //if the tag index is a starting tag and if it is at or just before rawtextsi
+        //and if an ending index is found after rawtextsi and before or after rawtextei
+        //then it is included
+
+        const mylvs = mytaglvs.getLevelsForAllTags(myruletext, mytagis);
+        console.log("mylvs = ", mylvs);
+
+        const mydispstrs = mytaglvs.getLevelsDisplayStrOrStrs(myruletext, mylvs, true);
+        console.log("mydispstrs = ", mydispstrs);
+
+        let minsindx = -1;
+        let minsi = -1;
+        for (let n = stagis.length - 1; n > -1 && n < stagis.length; n--)
+        {
+            if (stagis[n])
             {
-                throw new Error("invalid start or end index found and used for the rule text here!");
+                if (mytagis[n] < rawtextsi || mytagis[n] === rawtextsi)
+                {
+                    //this is the nearest starting tag found before the starting index
+                    //this needs to be included
+                    console.log("found are starting tag index at n = " + n + "!");
+                    console.log("mytagis[" + n + "] = " + mytagis[n]);
+                    console.log("rawtextsi = " + rawtextsi);
+                    console.log("rawtextei = " + rawtextei);
+
+                    let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[n], mytagis);
+                    console.log("pi = " + pi);
+
+                    if (pi < rawtextsi);
+                    else
+                    {
+                        //pi === rawtextsi || pi > rawtextsi
+                        //keep it...
+                        console.log("NEED TO KEEP THIS PAIR...!");
+                        if (minsindx < 0 && minsi < 0)
+                        {
+                            minsindx = mytagis[n];
+                            minsi = n;
+                        }
+                        else
+                        {
+                            if (mytagis[n] < minsindx)
+                            {
+                                minsindx = mytagis[n];
+                                minsi = n;
+                            }
+                            //else;//do nothing
+                        }
+                        console.log("NEW minsindx = " + minsindx);
+                        console.log("NEW minsi = " + minsi);
+                    }
+                }
+                //else;//do nothing
             }
             //else;//do nothing
+        }//end of n for loop
+        console.log("FINAL minsindx = " + minsindx);
+        console.log("FINAL minsi = " + minsi);
 
-            console.log("myruletext.substring(rawtextsi=" + rawtextsi + ", rawtextei=" + rawtextei +
-                ") = " + myruletext.substring(rawtextsi, rawtextei));
-            console.log("myseltext = " + myseltext);
+        if (minsindx < 0 || minsindx > myruletext.length - 1)
+        {
+            throw new Error("invalid value found and used here for minsindx index value!");
         }
+        //else;//do nothing
+
+        if (minsi < 0 || minsi > mytagis.length - 1)
+        {
+            throw new Error("invalid value found and used here for minsi index!");
+        }
+        //else;//do nothing
+
+        const finrawtextsi = minsindx;
+        console.log("rawtextsi = " + rawtextsi);
+        console.log("finrawtextsi = " + finrawtextsi);
+
+        const mytagpi = mytaglvs.getTagPairIndex(myruletext, mytagis[minsi], mytagis);
+        console.log("mytagpi = " + mytagpi);
+
+        let mytagpilen = mytagnms[minsi].length;
+        if (mytagnms[minsi] === "\b")
+        {
+            if (myruletext.charAt(mytagpi + 2) === 'b');
+            else mytagpilen += 2;
+        }
+        //else;//do nothing
+        console.log("mytagpilen = " + mytagpilen);
+
+        let finrawtextei = -1;
+        if (rawtextei > mytagpi + mytagpilen) finrawtextei = rawtextei;
+        else finrawtextei = mytagpi + mytagpilen;
+        console.log("finrawtextei = " + finrawtextei);
+        
+        const finfmtseltextstr = myruletext.substring(finrawtextsi, finrawtextei);
+        console.log("myruletext.substring(finrawtextsi=" + finrawtextsi + ", rawtextei=" + rawtextei +
+            ") = finfmtseltextstr = " + finfmtseltextstr);
+        
+        console.log("finfmtseltextstr.length = " + finfmtseltextstr.length);
+        console.log("fmtseltextstr.length = " + fmtseltextstr.length);
+        
+        const fmtdifflen = finfmtseltextstr.length - fmtseltextstr.length;
+        console.log("fmtdifflen = " + fmtdifflen);
+
+        //need to ask if certain tags are present
+        //this will contain information that we want...
+        //if bold or underline or italics are present
+        //we will then determine if all of the selected text is bolded, underlined, or italics...
+        let finfmttagis = mytaglvs.getAllTagIndexes(finfmtseltextstr);
+        let finfmtstagis = mytaglvs.areAllTagsStartingTags(finfmtseltextstr, finfmttagis);
+        let finfmtetagis = mytaglvs.areAllTagsEndingTags(finfmtseltextstr, finfmttagis);
+        let finfmttagnms = mytaglvs.getAllTags(finfmtseltextstr, finfmttagis);
+
+        const mysearchtags = ["/b", "/u", "/i", "/style"];
+        let mytagspresent = [];
+        if (finfmttagis === undefined || finfmttagis === null || finfmttagis.length < 1);
+        else
+        {
+            for (let k = 0; k < mysearchtags.length; k++)
+            {
+                mytagspresent[k] = false;
+                for (let n = 0; n < finfmttagis.length; n++)
+                {
+                    if (finfmttagnms[n] === mysearchtags[k])
+                    {
+                        mytagspresent[k] = true;
+                        break;
+                    }
+                    //else;//do nothing
+                }//end of n for loop
+            }//end of k for loop
+        }
+        console.log("boldtagspresent = " + mytagspresent[0]);
+        console.log("underlinetagspresent = " + mytagspresent[1]);
+        console.log("italicstagspresent = " + mytagspresent[2]);
+        console.log("styletagspresent = " + mytagspresent[3]);
+        
+        //need to check where each of the present tags are and
+        //ask if our start and end selection is between this entire thing
+        //if it is then it is that item
+        let aremytags = [];
+        for (let n = 0; n < mysearchtags.length; n++)
+        {
+            aremytags[n] = false;
+            console.log("OLD aremytags[" + n + "] = " + aremytags[n]);
+            console.log("mytagspresent[" + n + "] = " + mytagspresent[n]);
+
+            if (mytagspresent[n]);
+            else continue;
+
+            for (let k = 0; k < finfmttagis.length; k++)
+            {
+                if (finfmttagnms[k] === mysearchtags[n])
+                {
+                    console.log("found our tag at k = " + k + "!");
+
+                    let useparenttag = false;
+                    if (mysearchtags[n] === "/style") useparenttag = true;
+                    //else;//do nothing
+                    console.log("useparenttag = " + useparenttag);
+
+                    const mykindx = (useparenttag ? k - 1 : k);
+                    console.log("mykindx = " + mykindx);
+
+                    if (mykindx < 0) throw new Error("invalid value found and used for mykindx index!");
+                    //else;//do nothing
+
+                    if (finfmtstagis[mykindx])
+                    {
+                        console.log("this is a starting tag!");
+                        console.log("finfmttagis[" + mykindx + "] + finrawtextsi = " +
+                            (finfmttagis[mykindx] + finrawtextsi));
+                        console.log("rawtextsi = " + rawtextsi);
+                        console.log("rawtextei = " + rawtextei);
+
+                        let pi = mytaglvs.getTagPairIndex(finfmtseltextstr, finfmttagis[mykindx],
+                            finfmttagis);
+                        console.log("pi + finrawtextsi = " + (pi + finrawtextsi));
+
+                        if ((finfmttagis[mykindx] + finrawtextsi) < rawtextsi &&
+                            rawtextei < (pi + finrawtextsi))
+                        {
+                            aremytags[n] = true;
+                            break;
+                        }
+                        //else;//do nothing
+                    }
+                    //else;//do nothing
+                }
+                //else;//do nothing
+            }//end of k for loop
+            console.log("NEW aremytags[" + n + "] = " + aremytags[n]);
+        }//end of n for loop
 
         debugger;
         throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
@@ -1391,7 +1607,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
             <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? (
                 <EditAGame mid={gameobj.id} basicrules={basicrules} vegasrules={vegasrules}
-                    strats={strats} />
+                    strats={strats} mycolor={mycolor} setMyColor={setMyColor} refresh={handleMouseUp} />
                 ) : null}</h3>
             <details>
                 <summary>Rules:</summary>

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-function EditAGame({mid, strats, basicrules, vegasrules})
+function EditAGame({mid, mycolor, setMyColor, refresh, strats, basicrules, vegasrules})
 {
     if (mid === undefined || mid === null)
     {
         throw new Error("mid must be defined!");
     }
     //else;//do nothing
-
-    const [mycolor, setMyColor] = useState("#000000");
 
     function listFonts()
     {
@@ -85,7 +83,7 @@ function EditAGame({mid, strats, basicrules, vegasrules})
                 break;
             }
         }
-        console.log("myfrstnonzeroi = " + myfrstnonzeroi);
+        //console.log("myfrstnonzeroi = " + myfrstnonzeroi);
 
         if (myfrstnonzeroi < 0 || myfrstnonzeroi > mystr.length - 1)
         {
@@ -478,7 +476,7 @@ function EditAGame({mid, strats, basicrules, vegasrules})
             <button id={"underline"+mid} className=""><u>U</u></button>
             <select id={"font-color"+mid} value={mycolor} style={{color: mycolor}}
                 onChange={handleColorChange}>{mycoloropts}</select>
-            <button id={"refresh"+mid} onClick={null}>🔄</button>
+            <button id={"refresh"+mid} onClick={refresh}>↻</button>
         </div>
     );
 }

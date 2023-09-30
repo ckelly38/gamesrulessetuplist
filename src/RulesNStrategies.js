@@ -26,8 +26,17 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     const [editstrats, setEditStrats] = useState(false);
 
     const iseditingmode = (editbasic || editvegas || editstrats);
+    
+    const mydefaultfontdataobj = {
+        color: "#000000",
+        size: 16,
+        name: "Times New Roman",
+        isbold: false,
+        isunderline: false,
+        isitalics: false
+    };
 
-    const [mycolor, setMyColor] = useState("#000000");
+    const [myfontdata, setMyFontData] = useState(mydefaultfontdataobj);
     
 
     //# of Players: {min}-{max} (inclusive)
@@ -814,6 +823,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
 
         let minsindx = -1;
         let minsi = -1;
+        let notagsbeforeoratsi = true;
         for (let n = stagis.length - 1; n > -1 && n < stagis.length; n--)
         {
             if (stagis[n])
@@ -826,6 +836,9 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                     console.log("mytagis[" + n + "] = " + mytagis[n]);
                     console.log("rawtextsi = " + rawtextsi);
                     console.log("rawtextei = " + rawtextei);
+
+                    if (notagsbeforeoratsi) notagsbeforeoratsi = false;
+                    //else;//do nothing
 
                     let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[n], mytagis);
                     console.log("pi = " + pi);
@@ -860,35 +873,125 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         }//end of n for loop
         console.log("FINAL minsindx = " + minsindx);
         console.log("FINAL minsi = " + minsi);
+        console.log("notagsbeforeoratsi = " + notagsbeforeoratsi);
 
-        if (minsindx < 0 || minsindx > myruletext.length - 1)
+        if (notagsbeforeoratsi)
         {
-            throw new Error("invalid value found and used here for minsindx index value!");
+            let diffsitagis = [];
+            for (let n = stagis.length - 1; n > -1 && n < stagis.length; n--)
+            {
+                if (stagis[n]) diffsitagis[n] = mytagis[n] - rawtextsi;
+                else diffsitagis[n] = -1;
+                console.log("diffsitagis[" + n + "] = " + diffsitagis[n]);
+            }
+
+            let minvdiff = -1;
+            let minvdiffi = -1;
+            for (let n = stagis.length - 1; n > -1 && n < stagis.length; n--)
+            {
+                if (stagis[n])
+                {
+                    if (diffsitagis[n] < 0);
+                    else
+                    {
+                        if (minvdiff < 0)
+                        {
+                            minvdiff = diffsitagis[n];
+                            minvdiffi = n;
+                        }
+                        else
+                        {
+                            if (diffsitagis[n] < minvdiff)
+                            {
+                                minvdiff = diffsitagis[n];
+                                minvdiffi = n;
+                            }
+                            //else;//do nothing
+                        }
+                    }
+                }
+                //else;//do nothing
+            }
+            console.log("minvdiff = " + minvdiff);
+            console.log("minvdiffi = " + minvdiffi);
+
+            if (minvdiffi < 0 || minvdiffi > stagis.length - 1)
+            {
+                //not a valid value unless none are found no starting tags are found
+                //only valid when no tags are found
+                if (stagis.length < 1);
+                else
+                {
+                    throw new Error("no starting tag indexes were found! Only ending tag indexes " +
+                        "were found!");
+                }
+            }
+            else
+            {
+                console.log("found what we are looking for!");
+
+                minsi = minvdiffi;
+                minsindx = mytagis[minsi];
+                notagsbeforeoratsi = false;
+
+                console.log("NEW minsindx = " + minsindx);
+                console.log("NEW minsi = " + minsi);
+                console.log("NEW notagsbeforeoratsi = " + notagsbeforeoratsi);
+            }
         }
         //else;//do nothing
+        console.log("FINAL minsindx = " + minsindx);
+        console.log("FINAL minsi = " + minsi);
+        console.log("FINAL notagsbeforeoratsi = " + notagsbeforeoratsi);
 
-        if (minsi < 0 || minsi > mytagis.length - 1)
+        if (notagsbeforeoratsi)
         {
-            throw new Error("invalid value found and used here for minsi index!");
-        }
-        //else;//do nothing
+            if (minsindx < 0 || minsindx > myruletext.length - 1);
+            else throw new Error("invalid value found and used here for minsindx index value!");
 
-        const finrawtextsi = minsindx;
+            if (minsi < 0 || minsi > mytagis.length - 1);
+            else throw new Error("invalid value found and used here for minsi index!");
+        }
+        else
+        {
+            if (minsindx < 0 || minsindx > myruletext.length - 1)
+            {
+                throw new Error("invalid value found and used here for minsindx index value!");
+            }
+            //else;//do nothing
+
+            if (minsi < 0 || minsi > mytagis.length - 1)
+            {
+                throw new Error("invalid value found and used here for minsi index!");
+            }
+            //else;//do nothing
+        }
+        
+        
+        const finrawtextsi = (notagsbeforeoratsi ? rawtextsi :
+            ((minsindx < rawtextsi) ? minsindx : rawtextsi));
         console.log("rawtextsi = " + rawtextsi);
         console.log("finrawtextsi = " + finrawtextsi);
 
-        const mytagpi = mytaglvs.getTagPairIndex(myruletext, mytagis[minsi], mytagis);
+        const mytagpi = (notagsbeforeoratsi ? -1 : 
+            mytaglvs.getTagPairIndex(myruletext, mytagis[minsi], mytagis));
         console.log("mytagpi = " + mytagpi);
 
-        let mytagpilen = mytagnms[minsi].length;
-        if (mytagnms[minsi] === "\b")
+        let mytagpilen = -1;
+        if (notagsbeforeoratsi);
+        else
         {
-            if (myruletext.charAt(mytagpi + 2) === 'b');
-            else mytagpilen += 2;
+            mytagpilen = mytagnms[minsi].length;
+            if (mytagnms[minsi] === "\b")
+            {
+                if (myruletext.charAt(mytagpi + 2) === 'b');
+                else mytagpilen += 2;
+            }
+            //else;//do nothing
         }
-        //else;//do nothing
         console.log("mytagpilen = " + mytagpilen);
         console.log("mytagpi + mytagpilen = " + (mytagpi + mytagpilen));
+        console.log("rawtextei = " + rawtextei);
 
         let finrawtextei = -1;
         if (mytagpi + mytagpilen < rawtextei) finrawtextei = rawtextei;
@@ -942,8 +1045,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("italicstagspresent = " + mytagspresent[2]);
         console.log("styletagspresent = " + mytagspresent[3]);
 
-        debugger;
-        
         //need to check where each of the present tags are and
         //ask if our start and end selection is between this entire thing
         //if it is then it is that item
@@ -1005,12 +1106,14 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         }//end of n for loop
 
         let myinstylestr = "";
+        let myfontvals = ["", "", ""];
+        const fontstrs = [" font-family: ", " font-size: ", " color: "];
         if (aremytags[3])
         {
             //need to get the information between the two style tags
             for (let n = 0; n < finfmttagis.length; n++)
             {
-                if (mysearchtags[n] === "/style")
+                if (finfmttagnms[n] === "/style")
                 {
                     if (finfmtstagis[n])
                     {
@@ -1019,19 +1122,178 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                         console.log("pi = " + pi);
 
                         myinstylestr = finfmtseltextstr.substring(
-                            finfmtstagis[n] + mysearchtags[n].length, pi);
+                            finfmttagis[n] + finfmttagnms[n].length, pi);
                         break;
                     }
                     //else;//do nothing
                 }
                 //else;//do nothing
             }
+            console.log("myinstylestr = " + myinstylestr);
+
+            if (myinstylestr === undefined || myinstylestr === null || myinstylestr.length < 1)
+            {
+                throw new Error("the string of characters inside of the style tags should not be empty!");
+            }
+            //else;//do nothing
+
+            //extract the font family, the font size, the color
+            const myfontsindxs = fontstrs.map((mystr) => myinstylestr.indexOf(mystr));
+            const myfontsindxsvld = myfontsindxs.map((fsi) =>
+                ((fsi > 0 || fsi === 0) && fsi < myinstylestr.length));
+            console.log("fontstrs = ", fontstrs);
+            console.log("myfontsindxs = ", myfontsindxs);
+            console.log("myfontsindxsvld = ", myfontsindxsvld);
+
+            let myfontvalssindxs = [];
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
+                if (myfontsindxsvld[n])
+                {
+                    console.log("the start index is valid!");
+
+                    myfontvalssindxs[n] = myfontsindxs[n] + fontstrs[n].length;
+                }
+                else myfontvalssindxs[n] = myfontsindxs[n];
+                console.log("NEW myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
+            }//end of n for loop
+            console.log("myfontvalssindxs = ", myfontvalssindxs);
+
+            //go until ; or end of string index from the start index
+            let myfonteindxs = [];
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
+                if (myfontsindxsvld[n])
+                {
+                    console.log("the start index is valid!");
+
+                    myfonteindxs[n] = -1;
+                    for (let i = myfontsindxs[n] + fontstrs[n].length; i < myinstylestr.length; i++)
+                    {
+                        if (myinstylestr.charAt(i) === ';')
+                        {
+                            console.log("found a semi-colon at i = " + i + "!");
+                            myfonteindxs[n] = i;
+                            break;
+                        }
+                        else
+                        {
+                            if (i + 1 === myinstylestr.length)
+                            {
+                                console.log("reached the end of the string length!");
+                                myfonteindxs[n] = myinstylestr.length;
+                                break;
+                            }
+                            //else;//do nothing
+                        }
+                    }//end of i for loop
+                }
+                else myfonteindxs[n] = myfontsindxs[n];
+                console.log("NEW myfonteindxs[" + n + "] = " + myfonteindxs[n]);
+            }//end of n for loop
+            console.log("myfonteindxs = ", myfonteindxs);
+            console.log("");
+
+            console.log("myinstylestr = " + myinstylestr);
+            console.log("fontstrs = ", fontstrs);
+            console.log("myfontsindxs = ", myfontsindxs);
+            console.log("myfontsindxsvld = ", myfontsindxsvld);
+            console.log("myfontvalssindxs = ", myfontvalssindxs);
+            console.log("myfonteindxs = ", myfonteindxs);
+
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                if (myfontsindxsvld[n])
+                {
+                    myfontvals[n] = myinstylestr.substring(myfontvalssindxs[n], myfonteindxs[n]);
+                }
+                else myfontvals[n] = "";
+            }
+            console.log("myfontvals = ", myfontvals);
         }
         //else;//do nothing
-        console.log("myinstylestr = " + myinstylestr);
 
-        debugger;
-        throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
+        //get and save the vals now
+        console.log("fontstrs = ", fontstrs);
+        console.log("myfontvals = ", myfontvals);
+        
+        let nwfontdataobj = {...mydefaultfontdataobj};
+        nwfontdataobj.isbold = aremytags[0];
+        nwfontdataobj.isunderline = aremytags[1];
+        nwfontdataobj.isitalics = aremytags[2];
+        if (myinstylestr.length < 1);
+        else
+        {
+            console.log("now beginning to add the styleing information to the object!");
+
+            if (fontstrs.length === 3);
+            else throw new Error("there must be at least one string on the font strings to look for!");
+
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                if (fontstrs[n] === " font-family: ")
+                {
+                    //take the value and replace -s with spaces
+                    //then add to the object
+                    let mynwnm = "";
+                    for (let i = 0; i < myfontvals[n].length; i++)
+                    {
+                        if (myfontvals[n].charAt(i) === '-') mynwnm += " ";
+                        else mynwnm += myfontvals[n].charAt(i);
+                    }
+                    console.log("mynwnm = " + mynwnm);
+
+                    nwfontdataobj.name = "" + mynwnm;
+                }
+                else if (fontstrs[n] === " font-size: ")
+                {
+                    //remove the px at the end and convert remainder to a number
+                    //if invalid do not set and use defaults in state
+                    //then add to the object
+                    let mypxindx = myfontvals[n].indexOf("px");
+                    console.log("mypxindx = " + mypxindx);
+
+                    if (mypxindx < 0 || mypxindx > myfontvals[n].length - 1 || myfontvals[n].length === 0)
+                    {
+                        continue;
+                    }
+                    //else;//do nothing safe to proceed
+
+                    let mynumstr = myfontvals[n].substring(0, mypxindx);
+                    console.log("mynumstr = " + mynumstr);
+                    
+                    if (mynumstr.length < 1) continue;
+                    //else;//do nothing
+
+                    let mynumsz = Number(mynumstr);
+                    if (isNaN(mynumsz)) continue;
+                    //else;//do nothing
+                    console.log("mynumsz = " + mynumsz);
+
+                    nwfontdataobj.size = mynumsz;
+                }
+                else if (fontstrs[n] === " color: ")
+                {
+                    //this has multiple values just load it
+                    //value must not be empty, use defaults in state
+                    //then add to the object
+
+                    let mycolorstr = "" + myfontvals[n];
+                    console.log("mycolorstr = " + mycolorstr);
+
+                    if (mycolorstr.length < 1) continue;
+                    //else;//do nothing
+
+                    nwfontdataobj.color = "" + mycolorstr;
+                }
+                else throw new Error("illegal font property found in the style tag!");
+            }//end of n for loop
+        }
+        console.log("nwfontdataobj = ", nwfontdataobj);
+
+        setMyFontData(nwfontdataobj);
     }
 
     function generateMarkUpForDisplayFromRule(rule)
@@ -1673,7 +1935,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
             <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? (
                 <EditAGame mid={gameobj.id} basicrules={basicrules} vegasrules={vegasrules}
-                    strats={strats} mycolor={mycolor} setMyColor={setMyColor} refresh={handleMouseUp} />
+                    strats={strats} mydataobj={myfontdata} setMyDataObj={setMyFontData}
+                    refresh={handleMouseUp} />
                 ) : null}</h3>
             <details>
                 <summary>Rules:</summary>

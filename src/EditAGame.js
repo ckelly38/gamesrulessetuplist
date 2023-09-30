@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-function EditAGame({mid, mycolor, setMyColor, refresh, strats, basicrules, vegasrules})
+function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, vegasrules})
 {
     if (mid === undefined || mid === null)
     {
@@ -450,7 +450,8 @@ function EditAGame({mid, mycolor, setMyColor, refresh, strats, basicrules, vegas
 
         debugger;
 
-        setMyColor(event.target.value);
+        //setMyColor(event.target.value);
+        throw new Error("NOT DONE YET 9-29-2023 11:45 PM!");
     }
 
     const mycoloropts = getSimpleListOfColors().map((color) => {
@@ -459,7 +460,7 @@ function EditAGame({mid, mycolor, setMyColor, refresh, strats, basicrules, vegas
         return (<option key={color} value={myval}
             style={{color: "" + myval, backgroundColor: "" + myval}}>TEXT</option>);
     });
-    console.log("EDIT-A-GAME: mycoloropts = " + mycoloropts);
+    console.log("EDIT-A-GAME: mycoloropts = ", mycoloropts);
 
     const myfontsoptsarr = getAllFamilies().map((family) => 
         <option key={family} value={family}>{family}</option>);
@@ -468,13 +469,16 @@ function EditAGame({mid, mycolor, setMyColor, refresh, strats, basicrules, vegas
     //refresh emoji button from: https://emojicombos.com/refresh
     return (
         <div style={{fontSize: "18px", display: "inline"}}>
-            <select id={"fonts-drop-down"+mid} value={"Times New Roman"}>{myfontsoptsarr}</select>
+            <select id={"fonts-drop-down"+mid} value={mydataobj.name}>{myfontsoptsarr}</select>
             <input type="number" step="0.25" style={{width: "50px"}} id={"fontsize"+mid}
-                placeholder="size" value={16} />
-            <button id={"bold"+mid} className=""><b>B</b></button>
-            <button id={"italics"+mid} className=""><i>I</i></button>
-            <button id={"underline"+mid} className=""><u>U</u></button>
-            <select id={"font-color"+mid} value={mycolor} style={{color: mycolor}}
+                placeholder="size" value={mydataobj.size} />
+            <button id={"bold"+mid}
+                className={mydataobj.isbold ? "styleused" : ""}><b>B</b></button>
+            <button id={"italics"+mid}
+                className={mydataobj.isitalics ? "styleused" : ""}><i>I</i></button>
+            <button id={"underline"+mid}
+                className={mydataobj.isunderline ? "styleused" : ""}><u>U</u></button>
+            <select id={"font-color"+mid} value={mydataobj.color} style={{color: mydataobj.color}}
                 onChange={handleColorChange}>{mycoloropts}</select>
             <button id={"refresh"+mid} onClick={refresh}>↻</button>
         </div>

@@ -470,7 +470,7 @@ function EditAGame({mid, mycolor, setMyColor, refresh, strats, basicrules, vegas
         <div style={{fontSize: "18px", display: "inline"}}>
             <select id={"fonts-drop-down"+mid} value={"Times New Roman"}>{myfontsoptsarr}</select>
             <input type="number" step="0.25" style={{width: "50px"}} id={"fontsize"+mid}
-                placeholder="size" value={"12"} />
+                placeholder="size" value={16} />
             <button id={"bold"+mid} className=""><b>B</b></button>
             <button id={"italics"+mid} className=""><i>I</i></button>
             <button id={"underline"+mid} className=""><u>U</u></button>

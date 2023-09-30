@@ -837,9 +837,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                     console.log("rawtextsi = " + rawtextsi);
                     console.log("rawtextei = " + rawtextei);
 
-                    if (notagsbeforeoratsi) notagsbeforeoratsi = false;
-                    //else;//do nothing
-
                     let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[n], mytagis);
                     console.log("pi = " + pi);
 
@@ -848,6 +845,9 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                     {
                         //pi === rawtextsi || pi > rawtextsi
                         //keep it...
+                        if (notagsbeforeoratsi) notagsbeforeoratsi = false;
+                        //else;//do nothing
+                        
                         console.log("NEED TO KEEP THIS PAIR...!");
                         if (minsindx < 0 && minsi < 0)
                         {

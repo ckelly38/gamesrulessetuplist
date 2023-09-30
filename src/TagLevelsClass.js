@@ -852,8 +852,8 @@ class TagLevelsClass {
                 }
                 //else;//do nothing
             }
-            console.log("maxlevel = " + maxlevel);
-            console.log("maxleveli = " + maxleveli);
+            //console.log("maxlevel = " + maxlevel);
+            //console.log("maxleveli = " + maxleveli);
 
             if (maxlevel < 1 || maxleveli < 0 || ((maxleveli > levels.length - 1) && levels.length > 0))
             {
@@ -863,16 +863,16 @@ class TagLevelsClass {
 
             //need to know the biggest power of 10 underneath n
             const maxlevelstr = "" + maxlevel;
-            console.log("maxlevelstr.length = " + maxlevelstr.length);
+            //console.log("maxlevelstr.length = " + maxlevelstr.length);
                 
             const mypow = maxlevelstr.length;
-            console.log("FINAL mypow = " + mypow);
+            //console.log("FINAL mypow = " + mypow);
             
             let mypowoften = 1;
             if (useonedigitforlevelsperstr)
             {
                 for (let n = 0; n < mypow; n++) mypowoften *= 10;
-                console.log("FINAL mypowoften = " + mypowoften);
+                //console.log("FINAL mypowoften = " + mypowoften);
             }
             //else;//do nothing
             
@@ -888,13 +888,13 @@ class TagLevelsClass {
             let mystrs = [];
             for (let n = 0; n < mypow; n++)
             {
-                console.log("n = " + n);
+                //console.log("n = " + n);
 
                 let mynumpow = 1;
                 if (useonedigitforlevelsperstr)
                 {
                     for (let k = 0; k < n + 1; k++) mynumpow *= 10;
-                    console.log("mynumpow = " + mynumpow);
+                    //console.log("mynumpow = " + mynumpow);
                 }
                 //else;//do nothing
 
@@ -937,12 +937,12 @@ class TagLevelsClass {
                     else str += "" + levels[i];
                 }//end of i for loop
                 mystrs[n] = "" + str;
-                console.log("NEW mystrs[" + n + "] = " + mystrs[n]);
+                //console.log("NEW mystrs[" + n + "] = " + mystrs[n]);
             }//end of n for loop
             console.log("");
 
             if (rule === undefined || rule === null) console.log("");
-            else console.log(rule);
+            else console.log(rule + " (rule)");
             for (let p = 0; p < mypow; p++)
             {
                 console.log(mystrs[p] + " = FINAL mystrs[" + p + "]!");

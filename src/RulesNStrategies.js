@@ -77,7 +77,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
     }
 
-    function getRawIndexRelativeToParts(myparts, txtonlyindx, myformattingparts)
+    function getRawIndexRelativeToParts(myparts, txtonlyindx, myformattingparts, usestart)
     {
         //now compute the new indexes using the parts and formatting parts as guides
         //everything on parts[n] will count on the original indexes
@@ -91,11 +91,25 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         }
         //else;//do nothing
 
-        if (txtonlyindx < 0)
+        if (txtonlyindx === undefined || txtonlyindx === null || isNaN(txtonlyindx) || txtonlyindx < 0)
         {
             throw new Error("invalid value found and used here for the textonlyindx index!");
         }
         //else;//do nothing
+
+        if (usestart === undefined || null)
+        {
+            throw new Error("usestart must be a defined boolean variable, but it was not defined!");
+        }
+        else
+        {
+            if (usestart === true || usestart === false);
+            else
+            {
+                throw new Error("usestart must be a defined boolean variable, but it was not a " +
+                    "boolean variable!");
+            }
+        }
         
         let cumpartslen = -1;
         let mysparti = -1;
@@ -107,8 +121,23 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             else throw new Error("invalid value found and used for index n here!");
             //console.log("cumpartslen = " + cumpartslen);
 
-            if (cumpartslen - myparts[n].length < txtonlyindx &&
-                (txtonlyindx < cumpartslen || txtonlyindx === cumpartslen))
+            if (((cumpartslen - myparts[n].length < txtonlyindx) ||
+                (usestart && (cumpartslen - myparts[n].length === txtonlyindx))) &&
+                txtonlyindx < cumpartslen)
+            {
+                //this is the part we want...
+                console.log("found the part we want!");
+                console.log("cumpartslen - myparts[" + n + "].length = " +
+                    (cumpartslen - myparts[n].length));
+                console.log("txtonlyindx = " + txtonlyindx);
+                console.log("cumpartslen = " + cumpartslen);
+                
+                mysireltoparti = txtonlyindx - (cumpartslen - myparts[n].length);
+                mysparti = n;
+                break;
+            }
+            else if ((cumpartslen - myparts[n].length < txtonlyindx) && ((txtonlyindx < cumpartslen) ||
+                ((txtonlyindx === cumpartslen) && !usestart)))
             {
                 //this is the part we want...
                 console.log("found the part we want!");
@@ -737,8 +766,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             //now compute the new indexes here
             console.log("myhtmlsi = " + myhtmlsi);
             console.log("myhtmlei = " + myhtmlei);
-            rawtextsi = getRawIndexRelativeToParts(myparts, myhtmlsi, myformattingparts);
-            rawtextei = getRawIndexRelativeToParts(myparts, myhtmlei, myformattingparts);
+            rawtextsi = getRawIndexRelativeToParts(myparts, myhtmlsi, myformattingparts, true);
+            rawtextei = getRawIndexRelativeToParts(myparts, myhtmlei, myformattingparts, false);
 
             console.log("NEW rawtextsi = " + rawtextsi);
             console.log("NEW rawtextei = " + rawtextei);
@@ -763,6 +792,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("etagis = ", etagis);
         console.log("mytagnms = ", mytagnms);
 
+        
         //now we need to take the formatted selected text and load in the defaults to the editgame
         //need to change the colors, the size, etc...
         //
@@ -858,19 +888,20 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         }
         //else;//do nothing
         console.log("mytagpilen = " + mytagpilen);
+        console.log("mytagpi + mytagpilen = " + (mytagpi + mytagpilen));
 
         let finrawtextei = -1;
-        if (rawtextei > mytagpi + mytagpilen) finrawtextei = rawtextei;
+        if (mytagpi + mytagpilen < rawtextei) finrawtextei = rawtextei;
         else finrawtextei = mytagpi + mytagpilen;
         console.log("finrawtextei = " + finrawtextei);
         
         const finfmtseltextstr = myruletext.substring(finrawtextsi, finrawtextei);
-        console.log("myruletext.substring(finrawtextsi=" + finrawtextsi + ", rawtextei=" + rawtextei +
-            ") = finfmtseltextstr = " + finfmtseltextstr);
+        console.log("myruletext.substring(finrawtextsi=" + finrawtextsi + ", finrawtextei=" +
+            finrawtextei + ") = finfmtseltextstr = " + finfmtseltextstr);
         
         console.log("finfmtseltextstr.length = " + finfmtseltextstr.length);
         console.log("fmtseltextstr.length = " + fmtseltextstr.length);
-        
+
         const fmtdifflen = finfmtseltextstr.length - fmtseltextstr.length;
         console.log("fmtdifflen = " + fmtdifflen);
 
@@ -882,6 +913,10 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         let finfmtstagis = mytaglvs.areAllTagsStartingTags(finfmtseltextstr, finfmttagis);
         let finfmtetagis = mytaglvs.areAllTagsEndingTags(finfmtseltextstr, finfmttagis);
         let finfmttagnms = mytaglvs.getAllTags(finfmtseltextstr, finfmttagis);
+        console.log("finfmttagis = ", finfmttagis);
+        console.log("finfmtstagis = ", finfmtstagis);
+        console.log("finfmtetagis = ", finfmtetagis);
+        console.log("finfmttagnms = ", finfmttagnms);
 
         const mysearchtags = ["/b", "/u", "/i", "/style"];
         let mytagspresent = [];
@@ -906,6 +941,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("underlinetagspresent = " + mytagspresent[1]);
         console.log("italicstagspresent = " + mytagspresent[2]);
         console.log("styletagspresent = " + mytagspresent[3]);
+
+        debugger;
         
         //need to check where each of the present tags are and
         //ask if our start and end selection is between this entire thing
@@ -916,6 +953,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             aremytags[n] = false;
             console.log("OLD aremytags[" + n + "] = " + aremytags[n]);
             console.log("mytagspresent[" + n + "] = " + mytagspresent[n]);
+            console.log("tag we are looking for = mysearchtags[" + n + "] = " + mysearchtags[n]);
 
             if (mytagspresent[n]);
             else continue;
@@ -925,6 +963,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 if (finfmttagnms[k] === mysearchtags[n])
                 {
                     console.log("found our tag at k = " + k + "!");
+                    console.log("our tag is = finfmttagnms[" + k + "] = " + finfmttagnms[k]);
 
                     let useparenttag = false;
                     if (mysearchtags[n] === "/style") useparenttag = true;
@@ -949,13 +988,14 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                             finfmttagis);
                         console.log("pi + finrawtextsi = " + (pi + finrawtextsi));
 
-                        if ((finfmttagis[mykindx] + finrawtextsi) < rawtextsi &&
-                            rawtextei < (pi + finrawtextsi))
+                        if (finfmttagis[mykindx] + finrawtextsi < rawtextsi &&
+                            ((rawtextei < pi + finrawtextsi) || (rawtextei === pi + finrawtextsi)))
                         {
                             aremytags[n] = true;
                             break;
                         }
                         //else;//do nothing
+                        k++;
                     }
                     //else;//do nothing
                 }
@@ -963,6 +1003,32 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }//end of k for loop
             console.log("NEW aremytags[" + n + "] = " + aremytags[n]);
         }//end of n for loop
+
+        let myinstylestr = "";
+        if (aremytags[3])
+        {
+            //need to get the information between the two style tags
+            for (let n = 0; n < finfmttagis.length; n++)
+            {
+                if (mysearchtags[n] === "/style")
+                {
+                    if (finfmtstagis[n])
+                    {
+                        let pi = mytaglvs.getTagPairIndex(finfmtseltextstr, finfmttagis[n],
+                            finfmttagis);
+                        console.log("pi = " + pi);
+
+                        myinstylestr = finfmtseltextstr.substring(
+                            finfmtstagis[n] + mysearchtags[n].length, pi);
+                        break;
+                    }
+                    //else;//do nothing
+                }
+                //else;//do nothing
+            }
+        }
+        //else;//do nothing
+        console.log("myinstylestr = " + myinstylestr);
 
         debugger;
         throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");

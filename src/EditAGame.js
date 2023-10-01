@@ -469,14 +469,15 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
     //refresh emoji button from: https://emojicombos.com/refresh
     return (
         <div style={{fontSize: "18px", display: "inline"}}>
-            <select id={"fonts-drop-down"+mid} value={mydataobj.name}>{myfontsoptsarr}</select>
+            <select id={"fonts-drop-down"+mid} value={mydataobj.name} onChange={null}>
+                {myfontsoptsarr}</select>
             <input type="number" step="0.25" style={{width: "50px"}} id={"fontsize"+mid}
-                placeholder="size" value={mydataobj.size} />
-            <button id={"bold"+mid}
+                placeholder="size" value={mydataobj.size} onChange={null} />
+            <button id={"bold"+mid} onClick={null}
                 className={mydataobj.isbold ? "styleused" : ""}><b>B</b></button>
-            <button id={"italics"+mid}
+            <button id={"italics"+mid} onClick={null}
                 className={mydataobj.isitalics ? "styleused" : ""}><i>I</i></button>
-            <button id={"underline"+mid}
+            <button id={"underline"+mid} onClick={null}
                 className={mydataobj.isunderline ? "styleused" : ""}><u>U</u></button>
             <select id={"font-color"+mid} value={mydataobj.color} style={{color: mydataobj.color}}
                 onChange={handleColorChange}>{mycoloropts}</select>

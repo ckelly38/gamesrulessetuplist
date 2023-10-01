@@ -207,13 +207,19 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         return rawtexti;
     }
 
+    function loadDefaults()
+    {
+        let mycpdefaultfontobj = {...mydefaultfontdataobj};
+        setMyFontData(mycpdefaultfontobj);
+    }
+
     function handleMouseUp(event)
     {
-        console.log("event = ", event);
+        getSelectedTextAndLoadFormatIn(event);
+    }
 
-        if (iseditingmode);
-        else return;
-        
+    function getSelectedTextAndDOMObj()
+    {
         let myselect = window.getSelection();
         let docselect = document.selection;
         let usedocselect = false;
@@ -222,10 +228,10 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         
         if (myselect === undefined || myselect === null || myselect.toString().length < 1)
         {
-            if (docselect === undefined || docselect === null) return;
+            if (docselect === undefined || docselect === null) return null;
             else
             {
-                if (docselect.createRange().text.length < 1) return;
+                if (docselect.createRange().text.length < 1) return null;
                 else usedocselect = true;
             }
         }
@@ -255,7 +261,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
 
         console.log("myseltext = " + myseltext);
 
-        if (myseltext.length < 1) return;
+        if (myseltext.length < 1) return null;
         //else;//do nothing
 
         console.log("mydomnd = ", mydomnd);
@@ -273,14 +279,21 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("FINAL mydomnd = ", mydomnd);
         console.log("FINAL mydomnd.id = " + mydomnd.id);
 
-        //use the event target to get the dom node to get the rule index to get the rule
-        //or we could use the selection to get the dom node to get the rule index to get the rule
+        let myretobj = {
+            mydomnd: mydomnd,
+            myseltext: myseltext
+        };
+        return myretobj;
+    }
 
-        //unless it is in the raw text, if it is the rendered version, it will be text only,
-        //styleing info will not be visible or even part of it
+    function getRuleTextAndIsRawTextObj(myseltxtdomndobj)
+    {
+        if (myseltxtdomndobj === null || myseltxtdomndobj === undefined)
+        {
+            throw new Error("the selected text domnd obj must be defined and not null!");
+        }
+        //else;//do nothing
 
-        //we always want to use the selected text to determine against the raw text
-        //unless we are on the raw text
         const myrulestratstypes = ["basic", "vegas", "strats"];
         
         //the id is in this format: "current" + mytypestr + "rawtext" + gameobj.name + index
@@ -301,7 +314,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         let myrawidindx = -1;
         for (let k = 0; k < mybeginsrawidstrs.length; k++)
         {
-            let myindx = mydomnd.id.indexOf(mybeginsrawidstrs[k]);
+            let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsrawidstrs[k]);
             //console.log("myindx = " + myindx);
 
             if (myindx === 0)
@@ -318,7 +331,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         let mydispidindx = -1;
         for (let k = 0; k < mybeginsdispidstrs.length; k++)
         {
-            let myindx = mydomnd.id.indexOf(mybeginsdispidstrs[k]);
+            let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsdispidstrs[k]);
             //console.log("myindx = " + myindx);
 
             if (myindx === 0)
@@ -364,7 +377,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         else mypartidstr = mybeginsdispidstrs[mydispidindx];
         console.log("mypartidstr = " + mypartidstr);
 
-        const myruleidnumstr = mydomnd.id.substring(mypartidstr.length);
+        const myruleidnumstr = myseltxtdomndobj.mydomnd.id.substring(mypartidstr.length);
         console.log("myruleidnumstr = " + myruleidnumstr);
 
         if (myruleidnumstr.length < 1 || isNaN(myruleidnumstr))
@@ -373,13 +386,13 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         }
         //else;//do nothing
 
+        const ruleindx = Number(myruleidnumstr);
+        console.log("ruleindx = " + ruleindx);
+
         let mytypestr = null;
         if (israwtext) mytypestr = myrulestratstypes[myrawidindx];
         else mytypestr = myrulestratstypes[mydispidindx];
         console.log("mytypestr = " + mytypestr);
-
-        const ruleindx = Number(myruleidnumstr);
-        console.log("ruleindx = " + ruleindx);
 
         let myrulesarr = null;
         if (mytypestr === "basic") myrulesarr = basicrules;
@@ -390,120 +403,22 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         const myruletext = myrulesarr[ruleindx];
         console.log("myruletext = " + myruletext);
 
-        console.log("myseltext = " + myseltext);
-        console.log("mydomnd.textContent = " + mydomnd.textContent);
+        const myruletxtandisrawobj = {
+            myruletext: myruletext,
+            israwtext: israwtext
+        };
+        return myruletxtandisrawobj;
+    }
 
-        //we cannot rely on the offsets in the select object to be valid end points
-        //but we can get the index of the seltext
-        //from there we could calculate the end index
-        const myhtmlsi = mydomnd.textContent.indexOf(myseltext);
-        console.log("myhtmlsi = " + myhtmlsi);
-
-        if (myhtmlsi < 0 || (myhtmlsi > mydomnd.textContent.length - 1 &&
-            mydomnd.textContent.length > 0) || mydomnd.textContent.length === 0)
-        {
-            throw new Error("illegal value found and used for the htmlsi index!");
-        }
-        //else;//do nothing
-
-        const myhtmlei = myhtmlsi + myseltext.length;
-        console.log("myhtmlei = " + myhtmlei);
-
-        if (myhtmlei < 0 || myhtmlei > mydomnd.textContent.length)
-        {
-            throw new Error("illegal value found and used for the htmlei index!");
-        }
-        //else;//do nothing
-
-        const mytaglvs = new TagLevelsClass(myruletext);
-
-        const maxdiff = myruletext.length - mydomnd.textContent.length;
-        console.log("maxdiff = " + maxdiff);
-
-        if (maxdiff < 0)
-        {
-            throw new Error("illegal maxdiff between the rule and the rendered text lengths " +
-                "found and used here!");
-        }
-        //else;//do nothing
-
-        //we can see anyone above, but the style must be after one of them.
-        let mytagis = null;
-        let treatasrawtext = false;
-        if (israwtext) treatasrawtext = true;
-        else
-        {
-            //need to make sure that the raw rule has no tags in it for this to be true
-            //if there are no tag indexes, then treat as rawtext with escape characters
-            //if the entire selection is before all of the tag indexes, then treat as raw text
-            //otherwise it is not safe to do that
-            mytagis = mytaglvs.getAllTagIndexes(myruletext);
-            console.log("mytagis = ", mytagis);
-            
-            if (mytagis === undefined || mytagis === null || mytagis.length < 1)
-            {
-                console.log("there are no tags on the rule (this is raw text)!");
-
-                treatasrawtext = true;
-            }
-            else
-            {
-                console.log("checking if the entire selection ends before the tags start!");
-
-                treatasrawtext = true; 
-                for (let n = 0; n < mytagis.length; n++)
-                {
-                    if (myhtmlei < mytagis[n]);
-                    else
-                    {
-                        console.log("there exists one tag that the end selection is after " +
-                            "(this is not raw text)!");
-                        treatasrawtext = false;
-                        break;
-                    }
-                }
-
-                if (treatasrawtext)
-                {
-                    console.log("the entire selection ends before the tags start (this is raw text)!");
-                }
-                //else;//do nothing
-            }
-
-            if (maxdiff === 0);
-            else
-            {
-                if (treatasrawtext)
-                {
-                    treatasrawtext = false;
-                    console.log("escape characters are present (not raw text, but very close to it)!");
-                }
-                //else;//do nothing
-            }
-        }
-        console.log("treatasrawtext = " + treatasrawtext);
-        console.log("israwtext = " + israwtext);
-
-
-        //now that the mouse up event is recognized as text being selected
-        //an new problem exists, that when I want to select some text and then copy it,
-        //or delete it, the event is recognized as selecting text and it become next to impossible to
-        //copy or delete the text....
-
-        const stagis = mytaglvs.areAllTagsStartingTags(myruletext, mytagis);
-        const etagis = mytaglvs.areAllTagsEndingTags(myruletext, mytagis);
-        const mytagnms = mytaglvs.getAllTags(myruletext, mytagis);
-        console.log("stagis = ", stagis);
-        console.log("etagis = ", etagis);
-        console.log("mytagnms = ", mytagnms);
-
-
+    function getRawTextStartAndEndIndexs(israwtext, treatasrawtext, myhtmlsi, myhtmlei,
+        myseltxtdomndobj, myruletext, mytagis, stagis, etagis, mytagnms, mytaglvs)
+    {
         let rawtextsi = -1;
         let rawtextei = -1;
         if (israwtext || treatasrawtext)
         {
             //best case position for selection is absolute
-            //the rule text is mydomnd.textContent
+            //the rule text is myseltxtdomndobj.mydomnd.textContent
 
             console.log("the start and the end are on the raw text values!");
 
@@ -541,7 +456,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             //all tags and anything between the two style tags will not be displayed
             //that accounts as for why the rules are different
             //
-            //in this case, one rule is displayed text only (mydomnd.textContent)
+            //in this case, one rule is displayed text only (myseltxtdomndobj.mydomnd.textContent)
             //and the other rule has the formatting code (myruletext)
             
             //go until the first difference is found between the two rules
@@ -559,9 +474,9 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             for (let i = 0; i < myruletext.length; i++)
             {
                 console.log("myruletext.charAt(i=" + i + ") = " + myruletext.charAt(i));
-                console.log("mydomnd.textContent.charAt(mytxtonlyi=" + mytxtonlyi + ") = " +
-                    mydomnd.textContent.charAt(mytxtonlyi));
-                if (myruletext.charAt(i) === mydomnd.textContent.charAt(mytxtonlyi))
+                console.log("myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi=" + mytxtonlyi +
+                    ") = " + myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi));
+                if (myruletext.charAt(i) === myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi))
                 {
                     mytxtonlyi++;
 
@@ -791,36 +706,12 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         }
         //else;//do nothing
 
-        const fmtseltextstr = myruletext.substring(rawtextsi, rawtextei);
-        console.log("myruletext.substring(rawtextsi=" + rawtextsi + ", rawtextei=" + rawtextei +
-            ") = fmtseltextstr = " + fmtseltextstr);
-        console.log("myseltext = " + myseltext);
-        console.log("myruletext = " + myruletext);
-        console.log("mytagis = ", mytagis);
-        console.log("stagis = ", stagis);
-        console.log("etagis = ", etagis);
-        console.log("mytagnms = ", mytagnms);
+        return [rawtextsi, rawtextei];
+    }
 
-        
-        //now we need to take the formatted selected text and load in the defaults to the editgame
-        //need to change the colors, the size, etc...
-        //
-        //need to take the rule text and figure out if these are inside any tags...
-        //bold, underline, italics, and if it is inside anything that would change the font, size, color
-        //setMyColor();
-        //
-
-        //we want to know starting tags and ending tags around the selected text
-        //if the tag index is a starting tag and if it is at or just before rawtextsi
-        //and if an ending index is found after rawtextsi and before or after rawtextei
-        //then it is included
-
-        const mylvs = mytaglvs.getLevelsForAllTags(myruletext, mytagis);
-        console.log("mylvs = ", mylvs);
-
-        const mydispstrs = mytaglvs.getLevelsDisplayStrOrStrs(myruletext, mylvs, true);
-        console.log("mydispstrs = ", mydispstrs);
-
+    function getFinalRawTextStartAndEndIndexs(stagis, mytagis, rawtextsi, rawtextei, mytaglvs,
+        mytagnms, myruletext)
+    {
         let minsindx = -1;
         let minsi = -1;
         let notagsbeforeoratsi = true;
@@ -996,6 +887,201 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         let finrawtextei = -1;
         if (mytagpi + mytagpilen < rawtextei) finrawtextei = rawtextei;
         else finrawtextei = mytagpi + mytagpilen;
+        console.log("finrawtextei = " + finrawtextei);
+
+        return [finrawtextsi, finrawtextei];
+    }
+
+    function getTreatAsRawText(israwtext, mytagis, myhtmlei, maxdiff)
+    {
+        let treatasrawtext = false;
+        if (israwtext) treatasrawtext = true;
+        else
+        {
+            //need to make sure that the raw rule has no tags in it for this to be true
+            //if there are no tag indexes, then treat as rawtext with escape characters
+            //if the entire selection is before all of the tag indexes, then treat as raw text
+            //otherwise it is not safe to do that
+            console.log("mytagis = ", mytagis);
+            
+            if (mytagis === undefined || mytagis === null || mytagis.length < 1)
+            {
+                console.log("there are no tags on the rule (this is raw text)!");
+
+                treatasrawtext = true;
+            }
+            else
+            {
+                console.log("checking if the entire selection ends before the tags start!");
+
+                treatasrawtext = true; 
+                for (let n = 0; n < mytagis.length; n++)
+                {
+                    if (myhtmlei < mytagis[n]);
+                    else
+                    {
+                        console.log("there exists one tag that the end selection is after " +
+                            "(this is not raw text)!");
+                        treatasrawtext = false;
+                        break;
+                    }
+                }
+
+                if (treatasrawtext)
+                {
+                    console.log("the entire selection ends before the tags start (this is raw text)!");
+                }
+                //else;//do nothing
+            }
+
+            if (maxdiff === 0);
+            else
+            {
+                if (treatasrawtext)
+                {
+                    treatasrawtext = false;
+                    console.log("escape characters are present (not raw text, but very close to it)!");
+                }
+                //else;//do nothing
+            }
+        }
+        console.log("treatasrawtext = " + treatasrawtext);
+        console.log("israwtext = " + israwtext);
+
+        return treatasrawtext;
+    }
+
+    function getSelectedTextAndLoadFormatIn(event)
+    {
+        if (iseditingmode);
+        else return;
+        
+        const myseltxtdomndobj = getSelectedTextAndDOMObj();
+        if (myseltxtdomndobj === undefined || myseltxtdomndobj === null)
+        {
+            loadDefaults();
+            return;
+        }
+        //else;//do nothing
+        console.log("myseltxtdomndobj = ", myseltxtdomndobj);
+
+        //use the event target to get the dom node to get the rule index to get the rule
+        //or we could use the selection to get the dom node to get the rule index to get the rule
+
+        //unless it is in the raw text, if it is the rendered version, it will be text only,
+        //styleing info will not be visible or even part of it
+
+        //we always want to use the selected text to determine against the raw text
+        //unless we are on the raw text
+        
+        const myruletxtandrawtxtobj = getRuleTextAndIsRawTextObj(myseltxtdomndobj);
+        const myruletext = "" + myruletxtandrawtxtobj.myruletext;
+        const israwtext = myruletxtandrawtxtobj.israwtext;
+        console.log("myruletext = " + myruletext);
+        console.log("israwtext = " + israwtext);
+
+        console.log("myseltxtdomndobj.myseltext = " + myseltxtdomndobj.myseltext);
+        console.log("myseltxtdomndobj.mydomnd.textContent = " + myseltxtdomndobj.mydomnd.textContent);
+
+        //we cannot rely on the offsets in the select object to be valid end points
+        //but we can get the index of the seltext
+        //from there we could calculate the end index
+        const myhtmlsi = myseltxtdomndobj.mydomnd.textContent.indexOf(myseltxtdomndobj.myseltext);
+        console.log("myhtmlsi = " + myhtmlsi);
+
+        if (myhtmlsi < 0 || (myhtmlsi > myseltxtdomndobj.mydomnd.textContent.length - 1 &&
+            myseltxtdomndobj.mydomnd.textContent.length > 0) ||
+            myseltxtdomndobj.mydomnd.textContent.length === 0)
+        {
+            throw new Error("illegal value found and used for the htmlsi index!");
+        }
+        //else;//do nothing
+
+        const myhtmlei = myhtmlsi + myseltxtdomndobj.myseltext.length;
+        console.log("myhtmlei = " + myhtmlei);
+
+        if (myhtmlei < 0 || myhtmlei > myseltxtdomndobj.mydomnd.textContent.length)
+        {
+            throw new Error("illegal value found and used for the htmlei index!");
+        }
+        //else;//do nothing
+
+        const maxdiff = myruletext.length - myseltxtdomndobj.mydomnd.textContent.length;
+        console.log("maxdiff = " + maxdiff);
+
+        if (maxdiff < 0)
+        {
+            throw new Error("illegal maxdiff between the rule and the rendered text lengths " +
+                "found and used here!");
+        }
+        //else;//do nothing
+
+
+        const mytaglvs = new TagLevelsClass(myruletext);
+
+        //we can see anyone above, but the style must be after one of them.
+        let mytagis = null;
+        if (israwtext);
+        else mytagis = mytaglvs.getAllTagIndexes(myruletext);
+        console.log("mytagis = " + mytagis);
+
+        const treatasrawtext = getTreatAsRawText(israwtext, mytagis, myhtmlei, maxdiff);
+        console.log("israwtext = " + israwtext);
+        console.log("treatasrawtext = " + treatasrawtext);
+
+
+        //now that the mouse up event is recognized as text being selected
+        //an new problem exists, that when I want to select some text and then copy it,
+        //or delete it, the event is recognized as selecting text and it become next to impossible to
+        //copy or delete the text....
+
+        const stagis = mytaglvs.areAllTagsStartingTags(myruletext, mytagis);
+        const etagis = mytaglvs.areAllTagsEndingTags(myruletext, mytagis);
+        const mytagnms = mytaglvs.getAllTags(myruletext, mytagis);
+        console.log("stagis = ", stagis);
+        console.log("etagis = ", etagis);
+        console.log("mytagnms = ", mytagnms);
+
+
+        const [rawtextsi, rawtextei] = getRawTextStartAndEndIndexs(israwtext, treatasrawtext,
+            myhtmlsi, myhtmlei, myseltxtdomndobj, myruletext, mytagis, stagis, etagis, mytagnms, mytaglvs);
+        console.log("rawtextsi = " + rawtextsi);
+        console.log("rawtextei = " + rawtextei);
+
+        const fmtseltextstr = myruletext.substring(rawtextsi, rawtextei);
+        console.log("myruletext.substring(rawtextsi=" + rawtextsi + ", rawtextei=" + rawtextei +
+            ") = fmtseltextstr = " + fmtseltextstr);
+        console.log("myseltxtdomndobj.myseltext = " + myseltxtdomndobj.myseltext);
+        console.log("myruletext = " + myruletext);
+        console.log("mytagis = ", mytagis);
+        console.log("stagis = ", stagis);
+        console.log("etagis = ", etagis);
+        console.log("mytagnms = ", mytagnms);
+
+        
+        //now we need to take the formatted selected text and load in the defaults to the editgame
+        //need to change the colors, the size, etc...
+        //
+        //need to take the rule text and figure out if these are inside any tags...
+        //bold, underline, italics, and if it is inside anything that would change the font, size, color
+        //setMyColor();
+        //
+
+        //we want to know starting tags and ending tags around the selected text
+        //if the tag index is a starting tag and if it is at or just before rawtextsi
+        //and if an ending index is found after rawtextsi and before or after rawtextei
+        //then it is included
+
+        const mylvs = mytaglvs.getLevelsForAllTags(myruletext, mytagis);
+        console.log("mylvs = ", mylvs);
+
+        const mydispstrs = mytaglvs.getLevelsDisplayStrOrStrs(myruletext, mylvs, true);
+        console.log("mydispstrs = ", mydispstrs);
+
+        const [finrawtextsi, finrawtextei] =
+            getFinalRawTextStartAndEndIndexs(stagis, mytagis, rawtextsi, rawtextei, mytaglvs,
+                mytagnms, myruletext);
+        console.log("finrawtextsi = " + finrawtextsi);
         console.log("finrawtextei = " + finrawtextei);
         
         const finfmtseltextstr = myruletext.substring(finrawtextsi, finrawtextei);
@@ -1292,6 +1378,10 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }//end of n for loop
         }
         console.log("nwfontdataobj = ", nwfontdataobj);
+
+        console.log("event.target = ", event.target);
+        console.log("event.target.value = ", event.target.value);
+        //debugger;
 
         setMyFontData(nwfontdataobj);
     }

@@ -404,8 +404,10 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("myruletext = " + myruletext);
 
         const myruletxtandisrawobj = {
-            myruletext: myruletext,
-            israwtext: israwtext
+            myruletext: "" + myruletext,
+            israwtext: israwtext,
+            ruleindx: ruleindx,
+            mytypestr: "" + mytypestr
         };
         return myruletxtandisrawobj;
     }
@@ -951,11 +953,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         return treatasrawtext;
     }
 
-    function getSelectedTextAndLoadFormatIn(event)
+    function getFinalFormattedSelectedTextDataObj()
     {
-        if (iseditingmode);
-        else return;
-        
         const myseltxtdomndobj = getSelectedTextAndDOMObj();
         if (myseltxtdomndobj === undefined || myseltxtdomndobj === null)
         {
@@ -1088,20 +1087,100 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("myruletext.substring(finrawtextsi=" + finrawtextsi + ", finrawtextei=" +
             finrawtextei + ") = finfmtseltextstr = " + finfmtseltextstr);
         
-        console.log("finfmtseltextstr.length = " + finfmtseltextstr.length);
-        console.log("fmtseltextstr.length = " + fmtseltextstr.length);
+        const myfinfmtseltxtobj = {
+            finfmtseltextstr: "" + finfmtseltextstr,
+            myruletext: "" + myruletext,
+            finrawtextsi: finrawtextsi,
+            finrawtextei: finrawtextei,
+            fmtseltextstr: "" + fmtseltextstr,
+            rawtextsi: rawtextsi,
+            rawtextei: rawtextei,
+            myseltxtdomndobj: myseltxtdomndobj,
+            israwtext: israwtext,
+            treatasrawtext: treatasrawtext,
+            myhtmlsi: myhtmlsi,
+            myhtmlei: myhtmlei,
+            maxdiff: maxdiff,
+            mytaglvs: mytaglvs,
+            ruleindx: myruletxtandrawtxtobj.ruleindx,
+            mytypestr: "" + myruletxtandrawtxtobj.mytypestr
+        };
+        
+        return myfinfmtseltxtobj;
+    }
 
-        const fmtdifflen = finfmtseltextstr.length - fmtseltextstr.length;
+    function getSelectedTextAndLoadFormatIn(event)
+    {
+        if (iseditingmode);
+        else return;
+
+        let etgnd = null;
+        if (event === undefined || event === null);
+        else
+        {
+            console.log("event.target = ", event.target);
+            console.log("event.target.id = ", event.target.id);
+            if (event.target.id === null || event.target.id === undefined ||
+                event.target.id.toString().length < 1)
+            {
+                if (event.target.tagName === "B" || event.target.tagName === "U" ||
+                    event.target.tagName === "I")
+                {
+                    console.log("event.target.parentNode = ", event.target.parentNode);
+                    console.log("event.target.parentNode.value = ", event.target.parentNode.value);
+                    //log state here...
+                    etgnd = event.target.parentNode;
+                    console.log("myfontdata = ", myfontdata);
+                }
+                else
+                {
+                    console.log("no id!");
+                }
+            }
+            else
+            {
+                console.log("this has an id!");
+
+                etgnd = event.target;
+            }
+            console.log("etgnd = ", etgnd);
+            
+            if (etgnd === undefined || etgnd === null);
+            else
+            {
+                console.log("etgnd.id = ", etgnd.id);
+                console.log("event.target.value = ", event.target.value);
+            }
+            debugger;
+        }
+        
+        const myfinfmtdataobj = getFinalFormattedSelectedTextDataObj();
+        console.log("myfinfmtdataobj = ", myfinfmtdataobj);
+
+        if (myfinfmtdataobj === undefined || myfinfmtdataobj === null)
+        {
+            console.log("no selected text!");
+            return;
+        }
+        //else;//do nothing safe to proceed
+
+        console.log("myfinfmtdataobj.finfmtseltextstr.length = " +
+            myfinfmtdataobj.finfmtseltextstr.length);
+        console.log("myfinfmtdataobj.fmtseltextstr.length = " + myfinfmtdataobj.fmtseltextstr.length);
+
+        const fmtdifflen = myfinfmtdataobj.finfmtseltextstr.length - myfinfmtdataobj.fmtseltextstr.length;
         console.log("fmtdifflen = " + fmtdifflen);
+
+        const mytaglvs = myfinfmtdataobj.mytaglvs;
 
         //need to ask if certain tags are present
         //this will contain information that we want...
         //if bold or underline or italics are present
         //we will then determine if all of the selected text is bolded, underlined, or italics...
-        let finfmttagis = mytaglvs.getAllTagIndexes(finfmtseltextstr);
-        let finfmtstagis = mytaglvs.areAllTagsStartingTags(finfmtseltextstr, finfmttagis);
-        let finfmtetagis = mytaglvs.areAllTagsEndingTags(finfmtseltextstr, finfmttagis);
-        let finfmttagnms = mytaglvs.getAllTags(finfmtseltextstr, finfmttagis);
+        let finfmttagis = mytaglvs.getAllTagIndexes(myfinfmtdataobj.finfmtseltextstr);
+        let finfmtstagis = mytaglvs.areAllTagsStartingTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
+        let finfmtetagis = mytaglvs.areAllTagsEndingTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
+        let finfmttagnms = mytaglvs.getAllTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
         console.log("finfmttagis = ", finfmttagis);
         console.log("finfmtstagis = ", finfmtstagis);
         console.log("finfmtetagis = ", finfmtetagis);
@@ -1135,9 +1214,11 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         //ask if our start and end selection is between this entire thing
         //if it is then it is that item
         let aremytags = [];
+        let aremytagsandeis = [];
         for (let n = 0; n < mysearchtags.length; n++)
         {
             aremytags[n] = false;
+            aremytagsandeis[n] = null;
             console.log("OLD aremytags[" + n + "] = " + aremytags[n]);
             console.log("mytagspresent[" + n + "] = " + mytagspresent[n]);
             console.log("tag we are looking for = mysearchtags[" + n + "] = " + mysearchtags[n]);
@@ -1166,18 +1247,25 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                     if (finfmtstagis[mykindx])
                     {
                         console.log("this is a starting tag!");
-                        console.log("finfmttagis[" + mykindx + "] + finrawtextsi = " +
-                            (finfmttagis[mykindx] + finrawtextsi));
-                        console.log("rawtextsi = " + rawtextsi);
-                        console.log("rawtextei = " + rawtextei);
+                        console.log("finfmttagis[" + mykindx + "] + myfinfmtdataobj.finrawtextsi = " +
+                            (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi));
+                        console.log("myfinfmtdataobj.rawtextsi = " + myfinfmtdataobj.rawtextsi);
+                        console.log("myfinfmtdataobj.rawtextei = " + myfinfmtdataobj.rawtextei);
 
-                        let pi = mytaglvs.getTagPairIndex(finfmtseltextstr, finfmttagis[mykindx],
-                            finfmttagis);
-                        console.log("pi + finrawtextsi = " + (pi + finrawtextsi));
+                        let pi = mytaglvs.getTagPairIndex(myfinfmtdataobj.finfmtseltextstr,
+                            finfmttagis[mykindx], finfmttagis);
+                        console.log("pi + myfinfmtdataobj.finrawtextsi = " +
+                            (pi + myfinfmtdataobj.finrawtextsi));
 
-                        if (finfmttagis[mykindx] + finrawtextsi < rawtextsi &&
-                            ((rawtextei < pi + finrawtextsi) || (rawtextei === pi + finrawtextsi)))
+                        if (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi <
+                            myfinfmtdataobj.rawtextsi &&
+                            ((myfinfmtdataobj.rawtextei < pi + myfinfmtdataobj.finrawtextsi) ||
+                            (myfinfmtdataobj.rawtextei === pi + myfinfmtdataobj.finrawtextsi)))
                         {
+                            aremytagsandeis[n] = {
+                                rwtgsi: finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi,
+                                rwtgei: pi + myfinfmtdataobj.finrawtextsi
+                            };
                             aremytags[n] = true;
                             break;
                         }
@@ -1189,7 +1277,111 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 //else;//do nothing
             }//end of k for loop
             console.log("NEW aremytags[" + n + "] = " + aremytags[n]);
+            console.log("NEW aremytagsandeis[" + n + "] = ", aremytagsandeis[n]);
         }//end of n for loop
+
+        const myetxtidstrs = ["bold", "underline", "italics", ""];
+        let myetxtstrsi = -1;
+        if (etgnd === undefined || etgnd === null);
+        else
+        {
+            console.log("etgnd.id = " + etgnd.id);
+
+            for (let n = 0; n < myetxtidstrs.length - 1; n++)
+            {
+                if (etgnd.id.indexOf(myetxtidstrs[n]) === 0)
+                {
+                    myetxtstrsi = n;
+                    break;
+                }
+                //else;//do nothing
+            }
+        }
+        console.log("myetxtstrsi = " + myetxtstrsi);
+
+        if (myetxtstrsi < 0 || myetxtstrsi > myetxtidstrs.length - 1) myetxtstrsi = 3;
+        //else;//do nothing
+        console.log("FINAL myetxtstrsi = " + myetxtstrsi);
+
+        if (myetxtstrsi < 0 || myetxtstrsi > myetxtidstrs.length - 1)
+        {
+            throw new Error("invlaid value found and used for the myetxtstrsi index!");
+        }
+        //else;//do nothing
+        console.log("aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
+        console.log("aremytagsandeis[" + myetxtstrsi + "] = ", aremytagsandeis[myetxtstrsi]);
+
+        let myrulesarr = null;
+        if (myfinfmtdataobj.mytypestr === "basic") myrulesarr = basicrules;
+        else if (myfinfmtdataobj.mytypestr === "vegas") myrulesarr = vegasrules;
+        else if (myfinfmtdataobj.mytypestr === "strats") myrulesarr = strats;
+        else throw new Error("invalid rule type was found and used here!");
+
+        const ruleindx = myfinfmtdataobj.ruleindx;
+        console.log("ruleindx = " + ruleindx);
+
+        let nwruletxt = "" + myfinfmtdataobj.myruletext;
+        if (myetxtstrsi === 3);
+        else
+        {
+            //log state
+            console.log("myfontdata = ", myfontdata);
+
+            const myfontobjkey = "is" + myetxtidstrs[myetxtstrsi];
+            console.log("myfontobjkey = " + myfontobjkey);
+            console.log("myfontdata[" + myfontobjkey + "] = " + myfontdata[myfontobjkey]);
+
+            if (aremytags[myetxtstrsi])
+            {
+                //remove it from the rule...
+                //the moment we remove one, all indexes will be invalid
+                //we need to know if the bold tag is special or not
+                for (let n = 0; n < 2; n++)
+                {
+                    let i = -1;
+                    if (n === 0) i = aremytagsandeis[myetxtstrsi].rwtgei;
+                    else i = aremytagsandeis[myetxtstrsi].rwtgsi;
+                    console.log("i = " + i);
+
+                    let tgisspcal = false;
+                    if (myetxtidstrs[myetxtstrsi] === "bold")
+                    {
+                        //might be special
+                        if (myfinfmtdataobj.myruletext.charAt(i + 1) === "b");
+                        else tgisspcal = true;
+                    }
+                    //else;//do nothing
+                    console.log("tgisspcal = " + tgisspcal);
+
+                    const tglen = (tgisspcal ? mysearchtags[myetxtstrsi].length + 2:
+                        mysearchtags[myetxtstrsi].length);
+                    console.log("tglen = " + tglen);
+
+                    console.log("nwruletxt.substring(0, " + i + ") = " + nwruletxt.substring(0, i));
+                    
+                    if (i + tglen < nwruletxt.length)
+                    {
+                        console.log("nwruletxt.substring(" + (i + tglen) + ") = " +
+                            nwruletxt.substring(i + tglen));
+                        
+                        nwruletxt = nwruletxt.substring(0, i) + nwruletxt.substring(i + tglen);
+                    }
+                    else
+                    {
+                        console.log("it ends after that tag!");
+
+                        nwruletxt = nwruletxt.substring(0, i);
+                    }
+                    console.log("NEW nwruletxt = " + nwruletxt);
+                }//end of n for loop
+                console.log("FINAL nwruletxt = " + nwruletxt);
+            }
+            else
+            {
+                //add it to the rule...
+            }
+        }
+        debugger;
 
         let myinstylestr = "";
         let myfontvals = ["", "", ""];
@@ -1203,11 +1395,11 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 {
                     if (finfmtstagis[n])
                     {
-                        let pi = mytaglvs.getTagPairIndex(finfmtseltextstr, finfmttagis[n],
+                        let pi = mytaglvs.getTagPairIndex(myfinfmtdataobj.finfmtseltextstr, finfmttagis[n],
                             finfmttagis);
                         console.log("pi = " + pi);
 
-                        myinstylestr = finfmtseltextstr.substring(
+                        myinstylestr = myfinfmtdataobj.finfmtseltextstr.substring(
                             finfmttagis[n] + finfmttagnms[n].length, pi);
                         break;
                     }
@@ -1378,10 +1570,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }//end of n for loop
         }
         console.log("nwfontdataobj = ", nwfontdataobj);
-
-        console.log("event.target = ", event.target);
-        console.log("event.target.value = ", event.target.value);
-        //debugger;
 
         setMyFontData(nwfontdataobj);
     }
@@ -2021,45 +2209,50 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     console.log("EDIT-MODE: " + iseditingmode);
 
     return (
-        <div onSelectCapture={handleSelectionChange} onMouseUp={handleMouseUp}>
+        <div>
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
             <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? (
                 <EditAGame mid={gameobj.id} basicrules={basicrules} vegasrules={vegasrules}
                     strats={strats} mydataobj={myfontdata} setMyDataObj={setMyFontData}
                     refresh={handleMouseUp} />
                 ) : null}</h3>
-            <details>
-                <summary>Rules:</summary>
-                <p>Basic:<button
-                    onClick={(event) => changeEditingMode(event, true, true, null)}>
-                        {editbasic ? "Save" : "Edit"} Basic Rules</button>
-                    {iseditingmode ? <button onClick={(event) => cancelChangesClick(event, true, true)}>
-                        Cancel Changes For Basic Rules</button> : null}
-                </p>
-                <ul>{editbasic ? mybasicruleeditlis : mybasicrulelis}</ul>
-                {editbasic ? <button onClick={(event) => handleAddRuleClick(event, true, true)}>
-                    Add Basic Rule</button> : null}
-                <p>Vegas Style:<button
-                    onClick={(event) => changeEditingMode(event, true, false, null)}>
-                        {editvegas ? "Save" : "Edit"} Vegas Style Rules</button>
-                    {iseditingmode ? <button onClick={(event) => cancelChangesClick(event, true, false)}>
-                        Cancel Changes For Vegas Rules</button> : null}
-                </p>
-                <ul>{editvegas ? myvegasruleeditlis : myvegasrulelis}</ul>
-                {editvegas ? <button onClick={(event) => handleAddRuleClick(event, true, false)}>
-                    Add Vegas Rule</button> : null}
-            </details>
-            <details>
-                <summary>Strategies:<button
-                    onClick={(event) => changeEditingMode(event, false, false, null)}>
-                        {editstrats ? "Save" : "Edit"} Strategies</button>
-                    {iseditingmode ? <button onClick={(event) => cancelChangesClick(event, false, false)}>
-                        Cancel Changes For Strategies</button> : null}
-                </summary>
-                <ul>{editstrats ? mystratsruleeditlis : mystratlis}</ul>
-                {editstrats ? <button onClick={(event) => handleAddRuleClick(event, false, false)}>
-                    Add Strategy</button> : null}
-            </details>
+            <div onSelectCapture={handleSelectionChange} onMouseUp={handleMouseUp}>
+                <details>
+                    <summary>Rules:</summary>
+                    <p>Basic:<button
+                        onClick={(event) => changeEditingMode(event, true, true, null)}>
+                            {editbasic ? "Save" : "Edit"} Basic Rules</button>
+                        {iseditingmode ? <button onClick={
+                            (event) => cancelChangesClick(event, true, true)}>
+                            Cancel Changes For Basic Rules</button> : null}
+                    </p>
+                    <ul>{editbasic ? mybasicruleeditlis : mybasicrulelis}</ul>
+                    {editbasic ? <button onClick={(event) => handleAddRuleClick(event, true, true)}>
+                        Add Basic Rule</button> : null}
+                    <p>Vegas Style:<button
+                        onClick={(event) => changeEditingMode(event, true, false, null)}>
+                            {editvegas ? "Save" : "Edit"} Vegas Style Rules</button>
+                        {iseditingmode ? <button onClick={
+                            (event) => cancelChangesClick(event, true, false)}>
+                            Cancel Changes For Vegas Rules</button> : null}
+                    </p>
+                    <ul>{editvegas ? myvegasruleeditlis : myvegasrulelis}</ul>
+                    {editvegas ? <button onClick={(event) => handleAddRuleClick(event, true, false)}>
+                        Add Vegas Rule</button> : null}
+                </details>
+                <details>
+                    <summary>Strategies:<button
+                        onClick={(event) => changeEditingMode(event, false, false, null)}>
+                            {editstrats ? "Save" : "Edit"} Strategies</button>
+                        {iseditingmode ? <button onClick={
+                            (event) => cancelChangesClick(event, false, false)}>
+                            Cancel Changes For Strategies</button> : null}
+                    </summary>
+                    <ul>{editstrats ? mystratsruleeditlis : mystratlis}</ul>
+                    {editstrats ? <button onClick={(event) => handleAddRuleClick(event, false, false)}>
+                        Add Strategy</button> : null}
+                </details>
+            </div>
         </div>
     );
 }

@@ -581,6 +581,9 @@ class TagLevelsClass {
 
     areAllTagsStartingOrEndingTags(rule, usestart, alltagis = this.getAllTagIndexes(rule))
     {
+        if (alltagis === undefined || alltagis === null) return null;
+        //else;//do nothing
+        
         let startingtis = this.getStartingTagIndexs(rule, alltagis);
         let endingtis = this.getEndingTagIndexs(rule, alltagis);
 

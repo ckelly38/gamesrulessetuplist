@@ -62,30 +62,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     "strategies": []
     */
 
-    function handleSelectionChange(event)
-    {
-        console.log("event = ", event);
-        console.log("event.target.id = " + event.target.id);
-        console.log("event.target.value = " + event.target.value);
-        console.log("event.target.selectionStart = " + event.target.selectionStart);
-        console.log("event.target.selectionEnd = " + event.target.selectionEnd);
-        
-        const myseltext = event.target.value.substring(event.target.selectionStart,
-            event.target.selectionEnd);
-        
-        console.log("myseltext = \"" + myseltext + "\"");
-
-        if (myseltext.length < 1) return;
-        //else;//do nothing
-
-        //this will always be raw text
-        //domnd is the event.target
-        //the rule text is event.target.value
-        
-        debugger;
-        throw new Error("NOT DONE YET 9-27-2023 2:50 AM!");
-    }
-
     function getRawIndexRelativeToParts(myparts, txtonlyindx, myformattingparts, usestart)
     {
         //now compute the new indexes using the parts and formatting parts as guides
@@ -1019,9 +995,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         const mytaglvs = new TagLevelsClass(myruletext);
 
         //we can see anyone above, but the style must be after one of them.
-        let mytagis = null;
-        if (israwtext);
-        else mytagis = mytaglvs.getAllTagIndexes(myruletext);
+        const mytagis = mytaglvs.getAllTagIndexes(myruletext);
         console.log("mytagis = " + mytagis);
 
         const treatasrawtext = getTreatAsRawText(israwtext, mytagis, myhtmlei, maxdiff);
@@ -1064,7 +1038,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         //need to take the rule text and figure out if these are inside any tags...
         //bold, underline, italics, and if it is inside anything that would change the font, size, color
         //setMyColor();
-        //
 
         //we want to know starting tags and ending tags around the selected text
         //if the tag index is a starting tag and if it is at or just before rawtextsi
@@ -1321,10 +1294,12 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("ruleindx = " + ruleindx);
 
         let nwruletxt = "" + myfinfmtdataobj.myruletext;
+        let gennwrule = false;
         if (myetxtstrsi === 3);
         else
         {
             //log state
+            gennwrule = true;
             console.log("myfontdata = ", myfontdata);
 
             const myfontobjkey = "is" + myetxtidstrs[myetxtstrsi];
@@ -1375,17 +1350,89 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                     console.log("NEW nwruletxt = " + nwruletxt);
                 }//end of n for loop
                 console.log("FINAL nwruletxt = " + nwruletxt);
+
+                aremytags[myetxtstrsi] = false;
+                console.log("NEW aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
             }
             else
             {
                 //add it to the rule...
+                console.log("part 1: nwruletxt.substring(0, " + myfinfmtdataobj.finrawtextsi + ") = " +
+                    nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi));
+                
+                console.log("mysearchtags[" + myetxtstrsi + "] = " + mysearchtags[myetxtstrsi]);
+                
+                let myfirsttg = "";
+                if (mysearchtags[myetxtstrsi] === "/b")
+                {
+                    if (nwruletxt.charAt(myfinfmtdataobj.finrawtextsi) === 'r')
+                    {
+                        //this tag needs to be special
+                        myfirsttg = "//" + mysearchtags[myetxtstrsi];
+                    }
+                    else myfirsttg = "" + mysearchtags[myetxtstrsi];
+                }
+                else myfirsttg = "" + mysearchtags[myetxtstrsi];
+                console.log("part 2: myfirsttg = " + myfirsttg);
+                
+                console.log("part 3: nwruletxt.substring(" + myfinfmtdataobj.finrawtextsi + ", " +
+                    myfinfmtdataobj.finrawtextei + ") = " +
+                    nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei));
+
+                let myotg = "";
+                if (mysearchtags[myetxtstrsi] === "/b")
+                {
+                    if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
+                    {
+                        if (nwruletxt.charAt(myfinfmtdataobj.finrawtextei) === 'r')
+                        {
+                            //this tag needs to be special
+                            myotg = "//" + mysearchtags[myetxtstrsi];
+                        }
+                        else myotg = "" + mysearchtags[myetxtstrsi];
+                    }
+                    else myotg = "" + mysearchtags[myetxtstrsi];
+                }
+                else myotg = "" + mysearchtags[myetxtstrsi];
+                console.log("part 4: myotg = " + myotg);
+
+                if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
+                {
+                    console.log("part 5: nwruletxt.substring(" + myfinfmtdataobj.finrawtextei + ") = " +
+                        nwruletxt.substring(myfinfmtdataobj.finrawtextei));
+                }
+                else console.log("part 5: ");
+
+                if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
+                {
+                    nwruletxt = nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi) + myfirsttg +
+                        nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei) +
+                        myotg + nwruletxt.substring(myfinfmtdataobj.finrawtextei);
+                }
+                else
+                {
+                    nwruletxt = nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi) + myfirsttg +
+                        nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei) +
+                        myotg;
+                }
+                console.log("FINAL nwruletxt = " + nwruletxt);
+
+                aremytags[myetxtstrsi] = true;
+                console.log("NEW aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
             }
         }
+        console.log("gennwrule = " + gennwrule);
         debugger;
 
         let myinstylestr = "";
         let myfontvals = ["", "", ""];
         const fontstrs = [" font-family: ", " font-size: ", " color: "];
+        const fontpidstrs = ["fonts-drop-down", "fontsize", "font-color"];
+        let instylestrsi = -1;
+        let instylestrei = -1;
+        let myfontsindxs = [];
+        let myfontvalssindxs = [];
+        let myfonteindxs = [];
         if (aremytags[3])
         {
             //need to get the information between the two style tags
@@ -1401,6 +1448,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
 
                         myinstylestr = myfinfmtdataobj.finfmtseltextstr.substring(
                             finfmttagis[n] + finfmttagnms[n].length, pi);
+                        instylestrsi = finfmttagis[n] + finfmttagnms[n].length;
+                        instylestrei = pi;
                         break;
                     }
                     //else;//do nothing
@@ -1416,14 +1465,13 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             //else;//do nothing
 
             //extract the font family, the font size, the color
-            const myfontsindxs = fontstrs.map((mystr) => myinstylestr.indexOf(mystr));
+            myfontsindxs = fontstrs.map((mystr) => myinstylestr.indexOf(mystr));
             const myfontsindxsvld = myfontsindxs.map((fsi) =>
                 ((fsi > 0 || fsi === 0) && fsi < myinstylestr.length));
             console.log("fontstrs = ", fontstrs);
             console.log("myfontsindxs = ", myfontsindxs);
             console.log("myfontsindxsvld = ", myfontsindxsvld);
 
-            let myfontvalssindxs = [];
             for (let n = 0; n < fontstrs.length; n++)
             {
                 console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
@@ -1439,7 +1487,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             console.log("myfontvalssindxs = ", myfontvalssindxs);
 
             //go until ; or end of string index from the start index
-            let myfonteindxs = [];
             for (let n = 0; n < fontstrs.length; n++)
             {
                 console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
@@ -1496,6 +1543,99 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         //get and save the vals now
         console.log("fontstrs = ", fontstrs);
         console.log("myfontvals = ", myfontvals);
+        
+        if (aremytags[3])
+        {
+            console.log("etgnd = ", etgnd);
+            if (etgnd === undefined || etgnd === null);
+            else
+            {
+                console.log("etgnd.id = " + etgnd.id);
+                console.log("etgnd.value = " + etgnd.value);
+                
+                for (let n = 0; n < fontstrs.length; n++)
+                {
+                    if (fontstrs[n] === " font-family: " || fontstrs[n] === " color: ")
+                    {
+                        if (etgnd.id.indexOf(fontpidstrs[n]) === 0)
+                        {
+                            //replace the spaces with -s
+
+                            let mytempstr = "" + etgnd.value;
+                            if (fontstrs[n] === " font-family: ")
+                            {
+                                for (let i = 0; i < mytempstr.length; i++)
+                                {
+                                    if (mytempstr.charAt(i) === ' ')
+                                    {
+                                        if (i + 1 < mytempstr.length)
+                                        {
+                                            mytempstr = mytempstr.substring(0, i) + "-" +
+                                                mytempstr.substring(i + 1);
+                                        }
+                                        else mytempstr = mytempstr.substring(0, i) + "-";
+                                        console.log("NEW mytempstr = " + mytempstr);
+                                    }
+                                    //else;//do nothing
+                                }//end of i for loop
+                            }
+                            //else;//do nothing
+                            console.log("FINAL mytempstr = " + mytempstr);
+
+                            myfontvals[n] = "" + mytempstr;
+
+                            console.log("NEW myfontvals[" + n + "] = " + myfontvals[n]);
+                            console.log("myfinfmtdataobj.finrawtextsi = " + myfinfmtdataobj.finrawtextsi);
+                            console.log("instylestrsi = " + instylestrsi);
+                            console.log("instylestrei = " + instylestrei);
+                            console.log("myfontsindxs[" + n + "] = " + myfontsindxs[n]);
+                            console.log("myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
+                            console.log("myfonteindxs[" + n + "] = " + myfonteindxs[n]);
+
+                            console.log("instylestrsi + myfinfmtdataobj.finrawtextsi = " +
+                                (instylestrsi + myfinfmtdataobj.finrawtextsi));
+                            
+                            console.log("nwruletxt.substring(myfontvalssindxs[n] + instylestrsi + " +
+                                "myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi + " +
+                                "myfinfmtdataobj.finrawtextsi) = " +
+                                nwruletxt.substring(myfontvalssindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi));
+                            
+                            console.log(nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi));
+                            console.log(mytempstr);
+                            console.log(nwruletxt.substring(myfonteindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi));
+                            
+                            nwruletxt = nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi) + mytempstr +
+                                nwruletxt.substring(myfonteindxs[n] + instylestrsi +
+                                    myfinfmtdataobj.finrawtextsi);
+                            gennwrule = true;
+                            
+                            console.log("NEW nwruletxt = " + nwruletxt);
+                            console.log("NEW gennwrule = " + gennwrule);
+
+                            break;
+                        }
+                        //else;//do nothing
+                    }
+                    else if (fontstrs[n] === " font-size: ")
+                    {
+                        if (etgnd.id.indexOf(fontpidstrs[n]) === 0)
+                        {
+                            //
+                            break;
+                        }
+                        //else;//do nothing
+                    }
+                    else throw new Error("illegal font property found in the style tag!");
+                }//end of n for loop
+            }
+        }
+        //else;//do nothing
+        debugger;
         
         let nwfontdataobj = {...mydefaultfontdataobj};
         nwfontdataobj.isbold = aremytags[0];
@@ -1570,8 +1710,21 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }//end of n for loop
         }
         console.log("nwfontdataobj = ", nwfontdataobj);
+        console.log("gennwrule = " + gennwrule);
 
         setMyFontData(nwfontdataobj);
+
+        if (gennwrule)
+        {
+            //take the rules array if the index matches.... use the new rule
+            //else use the old rule
+            let mynwrules = myrulesarr.map((rule, index) => ((index === ruleindx) ? nwruletxt : rule));
+            if (myfinfmtdataobj.mytypestr === "basic") setBasicRules(mynwrules);
+            else if (myfinfmtdataobj.mytypestr === "vegas") setVegasRules(mynwrules);
+            else if (myfinfmtdataobj.mytypestr === "strats") setStrats(mynwrules);
+            else throw new Error("invalid rule type was found and used here!");
+        }
+        //else;//do nothing
     }
 
     function generateMarkUpForDisplayFromRule(rule)
@@ -2216,7 +2369,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                     strats={strats} mydataobj={myfontdata} setMyDataObj={setMyFontData}
                     refresh={handleMouseUp} />
                 ) : null}</h3>
-            <div onSelectCapture={handleSelectionChange} onMouseUp={handleMouseUp}>
+            <div onMouseUp={handleMouseUp}>
                 <details>
                     <summary>Rules:</summary>
                     <p>Basic:<button

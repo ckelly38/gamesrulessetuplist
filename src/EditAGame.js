@@ -414,52 +414,37 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
     function getColorsOfRainbow()
     {
         //red, orange, yellow, green, blue, indigo, violet
-        return ["FF0000", "FFA500", "FFFF00", "00FF00", "0000FF", "4B0082", "7F00FF"];
+        return ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#7F00FF"];
     }
 
     function getSimpleListOfColors()
     {
         const myroygbivarr = getColorsOfRainbow();
-        const bwarr = ["000000", "FFFFFF"];
+        const bwarr = ["#000000", "#FFFFFF"];
         let myretarr = [];
         for (let n = 0; n < myroygbivarr.length; n++) myretarr[n] = myroygbivarr[n];
         for (let n = 0; n < bwarr.length; n++) myretarr[n + myroygbivarr.length] = bwarr[n];
         return myretarr;
     }
 
-    function handleColorChange(event)
+    let mycolorlist = getSimpleListOfColors();
+    let fndcurrentcolor = false;
+    for (let n = 0; n < mycolorlist.length; n++)
     {
-        console.log("window.getSelection() = ", window.getSelection());
-
-        if (window.getSelection() === undefined || window.getSelection() === null)
+        if (mycolorlist[n] === mydataobj.color)
         {
-            console.log("changes aborted!");
-            return;
+            fndcurrentcolor = true;
+            break;
         }
         //else;//do nothing
-
-        const myselectedtext = window.getSelection().toString();
-        console.log("myselectedtext = " + myselectedtext);
-        
-        if (myselectedtext === undefined || myselectedtext === null || myselectedtext.length < 1)
-        {
-            console.log("changes aborted!");
-            return;
-        }
-        //else;//do nothing
-
-        debugger;
-
-        //setMyColor(event.target.value);
-        throw new Error("NOT DONE YET 9-29-2023 11:45 PM!");
     }
+    if (fndcurrentcolor);
+    else mycolorlist.push(mydataobj.color);
 
-    const mycoloropts = getSimpleListOfColors().map((color) => {
-        let myval = "#" + color;
-        //console.log("EDIT-A-GAME: myval = " + myval);
-        return (<option key={color} value={myval}
-            style={{color: "" + myval, backgroundColor: "" + myval}}>TEXT</option>);
-    });
+    const mycoloropts = mycolorlist.map((color) => (
+        <option key={color} value={color}
+            style={{color: "" + color, backgroundColor: "" + color}}>TEXT</option>)
+    );
     console.log("EDIT-A-GAME: mycoloropts = ", mycoloropts);
 
     const myfontsoptsarr = getAllFamilies().map((family) => 
@@ -469,19 +454,19 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
     //refresh emoji button from: https://emojicombos.com/refresh
     return (
         <div style={{fontSize: "18px", display: "inline"}}>
-            <select id={"fonts-drop-down"+mid} value={mydataobj.name} onChange={refresh}>
+            <select id={"fonts-drop-down" + mid} value={mydataobj.name} onChange={refresh}>
                 {myfontsoptsarr}</select>
             <input type="number" step="0.25" style={{width: "50px"}} id={"fontsize"+mid}
                 placeholder="size" value={mydataobj.size} onChange={refresh} />
-            <button id={"bold"+mid} onClick={refresh}
+            <button id={"bold" + mid} onClick={refresh}
                 className={mydataobj.isbold ? "styleused" : ""}><b>B</b></button>
-            <button id={"italics"+mid} onClick={refresh}
+            <button id={"italics" + mid} onClick={refresh}
                 className={mydataobj.isitalics ? "styleused" : ""}><i>I</i></button>
-            <button id={"underline"+mid} onClick={refresh}
+            <button id={"underline" + mid} onClick={refresh}
                 className={mydataobj.isunderline ? "styleused" : ""}><u>U</u></button>
-            <select id={"font-color"+mid} value={mydataobj.color} style={{color: mydataobj.color}}
-                onChange={handleColorChange}>{mycoloropts}</select>
-            <button id={"refresh"+mid} onClick={refresh}>↻</button>
+            <select id={"font-color" + mid} value={mydataobj.color} style={{color: mydataobj.color}}
+                onChange={refresh}>{mycoloropts}</select>
+            <button id={"refresh" + mid} onClick={refresh}>↻</button>
         </div>
     );
 }

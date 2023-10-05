@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 
 function EditAGame({mid, mydataobj, setMyDataObj, tempsize, setTempSize, refresh, sizefocus, sizeblur,
-    strats, basicrules, vegasrules})
+    colors, setColors, strats, basicrules, vegasrules})
 {
     if (mid === undefined || mid === null)
     {
@@ -10,20 +10,25 @@ function EditAGame({mid, mydataobj, setMyDataObj, tempsize, setTempSize, refresh
     }
     //else;//do nothing
 
-    let mycolorlist = getSimpleListOfColors();
     let fndcurrentcolor = false;
-    for (let n = 0; n < mycolorlist.length; n++)
+    for (let n = 0; n < colors.length; n++)
     {
-        if (mycolorlist[n] === mydataobj.color)
+        if (colors[n] === mydataobj.color)
         {
             fndcurrentcolor = true;
             break;
         }
         //else;//do nothing
     }
+    console.log("EDITAGAME: fndcurrentcolor = " + fndcurrentcolor);
+
     if (fndcurrentcolor);
-    else mycolorlist.push(mydataobj.color);
-    console.log("EDITAGAME: mycolorlist = " + mycolorlist);
+    else
+    {
+        let nwcolorlist = [...colors, mydataobj.color];
+        setColors(nwcolorlist);
+    }
+    console.log("EDITAGAME: colors = " + colors);
     
 
     function listFonts()
@@ -444,7 +449,7 @@ function EditAGame({mid, mydataobj, setMyDataObj, tempsize, setTempSize, refresh
         return myretarr;
     }
 
-    const mycoloropts = mycolorlist.map((color) => (
+    const mycoloropts = colors.map((color) => (
         <option key={color} value={color}
             style={{color: "" + color, backgroundColor: "" + color}}>TEXT</option>)
     );

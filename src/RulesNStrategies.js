@@ -36,6 +36,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
 
     const [seltxtdomobj, setSelTextDOMObj] = useState(null);
     const [tempsize, setTempSize] = useState(mydefaultfontdataobj.size);
+    const [colors, setColors] = useState(["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#0000FF",
+        "#4B0082", "#7F00FF", "#000000", "#FFFFFF"]);
 
     const iseditingmode = (editbasic || editvegas || editstrats);
     
@@ -1160,7 +1162,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }
             if (isonblur) console.log("seltxtdomobj = ", seltxtdomobj);
             //else;//do nothing
-            debugger;
+            //debugger;
         }
         
         let myfinfmtdataobj = null;
@@ -1460,7 +1462,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }
         }
         console.log("gennwrule = " + gennwrule);
-        debugger;
+        //debugger;
 
         let myinstylestr = "";
         let myfontvals = ["", "", ""];
@@ -1668,7 +1670,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             }
         }
         //else;//do nothing
-        debugger;
+        //debugger;
         
         let nwfontdataobj = {...mydefaultfontdataobj};
         nwfontdataobj.isbold = aremytags[0];
@@ -2406,7 +2408,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 <EditAGame mid={gameobj.id} basicrules={basicrules} vegasrules={vegasrules}
                     strats={strats} mydataobj={myfontdata} setMyDataObj={setMyFontData}
                     refresh={handleMouseUp} sizefocus={onFocusHandler} sizeblur={onBlurHandler}
-                    tempsize={tempsize} setTempSize={setTempSize} />
+                    tempsize={tempsize} setTempSize={setTempSize} colors={colors} setColors={setColors} />
                 ) : null}</h3>
             <div onMouseUp={handleMouseUp}>
                 <details>

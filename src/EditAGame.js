@@ -1,13 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 
-function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, vegasrules})
+function EditAGame({mid, mydataobj, setMyDataObj, tempsize, setTempSize, refresh, sizefocus, sizeblur,
+    strats, basicrules, vegasrules})
 {
     if (mid === undefined || mid === null)
     {
         throw new Error("mid must be defined!");
     }
     //else;//do nothing
+
+    let mycolorlist = getSimpleListOfColors();
+    let fndcurrentcolor = false;
+    for (let n = 0; n < mycolorlist.length; n++)
+    {
+        if (mycolorlist[n] === mydataobj.color)
+        {
+            fndcurrentcolor = true;
+            break;
+        }
+        //else;//do nothing
+    }
+    if (fndcurrentcolor);
+    else mycolorlist.push(mydataobj.color);
+    console.log("EDITAGAME: mycolorlist = " + mycolorlist);
+    
 
     function listFonts()
     {
@@ -50,7 +67,7 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
               }
             }
           
-            console.log('Available Fonts:', [...fontAvailable.values()]);
+            //console.log('Available Fonts:', [...fontAvailable.values()]);
             return fontAvailable;
           })();
         return fontCheck;
@@ -60,7 +77,7 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
     function getAllFamilies()
     {
         const fontFaces = listFonts();
-        console.log("EDIT-A-GAME: fontFaces = ", fontFaces);
+        //console.log("EDIT-A-GAME: fontFaces = ", fontFaces);
 
         return [...new Set(fontFaces)];
     }
@@ -427,20 +444,6 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
         return myretarr;
     }
 
-    let mycolorlist = getSimpleListOfColors();
-    let fndcurrentcolor = false;
-    for (let n = 0; n < mycolorlist.length; n++)
-    {
-        if (mycolorlist[n] === mydataobj.color)
-        {
-            fndcurrentcolor = true;
-            break;
-        }
-        //else;//do nothing
-    }
-    if (fndcurrentcolor);
-    else mycolorlist.push(mydataobj.color);
-
     const mycoloropts = mycolorlist.map((color) => (
         <option key={color} value={color}
             style={{color: "" + color, backgroundColor: "" + color}}>TEXT</option>)
@@ -457,7 +460,8 @@ function EditAGame({mid, mydataobj, setMyDataObj, refresh, strats, basicrules, v
             <select id={"fonts-drop-down" + mid} value={mydataobj.name} onChange={refresh}>
                 {myfontsoptsarr}</select>
             <input type="number" step="0.25" style={{width: "50px"}} id={"fontsize"+mid}
-                placeholder="size" value={mydataobj.size} onChange={refresh} />
+                placeholder="size" value={tempsize} onChange={(event) => setTempSize(event.target.value)}
+                onFocus={sizefocus} onBlur={sizeblur} />
             <button id={"bold" + mid} onClick={refresh}
                 className={mydataobj.isbold ? "styleused" : ""}><b>B</b></button>
             <button id={"italics" + mid} onClick={refresh}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import './App.css';
 import EditAGame from "./EditAGame";
 import TagLevelsClass from "./TagLevelsClass";
@@ -25,8 +25,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
     const [editvegas, setEditVegas] = useState(false);
     const [editstrats, setEditStrats] = useState(false);
 
-    const iseditingmode = (editbasic || editvegas || editstrats);
-    
     const mydefaultfontdataobj = {
         color: "#000000",
         size: 16,
@@ -36,6 +34,11 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         isitalics: false
     };
 
+    const [seltxtdomobj, setSelTextDOMObj] = useState(null);
+    const [tempsize, setTempSize] = useState(mydefaultfontdataobj.size);
+
+    const iseditingmode = (editbasic || editvegas || editstrats);
+    
     const [myfontdata, setMyFontData] = useState(mydefaultfontdataobj);
     
 
@@ -191,7 +194,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
 
     function handleMouseUp(event)
     {
-        getSelectedTextAndLoadFormatIn(event);
+        getSelectedTextAndLoadFormatIn(event, false);
     }
 
     function getSelectedTextAndDOMObj()
@@ -260,6 +263,16 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             myseltext: myseltext
         };
         return myretobj;
+    }
+
+    function onFocusHandler(event)
+    {
+        setSelTextDOMObj(getSelectedTextAndDOMObj());
+    }
+
+    function onBlurHandler(event)
+    {
+        getSelectedTextAndLoadFormatIn(event, true);
     }
 
     function getRuleTextAndIsRawTextObj(myseltxtdomndobj)
@@ -929,9 +942,14 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         return treatasrawtext;
     }
 
-    function getFinalFormattedSelectedTextDataObj()
+    function getFinalFormattedSelectedTextDataObj(myseltxtdomobj)
     {
-        const myseltxtdomndobj = getSelectedTextAndDOMObj();
+        let myseltxtdomndobj = null;
+        if (myseltxtdomobj === undefined || myseltxtdomobj === null)
+        {
+            myseltxtdomndobj = getSelectedTextAndDOMObj();
+        }
+        else myseltxtdomndobj = myseltxtdomobj;
         if (myseltxtdomndobj === undefined || myseltxtdomndobj === null)
         {
             loadDefaults();
@@ -1082,10 +1100,26 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         return myfinfmtseltxtobj;
     }
 
-    function getSelectedTextAndLoadFormatIn(event)
+
+    function getSelectedTextAndLoadFormatIn(event, isonblur = false)
     {
         if (iseditingmode);
         else return;
+
+        console.log("isonblur = " + isonblur);
+        if (isonblur === undefined || isonblur === null)
+        {
+            throw new Error("isonblur must be defined boolean variable, but it was not defined!");
+        }
+        else
+        {
+            if (isonblur === true || isonblur === false);
+            else
+            {
+                throw new Error("isonblur must be defined boolean variable, but it was not a " +
+                    "boolean variable!");
+            }
+        }
 
         let etgnd = null;
         if (event === undefined || event === null);
@@ -1124,10 +1158,14 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 console.log("etgnd.id = ", etgnd.id);
                 console.log("event.target.value = ", event.target.value);
             }
+            if (isonblur) console.log("seltxtdomobj = ", seltxtdomobj);
+            //else;//do nothing
             debugger;
         }
         
-        const myfinfmtdataobj = getFinalFormattedSelectedTextDataObj();
+        let myfinfmtdataobj = null;
+        if (isonblur) myfinfmtdataobj = getFinalFormattedSelectedTextDataObj(seltxtdomobj);
+        else myfinfmtdataobj = getFinalFormattedSelectedTextDataObj();
         console.log("myfinfmtdataobj = ", myfinfmtdataobj);
 
         if (myfinfmtdataobj === undefined || myfinfmtdataobj === null)
@@ -1555,15 +1593,19 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                 
                 for (let n = 0; n < fontstrs.length; n++)
                 {
-                    if (fontstrs[n] === " font-family: " || fontstrs[n] === " color: ")
+                    if (fontstrs[n] === " font-family: " || fontstrs[n] === " color: " ||
+                        fontstrs[n] === " font-size: ")
                     {
                         if (etgnd.id.indexOf(fontpidstrs[n]) === 0)
                         {
-                            //replace the spaces with -s
+                            let mytempstr = "";
+                            if (fontstrs[n] === " font-size: ") mytempstr = "" + etgnd.value + "px";
+                            else mytempstr = "" + etgnd.value;
+                            console.log("init mytempstr = " + mytempstr);
 
-                            let mytempstr = "" + etgnd.value;
                             if (fontstrs[n] === " font-family: ")
                             {
+                                //replace the spaces with -s
                                 for (let i = 0; i < mytempstr.length; i++)
                                 {
                                     if (mytempstr.charAt(i) === ' ')
@@ -1617,15 +1659,6 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
                             console.log("NEW nwruletxt = " + nwruletxt);
                             console.log("NEW gennwrule = " + gennwrule);
 
-                            break;
-                        }
-                        //else;//do nothing
-                    }
-                    else if (fontstrs[n] === " font-size: ")
-                    {
-                        if (etgnd.id.indexOf(fontpidstrs[n]) === 0)
-                        {
-                            //
                             break;
                         }
                         //else;//do nothing
@@ -1713,6 +1746,7 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
         console.log("gennwrule = " + gennwrule);
 
         setMyFontData(nwfontdataobj);
+        setTempSize(nwfontdataobj.size);
 
         if (gennwrule)
         {
@@ -1725,7 +1759,11 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             else throw new Error("invalid rule type was found and used here!");
         }
         //else;//do nothing
+
+        if (isonblur) setSelTextDOMObj(null);
+        //else;//do nothing
     }
+
 
     function generateMarkUpForDisplayFromRule(rule)
     {
@@ -2367,7 +2405,8 @@ function RulesNStrategies({games, gameobj, screener, updateGame})
             <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? (
                 <EditAGame mid={gameobj.id} basicrules={basicrules} vegasrules={vegasrules}
                     strats={strats} mydataobj={myfontdata} setMyDataObj={setMyFontData}
-                    refresh={handleMouseUp} />
+                    refresh={handleMouseUp} sizefocus={onFocusHandler} sizeblur={onBlurHandler}
+                    tempsize={tempsize} setTempSize={setTempSize} />
                 ) : null}</h3>
             <div onMouseUp={handleMouseUp}>
                 <details>

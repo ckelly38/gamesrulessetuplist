@@ -11,7 +11,7 @@ function Stats({games, gameobj, screener, updateGame})
     }
     //else;//do nothing
 
-    console.log("gameobj = ", gameobj);
+    console.log("stats: gameobj = ", gameobj);
 
     //# of Players: {min}-{max} (inclusive)
     //Average Number of Minutes: {time}
@@ -47,9 +47,7 @@ function Stats({games, gameobj, screener, updateGame})
     const [mypexs, setMyPExs] = useState(mypexobjsarr);
 
     const cpmypexsgameobj = gameobj.NumberOfPlayersExcluding.map((val) => val);
-
-    const [myodecktype, setMyODeckType] = useState("");
-    const [mypartialgamedata, setMyPartialGameDataObj] = useState({
+    const mydefaultgamedatobj = {
         name: "" + gameobj.name,
         KindOfDeck: "" + gameobj.KindOfDeck,
         AverageMinutes: gameobj.AverageMinutes,
@@ -57,21 +55,24 @@ function Stats({games, gameobj, screener, updateGame})
         MaxNumberOfPlayers: gameobj.MaxNumberOfPlayers,
         NumberOfDecks: gameobj.NumberOfDecks,
         NumberOfPlayersExcluding: cpmypexsgameobj
-    });
-    console.log("mypartialgamedata = ", mypartialgamedata);
+    };
+
+    const [myodecktype, setMyODeckType] = useState("");
+    const [mypartialgamedata, setMyPartialGameDataObj] = useState(mydefaultgamedatobj);
+    console.log("stats: mypartialgamedata = ", mypartialgamedata);
 
     //handleChange from AddAGame function more or less ids are about the only thing that is different
     //on the AddAGame component the ids are unique by themselves only rendered once on the page
     function handleChange(event)
     {
         console.log("Stats AddAGame handleChange: event.target = ", event.target);
-        console.log("handleChange: event.target.value = " + event.target.value);
-        console.log("handleChange: event.target.id = " + event.target.id);
-        console.log("handleChange: OLD gameobj = ", gameobj);
+        console.log("statshandleChange: event.target.value = " + event.target.value);
+        console.log("statshandleChange: event.target.id = " + event.target.id);
+        console.log("statshandleChange: OLD gameobj = ", gameobj);
 
         let nwpgameobj = {...mypartialgamedata};
 
-        console.log("handleChange: OLD nwpgameobj = ", nwpgameobj);
+        console.log("statshandleChange: OLD nwpgameobj = ", nwpgameobj);
         
         //do something with the value all we need is the key
         let objkey = "";
@@ -94,19 +95,19 @@ function Stats({games, gameobj, screener, updateGame})
         }
         else
         {
-            throw new Error("handleChange: NEED TO DO SOMETHING HERE TO HANDLE THE ID (" +
+            throw new Error("statshandleChange: NEED TO DO SOMETHING HERE TO HANDLE THE ID (" +
                 event.target.id + ")!");
         }
-        console.log("handleChange: objkey = " + objkey);
-        console.log("handleChange: usenumber = " + usenumber);
-        console.log("handleChange: usedrop = " + usedrop);
+        console.log("statshandleChange: objkey = " + objkey);
+        console.log("statshandleChange: usenumber = " + usenumber);
+        console.log("statshandleChange: usedrop = " + usedrop);
 
         if (usenumber) nwpgameobj[objkey] = Number(event.target.value);
         else
         {
             if (!usedrop && screener({input: "" + event.target.value}))
             {
-                console.error("handleChange: input (" + event.target.value +
+                console.error("statshandleChange: input (" + event.target.value +
                     ") has illegal characters in it!");
                 console.log("changes aborted!");
                 return;
@@ -119,7 +120,7 @@ function Stats({games, gameobj, screener, updateGame})
             }
             //else;//do nothing
         }
-        console.log("handleChange: NEW nwpgameobj = ", nwpgameobj);
+        console.log("statshandleChange: NEW nwpgameobj = ", nwpgameobj);
 
         setMyPartialGameDataObj(nwpgameobj);
     }
@@ -140,10 +141,36 @@ function Stats({games, gameobj, screener, updateGame})
             nwgameobj.rules.vegasstyle = [...gameobj.rules.vegasstyle];
             nwgameobj.strategies=[...gameobj.strategies];
 
-            debugger;
+            if (nwstate === undefined || nwstate === null)
+            {
+                //safe to copy from state
+                console.log("safe to copy the data from the state variable!");
 
-            throw new Error("NOT DONE YET HERE 10-5-2023 9:45 PM!");
-            //updateGame(nwgameobj);
+                nwgameobj.name = "" + mypartialgamedata.name;
+                nwgameobj.KindOfDeck = "" + mypartialgamedata.KindOfDeck;
+                nwgameobj.AverageMinutes = mypartialgamedata.AverageMinutes;
+                nwgameobj.MinNumberOfPlayers = mypartialgamedata.MinNumberOfPlayers;
+                nwgameobj.MaxNumberOfPlayers = mypartialgamedata.MaxNumberOfPlayers;
+                nwgameobj.NumberOfDecks = mypartialgamedata.NumberOfDecks;
+                nwgameobj.NumberOfPlayersExcluding = mypexs.map((myexobj) => myexobj.value);
+            }
+            else
+            {
+                //must copy from nwstate
+                console.log("NOT safe to copy the data from the state variable! MUST COPY FROM nwstate!");
+                
+                nwgameobj.name = "" + nwstate.name;
+                nwgameobj.KindOfDeck = "" + nwstate.KindOfDeck;
+                nwgameobj.AverageMinutes = nwstate.AverageMinutes;
+                nwgameobj.MinNumberOfPlayers = nwstate.MinNumberOfPlayers;
+                nwgameobj.MaxNumberOfPlayers = nwstate.MaxNumberOfPlayers;
+                nwgameobj.NumberOfDecks = nwstate.NumberOfDecks;
+                nwgameobj.NumberOfPlayersExcluding = nwstate.NumberOfPlayersExcluding.map((val) => val);
+            }
+            console.log("nwgameobj = ", nwgameobj);
+            //debugger;
+
+            updateGame(nwgameobj);
         }
         //else;//do nothing
 
@@ -155,15 +182,11 @@ function Stats({games, gameobj, screener, updateGame})
         console.log("event.target = ", event.target);
         
         //revert the state variables then save it in editing mode
-        let nwstate = null;
-        console.error("NOT DONE YET HERE 10-6-2023 12:30 AM!");
+        let nwstate = {...mydefaultgamedatobj};
+        nwstate.NumberOfPlayersExcluding = cpmypexsgameobj.map((val) => val);
         console.log("nwstate = ", nwstate);
 
-        if (nwstate === undefined || nwstate === null)
-        {
-            debugger;
-            throw new Error("nwstate must be defined!");
-        }
+        if (nwstate === undefined || nwstate === null) throw new Error("nwstate must be defined!");
         //else;//do nothing
 
         changeEditingMode(nwstate);

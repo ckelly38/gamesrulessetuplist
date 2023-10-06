@@ -38,8 +38,12 @@ function ListOfNumbers({label, myexs, setMyExs})
     const rendinputsarr = inputsarr.map((input) => (
         <div style={{display: "inline"}} key={input.id}>{input}, </div>));
 
+    let mylabledispstr = "";
+    if (label === undefined || label === null || label.length < 1);
+    else mylabledispstr = label + ":";
+
     return (
-        <div>{label}: 
+        <div>{mylabledispstr} 
             <div style={{display: "inline"}}>{rendinputsarr}</div>
             <button type="button" onClick={addInput}>Add More Exclusions</button>
         </div>

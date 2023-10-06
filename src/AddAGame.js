@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import GameFormRules from "./GameFormRules";
 import ListOfNumbers from "./ListOfNumbers";
+import DeckTypeSelection from "./DeckTypeSelection";
 
 function AddAGame({addGame, screener})
 {
@@ -26,7 +27,7 @@ function AddAGame({addGame, screener})
         isvegas: false,
         text: ""
     }]);
-    const[mystrats, setMyStrategies] = useState([{
+    const [mystrats, setMyStrategies] = useState([{
         id: "strategy1",
         text: ""
     }]);
@@ -34,8 +35,8 @@ function AddAGame({addGame, screener})
     //    id: "pex1",
     //    value: 0
     //}
-    const[myplayerexclusions, setMyPlayerExclusion] = useState([]);
-    const[myotherdecktype, setMyOtherDeckType] = useState("");
+    const [myplayerexclusions, setMyPlayerExclusion] = useState([]);
+    const [myotherdecktype, setMyOtherDeckType] = useState("");
 
     function handleSubmit(event)
     {
@@ -174,13 +175,8 @@ function AddAGame({addGame, screener})
             <input required={true} id="avnummins" type="number" min="0" step="any" placeholder="0"
                 value={gameobj.AverageMinutes} onChange={handleChange} /><br />
             <label htmlFor="deck-type" id="deck-typelbl">Deck Type: </label>
-            <select id="deck-type" value={gameobj.KindOfDeck} onChange={handleChange}>
-                <option value="A normal 52 card deck that has the 4 suits and no jokers">Normal</option>
-                <option value="Special Deck that comes with the game">Special</option>
-                <option value={myotherdecktype}>Other</option>
-            </select>
-            <input id="otherdecktype" type="text"  style={{width: "400px"}}
-                placeholder="other deck type..." value={myotherdecktype} onChange={handleChange} />
+            <DeckTypeSelection gameobj={gameobj} handleChange={handleChange}
+                myotherdecktype={myotherdecktype} />
             <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
                 handleChange={screener} />
             <GameFormRules type="strategies" myrules={mystrats} setMyRules={setMyStrategies}

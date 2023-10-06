@@ -124,7 +124,8 @@ function GameRulesStatsSetupRenderer({games, type, screener, updateGame})
                 else if (boolsobj.usestats)
                 {
                     return (
-                        <Stats key={game.id} games={games} gameobj={game} />
+                        <Stats key={game.id} games={games} gameobj={game} screener={screener}
+                        updateGame={updateGame} />
                     );
                 }
                 else if (boolsobj.userules)

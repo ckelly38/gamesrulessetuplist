@@ -175,7 +175,7 @@ function AddAGame({addGame, screener})
             <input required={true} id="avnummins" type="number" min="0" step="any" placeholder="0"
                 value={gameobj.AverageMinutes} onChange={handleChange} /><br />
             <label htmlFor="deck-type" id="deck-typelbl">Deck Type: </label>
-            <DeckTypeSelection gameobj={gameobj} handleChange={handleChange}
+            <DeckTypeSelection gameobj={gameobj} handleChange={handleChange} mid=""
                 myotherdecktype={myotherdecktype} />
             <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
                 handleChange={screener} />

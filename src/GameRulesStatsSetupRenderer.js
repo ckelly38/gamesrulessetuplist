@@ -118,14 +118,15 @@ function GameRulesStatsSetupRenderer({games, type, screener, updateGame})
                 if (boolsobj.usesetup)
                 {
                     return (
-                        <GameSetup key={game.id} games={games} gameobj={game} />
+                        <GameSetup key={game.id} games={games} gameobj={game} screener={screener}
+                            updateGame={updateGame} />
                     );
                 }
                 else if (boolsobj.usestats)
                 {
                     return (
                         <Stats key={game.id} games={games} gameobj={game} screener={screener}
-                        updateGame={updateGame} />
+                            updateGame={updateGame} />
                     );
                 }
                 else if (boolsobj.userules)
@@ -150,9 +151,11 @@ function GameRulesStatsSetupRenderer({games, type, screener, updateGame})
             return (
                 <>
                     <NavBar gameid={mygameobj.id} />
-                    {boolsobj.usesetup ? ( <GameSetup games={games} gameobj={mygameobj} /> ) : (
+                    {boolsobj.usesetup ? ( <GameSetup games={games} gameobj={mygameobj} screener={screener}
+                        updateGame={updateGame} /> ) : (
                         (boolsobj.usestats ? (
-                            <Stats games={games} gameobj={mygameobj} />
+                            <Stats games={games} gameobj={mygameobj} screener={screener}
+                                updateGame={updateGame} />
                         ) : (boolsobj.userules ? (
                             <RulesNStrategies games={games} gameobj={mygameobj} screener={screener}
                                 updateGame={updateGame} />

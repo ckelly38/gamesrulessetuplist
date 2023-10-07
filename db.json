@@ -58,10 +58,10 @@
       "MaxNumberOfPlayers": 0,
       "NumberOfPlayersExcluding": [],
       "NumberOfDecks": 0,
-      "AverageMinutes": 0,
+      "AverageMinutes": 1,
       "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
       "image": "url",
-      "description": "",
+      "description": "This shows the general setup of the game: name.",
       "rules": {
         "basic": [
           "test: /b/u/i/span/style font-family: Webdings; font-size: 30px; color: rgb(256, 0, 0, 1) /styleHearts/span/i/u/b, Spades, Clubs, and /span/style color: red /styleDiamonds/span",

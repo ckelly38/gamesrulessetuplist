@@ -92,293 +92,6 @@ function RulesNStrategies({games, gameobj, updateGame})
         setSelTextDOMObj(mytaglvs.getSelectedTextAndDOMObj());
     }
 
-    //this takes in state
-    function getRuleTextAndIsRawTextObj(myseltxtdomndobj)
-    {
-        if (myseltxtdomndobj === null || myseltxtdomndobj === undefined)
-        {
-            throw new Error("the selected text domnd obj must be defined and not null!");
-        }
-        //else;//do nothing
-
-        const myrulestratstypes = ["basic", "vegas", "strats"];
-        
-        //the id is in this format: "current" + mytypestr + "rawtext" + gameobj.name + index
-        let mybeginsrawidstrs = [];
-        for (let k = 0; k < myrulestratstypes.length; k++)
-        {
-            mybeginsrawidstrs[k] = "current" + myrulestratstypes[k] + "rawtext" + gameobj.name;
-        }
-        
-        //the id is in this format: mytypestr + gameobj.name + index
-        let mybeginsdispidstrs = [];
-        for (let k = 0; k < myrulestratstypes.length; k++)
-        {
-            mybeginsdispidstrs[k] = myrulestratstypes[k] + gameobj.name;
-        }
-
-        let israwtext = false;
-        let myrawidindx = -1;
-        for (let k = 0; k < mybeginsrawidstrs.length; k++)
-        {
-            let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsrawidstrs[k]);
-            //console.log("myindx = " + myindx);
-
-            if (myindx === 0)
-            {
-                myrawidindx = k;
-                israwtext = true;
-                break;
-            }
-            //else;//do nothing
-        }
-        console.log("israwtext = " + israwtext);
-        console.log("myrawidindx = " + myrawidindx);
-        //console.log("myseltxtdomndobj.mydomnd.id = " + myseltxtdomndobj.mydomnd.id);
-        
-        let mydispidindx = -1;
-        for (let k = 0; k < mybeginsdispidstrs.length; k++)
-        {
-            let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsdispidstrs[k]);
-            //console.log("mybeginsdispidstrs[" + k + "] = " + mybeginsdispidstrs[k]);
-            console.log("myindx = " + myindx);
-
-            if (myindx === 0)
-            {
-                mydispidindx = k;
-                break;
-            }
-            //else;//do nothing
-        }
-        console.log("mydispidindx = " + mydispidindx);
-
-        if (israwtext)
-        {
-            if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1)
-            {
-                throw new Error("invalid value found and used for the myrawidindx index!");
-            }
-            //else;//do nothing
-
-            if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1);
-            else
-            {
-                throw new Error("invalid value found and used for the mydispidindx index!");
-            }
-        }
-        else
-        {
-            if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1);
-            else
-            {
-                throw new Error("invalid value found and used for the myrawidindx index!");
-            }
-
-            if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1)
-            {
-                debugger;
-                throw new Error("invalid value found and used for the mydispidindx index!");
-            }
-            //else;//do nothing
-        }
-        
-        let mypartidstr = null;
-        if (israwtext) mypartidstr = mybeginsrawidstrs[myrawidindx];
-        else mypartidstr = mybeginsdispidstrs[mydispidindx];
-        console.log("mypartidstr = " + mypartidstr);
-
-        const myruleidnumstr = myseltxtdomndobj.mydomnd.id.substring(mypartidstr.length);
-        console.log("myruleidnumstr = " + myruleidnumstr);
-
-        if (myruleidnumstr.length < 1 || isNaN(myruleidnumstr))
-        {
-            throw new Error("illegal value found and used for the rule index here!");
-        }
-        //else;//do nothing
-
-        const ruleindx = Number(myruleidnumstr);
-        console.log("ruleindx = " + ruleindx);
-
-        let mytypestr = null;
-        if (israwtext) mytypestr = myrulestratstypes[myrawidindx];
-        else mytypestr = myrulestratstypes[mydispidindx];
-        console.log("mytypestr = " + mytypestr);
-
-        let myrulesarr = null;
-        if (mytypestr === "basic") myrulesarr = basicrules;
-        else if (mytypestr === "vegas") myrulesarr = vegasrules;
-        else if (mytypestr === "strats") myrulesarr = strats;
-        else throw new Error("invalid rule type was found and used here!");
-
-        const myruletext = myrulesarr[ruleindx];
-        console.log("myruletext = " + myruletext);
-
-        const myruletxtandisrawobj = {
-            myruletext: "" + myruletext,
-            israwtext: israwtext,
-            ruleindx: ruleindx,
-            mytypestr: "" + mytypestr
-        };
-        return myruletxtandisrawobj;
-    }
-
-
-    //this calls a method that takes in state
-    function getFinalFormattedSelectedTextDataObj(myseltxtdomobj)
-    {
-        const mytaglvs = new TagLevelsClass("");
-        let myseltxtdomndobj = null;
-        if (myseltxtdomobj === undefined || myseltxtdomobj === null)
-        {
-            myseltxtdomndobj = mytaglvs.getSelectedTextAndDOMObj();
-        }
-        else myseltxtdomndobj = myseltxtdomobj;
-        if (myseltxtdomndobj === undefined || myseltxtdomndobj === null) return null;
-        //else;//do nothing
-        console.log("myseltxtdomndobj = ", myseltxtdomndobj);
-
-        //use the event target to get the dom node to get the rule index to get the rule
-        //or we could use the selection to get the dom node to get the rule index to get the rule
-
-        //unless it is in the raw text, if it is the rendered version, it will be text only,
-        //styleing info will not be visible or even part of it
-
-        //we always want to use the selected text to determine against the raw text
-        //unless we are on the raw text
-        
-        const myruletxtandrawtxtobj = getRuleTextAndIsRawTextObj(myseltxtdomndobj);
-        const myruletext = "" + myruletxtandrawtxtobj.myruletext;
-        const israwtext = myruletxtandrawtxtobj.israwtext;
-        console.log("myruletext = " + myruletext);
-        console.log("israwtext = " + israwtext);
-
-        console.log("myseltxtdomndobj.myseltext = " + myseltxtdomndobj.myseltext);
-        console.log("myseltxtdomndobj.mydomnd.textContent = " + myseltxtdomndobj.mydomnd.textContent);
-
-        //we cannot rely on the offsets in the select object to be valid end points
-        //but we can get the index of the seltext
-        //from there we could calculate the end index
-        const myhtmlsi = myseltxtdomndobj.mydomnd.textContent.indexOf(myseltxtdomndobj.myseltext);
-        console.log("myhtmlsi = " + myhtmlsi);
-
-        if (myhtmlsi < 0 || (myhtmlsi > myseltxtdomndobj.mydomnd.textContent.length - 1 &&
-            myseltxtdomndobj.mydomnd.textContent.length > 0) ||
-            myseltxtdomndobj.mydomnd.textContent.length === 0)
-        {
-            throw new Error("illegal value found and used for the htmlsi index!");
-        }
-        //else;//do nothing
-
-        const myhtmlei = myhtmlsi + myseltxtdomndobj.myseltext.length;
-        console.log("myhtmlei = " + myhtmlei);
-
-        if (myhtmlei < 0 || myhtmlei > myseltxtdomndobj.mydomnd.textContent.length)
-        {
-            throw new Error("illegal value found and used for the htmlei index!");
-        }
-        //else;//do nothing
-
-        const maxdiff = myruletext.length - myseltxtdomndobj.mydomnd.textContent.length;
-        console.log("maxdiff = " + maxdiff);
-
-        if (maxdiff < 0)
-        {
-            throw new Error("illegal maxdiff between the rule and the rendered text lengths " +
-                "found and used here!");
-        }
-        //else;//do nothing
-
-
-        
-
-        //we can see anyone above, but the style must be after one of them.
-        const mytagis = mytaglvs.getAllTagIndexes(myruletext);
-        console.log("mytagis = " + mytagis);
-
-        const treatasrawtext = mytaglvs.getTreatAsRawText(israwtext, mytagis, myhtmlei, maxdiff);
-        console.log("israwtext = " + israwtext);
-        console.log("treatasrawtext = " + treatasrawtext);
-
-
-        //now that the mouse up event is recognized as text being selected
-        //an new problem exists, that when I want to select some text and then copy it,
-        //or delete it, the event is recognized as selecting text and it become next to impossible to
-        //copy or delete the text....
-
-        const stagis = mytaglvs.areAllTagsStartingTags(myruletext, mytagis);
-        const etagis = mytaglvs.areAllTagsEndingTags(myruletext, mytagis);
-        const mytagnms = mytaglvs.getAllTags(myruletext, mytagis);
-        console.log("stagis = ", stagis);
-        console.log("etagis = ", etagis);
-        console.log("mytagnms = ", mytagnms);
-
-
-        const [rawtextsi, rawtextei] = mytaglvs.getRawTextStartAndEndIndexs(israwtext, treatasrawtext,
-            myhtmlsi, myhtmlei, myseltxtdomndobj, myruletext, mytagis, stagis, etagis, mytagnms, mytaglvs);
-        console.log("rawtextsi = " + rawtextsi);
-        console.log("rawtextei = " + rawtextei);
-
-        const fmtseltextstr = myruletext.substring(rawtextsi, rawtextei);
-        console.log("myruletext.substring(rawtextsi=" + rawtextsi + ", rawtextei=" + rawtextei +
-            ") = fmtseltextstr = " + fmtseltextstr);
-        console.log("myseltxtdomndobj.myseltext = " + myseltxtdomndobj.myseltext);
-        console.log("myruletext = " + myruletext);
-        console.log("mytagis = ", mytagis);
-        console.log("stagis = ", stagis);
-        console.log("etagis = ", etagis);
-        console.log("mytagnms = ", mytagnms);
-
-        
-        //now we need to take the formatted selected text and load in the defaults to the editgame
-        //need to change the colors, the size, etc...
-        //
-        //need to take the rule text and figure out if these are inside any tags...
-        //bold, underline, italics, and if it is inside anything that would change the font, size, color
-        //setMyColor();
-
-        //we want to know starting tags and ending tags around the selected text
-        //if the tag index is a starting tag and if it is at or just before rawtextsi
-        //and if an ending index is found after rawtextsi and before or after rawtextei
-        //then it is included
-
-        const mylvs = mytaglvs.getLevelsForAllTags(myruletext, mytagis);
-        console.log("mylvs = ", mylvs);
-
-        const mydispstrs = mytaglvs.getLevelsDisplayStrOrStrs(myruletext, mylvs, true);
-        console.log("mydispstrs = ", mydispstrs);
-
-        const [finrawtextsi, finrawtextei] =
-            mytaglvs.getFinalRawTextStartAndEndIndexs(stagis, mytagis, rawtextsi, rawtextei, mytaglvs,
-                mytagnms, myruletext);
-        console.log("finrawtextsi = " + finrawtextsi);
-        console.log("finrawtextei = " + finrawtextei);
-        
-        const finfmtseltextstr = myruletext.substring(finrawtextsi, finrawtextei);
-        console.log("myruletext.substring(finrawtextsi=" + finrawtextsi + ", finrawtextei=" +
-            finrawtextei + ") = finfmtseltextstr = " + finfmtseltextstr);
-        
-        const myfinfmtseltxtobj = {
-            finfmtseltextstr: "" + finfmtseltextstr,
-            myruletext: "" + myruletext,
-            finrawtextsi: finrawtextsi,
-            finrawtextei: finrawtextei,
-            fmtseltextstr: "" + fmtseltextstr,
-            rawtextsi: rawtextsi,
-            rawtextei: rawtextei,
-            myseltxtdomndobj: myseltxtdomndobj,
-            israwtext: israwtext,
-            treatasrawtext: treatasrawtext,
-            myhtmlsi: myhtmlsi,
-            myhtmlei: myhtmlei,
-            maxdiff: maxdiff,
-            mytaglvs: mytaglvs,
-            ruleindx: myruletxtandrawtxtobj.ruleindx,
-            mytypestr: "" + myruletxtandrawtxtobj.mytypestr
-        };
-        
-        return myfinfmtseltxtobj;
-    }
-
 
     //this takes in and calls setState
     function getSelectedTextAndLoadFormatIn(event, isonblur = false)
@@ -449,8 +162,17 @@ function RulesNStrategies({games, gameobj, updateGame})
         }
         
         let myfinfmtdataobj = null;
-        if (isonblur) myfinfmtdataobj = getFinalFormattedSelectedTextDataObj(seltxtdomobj);
-        else myfinfmtdataobj = getFinalFormattedSelectedTextDataObj();
+        const mytagclsobj = new TagLevelsClass("");
+        if (isonblur)
+        {
+            myfinfmtdataobj = mytagclsobj.getFinalFormattedSelectedTextDataObj(seltxtdomobj, gameobj,
+                basicrules, vegasrules, strats);
+        }
+        else
+        {
+            myfinfmtdataobj = mytagclsobj.getFinalFormattedSelectedTextDataObj(null, gameobj,
+                basicrules, vegasrules, strats);
+        }
         console.log("myfinfmtdataobj = ", myfinfmtdataobj);
 
         if (myfinfmtdataobj === undefined || myfinfmtdataobj === null)
@@ -607,15 +329,6 @@ function RulesNStrategies({games, gameobj, updateGame})
         //else;//do nothing
         console.log("aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
         console.log("aremytagsandeis[" + myetxtstrsi + "] = ", aremytagsandeis[myetxtstrsi]);
-
-        let myrulesarr = null;
-        if (myfinfmtdataobj.mytypestr === "basic") myrulesarr = basicrules;
-        else if (myfinfmtdataobj.mytypestr === "vegas") myrulesarr = vegasrules;
-        else if (myfinfmtdataobj.mytypestr === "strats") myrulesarr = strats;
-        else throw new Error("invalid rule type was found and used here!");
-
-        const ruleindx = myfinfmtdataobj.ruleindx;
-        console.log("ruleindx = " + ruleindx);
 
         let nwruletxt = "" + myfinfmtdataobj.myruletext;
         let gennwrule = false;
@@ -1030,6 +743,17 @@ function RulesNStrategies({games, gameobj, updateGame})
         }
         console.log("nwfontdataobj = ", nwfontdataobj);
         console.log("gennwrule = " + gennwrule);
+
+        
+        let myrulesarr = null;
+        if (myfinfmtdataobj.mytypestr === "basic") myrulesarr = basicrules;
+        else if (myfinfmtdataobj.mytypestr === "vegas") myrulesarr = vegasrules;
+        else if (myfinfmtdataobj.mytypestr === "strats") myrulesarr = strats;
+        else throw new Error("invalid rule type was found and used here!");
+
+        const ruleindx = myfinfmtdataobj.ruleindx;
+        console.log("ruleindx = " + ruleindx);
+
 
         setMyFontData(nwfontdataobj);
         setTempSize(nwfontdataobj.size);

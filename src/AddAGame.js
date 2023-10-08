@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import GameFormRules from "./GameFormRules";
 import ListOfNumbers from "./ListOfNumbers";
 import DeckTypeSelection from "./DeckTypeSelection";
+import TagLevelsClass from './TagLevelsClass';
 
-function AddAGame({addGame, screener})
+function AddAGame({addGame})
 {
     const [gameobj, setGameObject] = useState({
         "name": "name",
@@ -112,7 +113,8 @@ function AddAGame({addGame, screener})
         if (usenumber) nwgameobj[objkey] = Number(event.target.value);
         else
         {
-            if (!usedrop && screener({input: "" + event.target.value}))
+            const mytaglvs = new TagLevelsClass("");
+            if (!usedrop && mytaglvs.screener({input: "" + event.target.value}))
             {
                 console.error("handleChange: input (" + event.target.value +
                     ") has illegal characters in it!");
@@ -149,6 +151,7 @@ function AddAGame({addGame, screener})
     "strategies": []
     */
 
+    const mytaglvs = new TagLevelsClass("");
     return (
         <form onSubmit={handleSubmit}>
             <label htmlFor="nwname" id="nwnamelbl">Game Name: </label>
@@ -178,9 +181,9 @@ function AddAGame({addGame, screener})
             <DeckTypeSelection gameobj={gameobj} handleChange={handleChange} mid=""
                 myotherdecktype={myotherdecktype} />
             <GameFormRules type="rules" myrules={myrules} setMyRules={setMyRules}
-                handleChange={screener} />
+                handleChange={mytaglvs.screener} />
             <GameFormRules type="strategies" myrules={mystrats} setMyRules={setMyStrategies}
-                handleChange={screener} />
+                handleChange={mytaglvs.screener} />
             <input type="submit" value="Submit" />
         </form>
     );

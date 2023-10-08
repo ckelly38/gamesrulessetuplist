@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import TagLevelsClass from './TagLevelsClass';
 
-function GameSetup({games, gameobj, screener, updateGame})
+function GameSetup({games, gameobj, updateGame})
 {
     if (games === undefined || games === null || games.length < 1)
     {
@@ -119,7 +120,8 @@ function GameSetup({games, gameobj, screener, updateGame})
         }
 
         let nwpimgurlanddesc = {...mytemimgurldesc};
-        if (screener({input: "" + event.target.value}))
+        const mytaglvs = new TagLevelsClass("");
+        if (mytaglvs.screener({input: "" + event.target.value}))
         {
             console.error("handleChange: input (" + event.target.value + ") has illegal characters in it!");
             console.log("changes aborted!");
@@ -132,13 +134,17 @@ function GameSetup({games, gameobj, screener, updateGame})
     }
 
     let description = "";
+    let usedefaultdesc = true;//should be false;
+    //but to fix rendering problems due to heirarchy problems temporarily set to true.
     if (mytemimgurldesc.description === undefined || mytemimgurldesc.description === null ||
         mytemimgurldesc.description.length < 1)
     {
         description = "This shows the general setup of the game: " + name + ".";
+        usedefaultdesc = true;
     }
     else description = mytemimgurldesc.description;
     console.log("description = " + description);
+    console.log("usedefaultdesc = " + usedefaultdesc);
 
     return (
         <div className="App">
@@ -155,7 +161,8 @@ function GameSetup({games, gameobj, screener, updateGame})
                     <img src={mytemimgurldesc.image} alt={name + " setup"} /></>
                 ) : <img src={mytemimgurldesc.image} alt={name + " setup"} />}
             {editMode ? <textarea id={"editimgdesc" + gameobj.id} value={description}
-                style={{width: "1200px"}} onChange={handleChange} /> : <p>{description}</p>}
+                style={{width: "1200px"}} onChange={handleChange} /> : (usedefaultdesc ?
+                <p>{description}</p> : <p dangerouslySetInnerHTML={description} />)}
         </div>
     );
 }

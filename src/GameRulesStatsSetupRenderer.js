@@ -5,7 +5,7 @@ import Stats from "./Stats";
 import GameSetup from "./GameSetup";
 import RulesNStrategies from "./RulesNStrategies";
 
-function GameRulesStatsSetupRenderer({games, type, screener, updateGame})
+function GameRulesStatsSetupRenderer({games, type, updateGame})
 {
     const params = useParams();
     console.log("params = ", params);
@@ -118,21 +118,19 @@ function GameRulesStatsSetupRenderer({games, type, screener, updateGame})
                 if (boolsobj.usesetup)
                 {
                     return (
-                        <GameSetup key={game.id} games={games} gameobj={game} screener={screener}
-                            updateGame={updateGame} />
+                        <GameSetup key={game.id} games={games} gameobj={game} updateGame={updateGame} />
                     );
                 }
                 else if (boolsobj.usestats)
                 {
                     return (
-                        <Stats key={game.id} games={games} gameobj={game} screener={screener}
-                            updateGame={updateGame} />
+                        <Stats key={game.id} games={games} gameobj={game} updateGame={updateGame} />
                     );
                 }
                 else if (boolsobj.userules)
                 {
                     return (
-                        <RulesNStrategies key={game.id} games={games} gameobj={game} screener={screener}
+                        <RulesNStrategies key={game.id} games={games} gameobj={game}
                             updateGame={updateGame} />
                     );
                 }
@@ -151,14 +149,12 @@ function GameRulesStatsSetupRenderer({games, type, screener, updateGame})
             return (
                 <>
                     <NavBar gameid={mygameobj.id} />
-                    {boolsobj.usesetup ? ( <GameSetup games={games} gameobj={mygameobj} screener={screener}
+                    {boolsobj.usesetup ? ( <GameSetup games={games} gameobj={mygameobj}
                         updateGame={updateGame} /> ) : (
                         (boolsobj.usestats ? (
-                            <Stats games={games} gameobj={mygameobj} screener={screener}
-                                updateGame={updateGame} />
+                            <Stats games={games} gameobj={mygameobj} updateGame={updateGame} />
                         ) : (boolsobj.userules ? (
-                            <RulesNStrategies games={games} gameobj={mygameobj} screener={screener}
-                                updateGame={updateGame} />
+                            <RulesNStrategies games={games} gameobj={mygameobj} updateGame={updateGame} />
                         ) : null))
                     )}
                 </>

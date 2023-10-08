@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import ListOfNumbers from "./ListOfNumbers";
 import DeckTypeSelection from "./DeckTypeSelection";
 import './App.css';
+import TagLevelsClass from "./TagLevelsClass";
 
-function Stats({games, gameobj, screener, updateGame})
+function Stats({games, gameobj, updateGame})
 {
     if (games === undefined || games === null || games.length < 1)
     {
@@ -105,7 +106,8 @@ function Stats({games, gameobj, screener, updateGame})
         if (usenumber) nwpgameobj[objkey] = Number(event.target.value);
         else
         {
-            if (!usedrop && screener({input: "" + event.target.value}))
+            const mytaglvs = new TagLevelsClass("");
+            if (!usedrop && mytaglvs.screener({input: "" + event.target.value}))
             {
                 console.error("statshandleChange: input (" + event.target.value +
                     ") has illegal characters in it!");

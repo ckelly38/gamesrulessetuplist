@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 
 function EditAGame({mid, mydataobj, setMyDataObj, tempsize, setTempSize, refresh, sizefocus, sizeblur,
-    colors, setColors, strats, basicrules, vegasrules})
+    colors, setColors})
 {
     if (mid === undefined || mid === null)
     {

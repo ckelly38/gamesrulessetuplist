@@ -6,80 +6,12 @@ import NavBar from "./NavBar";
 import Home from "./Home";
 import AddAGame from "./AddAGame";
 import GameRulesStatsSetupRenderer from "./GameRulesStatsSetupRenderer";
+import TagLevelsClass from './TagLevelsClass';
 
 
 function App() {
   const [games, setGames] = useState([]);
   const [loaded, setIsLoaded] = useState(false);
-
-  function doesInputHaveUnnecessaryCharacters(inputobj)
-  {
-      console.log("AddAGame screener: inputobj = ", inputobj);
-      if (inputobj.input === undefined || inputobj.input === null)
-      {
-          throw new Error("AddAGame screener: the input string was null and must be defined!");
-      }
-      //else;//do nothing
-      console.log("screener: inputobj.input.length = " + inputobj.input.length);
-
-      for (let i = 0; i < inputobj.input.length; i++)
-      {
-          //need to screen for "" before end of the string
-          //need to screen for < or > or / or =
-          //console.log("inputobj.input.charAt(" + i + ") = " + inputobj.input.charAt(i));
-          if (inputobj.input.charAt(i) === '<')
-          {
-              console.log("may have found a tag start here at i = " + i + "!");
-              let errmsg = "";
-              for (let k = i + 1; k < inputobj.input.length; k++)
-              {
-                  if (inputobj.input.charAt(k) === '"')
-                  {
-                      errmsg = "AddAGame screener: illegal character " +
-                          "found. Found < then \" after it!";
-                  }
-                  else if (inputobj.input.charAt(k) === '>')
-                  {
-                      errmsg = "AddAGame screener: illegal character found. " +
-                          "Found < then > after it!";
-                  }
-                  else if (inputobj.input.charAt(k) === '=')
-                  {
-                      errmsg = "AddAGame screener: illegal character found. " +
-                          "Found < then = after it!";
-                  }
-                  else
-                  {
-                      if (k === i + 1)
-                      {
-                          if (inputobj.input.charAt(k) === '/')
-                          {
-                              errmsg = "AddAGame screener: illegal character found. " +
-                                  "Found < then / after it!";
-                          }
-                          else if (inputobj.input.charAt(k) === '>')
-                          {
-                              errmsg = "AddAGame screener: illegal character found. " +
-                                  "Found < then > after it!";
-                          }
-                          //else;//do nothing
-                      }
-                      //else;//do nothing
-                  }
-
-                  if (errmsg.length > 0)
-                  {
-                      console.error(errmsg);
-                      alert("Error: input = " + inputobj.input + " is illegal! " + errmsg);
-                      return true;
-                  }
-              }//end of k for loop
-          }
-          //else;//do nothing should be safe
-      }//end of i for loop
-      console.log("AddAGame screener: input object is safe!");
-      return false;
-  }
 
   function screenEachGameObj(gameobj)
   {
@@ -102,11 +34,13 @@ function App() {
     "strategies": []
     */
 
+    const mytaglvs = new TagLevelsClass("");
+
     //name, kind, image, description, and all rules
     const basickeysarr = ["name", "KindOfDeck", "image", "description"];
     for (let item in basickeysarr)
     {
-      if (doesInputHaveUnnecessaryCharacters({input: "" + gameobj[item]}))
+      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj[item]}))
       {
           console.error("handleChange: input (" + gameobj[item] + ") has illegal characters in it!");
           console.log("changes aborted!");
@@ -116,7 +50,7 @@ function App() {
     }
     for (let n = 0; n < gameobj.rules.basic.length; n++)
     {
-      if (doesInputHaveUnnecessaryCharacters({input: "" + gameobj.rules.basic[n]}))
+      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj.rules.basic[n]}))
       {
           console.error("handleChange: input (" + gameobj.rules.basic[n] +
             ") has illegal characters in it!");
@@ -127,7 +61,7 @@ function App() {
     }
     for (let n = 0; n < gameobj.rules.vegasstyle.length; n++)
     {
-      if (doesInputHaveUnnecessaryCharacters({input: "" + gameobj.rules.vegasstyle[n]}))
+      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj.rules.vegasstyle[n]}))
       {
           console.error("handleChange: input (" + gameobj.rules.vegasstyle[n] +
             ") has illegal characters in it!");
@@ -138,7 +72,7 @@ function App() {
     }
     for (let n = 0; n < gameobj.strategies.length; n++)
     {
-      if (doesInputHaveUnnecessaryCharacters({input: "" + gameobj.strategies[n]}))
+      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj.strategies[n]}))
       {
           console.error("handleChange: input (" + gameobj.strategies[n] +
             ") has illegal characters in it!");
@@ -304,40 +238,32 @@ function App() {
         <Route exact path="/new">
           <>
             <NavBar />
-            <AddAGame screener={doesInputHaveUnnecessaryCharacters} addGame={addGame} />
+            <AddAGame addGame={addGame} />
           </>
         </Route>
         <Route exact path="/about">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
         <Route path="/:id/about">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
         <Route exact path="/stats">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
         <Route path="/:id/stats">
-          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
         <Route exact path="/setup">
-          <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame} />
         </Route>
         <Route path="/:id/setup">
-          <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame} />
         </Route>
         <Route exact path="/rules">
-          <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame} />
         </Route>
         <Route path="/:id/rules">
-          <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame}
-            screener={doesInputHaveUnnecessaryCharacters} />
+          <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame} />
         </Route>
         <Route path="*/*">
           <>

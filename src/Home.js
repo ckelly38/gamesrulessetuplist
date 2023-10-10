@@ -7,11 +7,11 @@ function Home({games})
         <li key={game.id} id={game.id}>
             <p>{game.name}:</p>
             <NavLink style={{paddingLeft: "20px", paddingRight: "20px"}}
-                to={"/" + game.id + "/about"}>About</NavLink>
+                to={"/about/" + game.id}>About</NavLink>
             <NavLink style={{paddingLeft: "20px", paddingRight: "20px"}}
-                to={"/" + game.id + "/setup"}>Setup</NavLink>
+                to={"/setup/" + game.id}>Setup</NavLink>
             <NavLink style={{paddingLeft: "20px", paddingRight: "20px"}}
-                to={"/" + game.id + "/rules"}>Rules And Strategies</NavLink>
+                to={"/rules/" + game.id}>Rules And Strategies</NavLink>
         </li>
     ));
 

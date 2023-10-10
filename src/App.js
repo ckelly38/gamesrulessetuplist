@@ -244,25 +244,25 @@ function App() {
         <Route exact path="/about">
           <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
-        <Route path="/:id/about">
+        <Route path="/about/:id">
           <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
         <Route exact path="/stats">
           <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
-        <Route path="/:id/stats">
+        <Route path="/stats/:id">
           <GameRulesStatsSetupRenderer games={games} type="STATS" updateGame={updateGame} />
         </Route>
         <Route exact path="/setup">
           <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame} />
         </Route>
-        <Route path="/:id/setup">
+        <Route path="/setup/:id">
           <GameRulesStatsSetupRenderer games={games} type="SETUP" updateGame={updateGame} />
         </Route>
         <Route exact path="/rules">
           <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame} />
         </Route>
-        <Route path="/:id/rules">
+        <Route path="/rules/:id">
           <GameRulesStatsSetupRenderer games={games} type="RULES" updateGame={updateGame} />
         </Route>
         <Route path="*/*">

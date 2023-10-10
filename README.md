@@ -68,3 +68,60 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Setup of this Program before use:
+You must have JSON-SERVER RUNNING and connect to it on the same computer.
+You must have JSON-SERVER installed and have NODE.JS installed on the same computer to run this application.
+
+To run JSON-SERVER use: json-server --watch db.json
+
+To run the program run: npm start
+
+## Using This Program
+DEAR USER my progam is informative. It tells you rules and requirements about a list of games.
+
+As an admin, you can add a game, and also edit games. You can save your changes to the server or not. Despite it appearing to have multiple tabs/pages this is a(n) SPA (Single Page Application) that uses React Router.
+
+### Home Page
+Starting at the Home page, you see a list of games. If you click on one of the links below the name of each game, then it will take you to the page and only show that game's information for the page you requested.
+
+### Stats Page
+The Stats page, shows basic requirements of the game. As well as normal playing length.
+
+### Rules And Strategies Page
+The Rules And Strategies page, show the rules and strategies for the game. By default, it does not show them. It does have a dropdown that lets you see what you want.
+
+### Game Setup Page
+The Setup page lets you view how the game is supposed to look like when it is played to give you an idea.
+
+### NAVBAR Usage
+If you click the links above, in the NavBar, then it will load information for ALL of the games.
+
+### THE EDITOR
+The editor is there to fix problems like type-os and to add styling information to the rules and the image description if you so choose.
+
+The editor itself looks similar to WORD... in that you can choose the FONT NAME, FONT SIZE, FONT COLOR, if something is BOLD, UNDERLINED, OR ITALICS.
+
+The editor does not have all possible known fonts or colors. As a result, you are allowed to temporarily add colors to the list. To do this /style color: value /style in the raw text. The style tag is inline only.
+Meaning that it must be used inside of another tag: /span or /p /b ///b /i /u.
+The style tag works like the inline style attribute does to add CSS to the website.
+
+To display something that you don't want a tag like: print/post you need to escape it: print//post.
+
+To indicate that something is not a line break and that it needs to be bold when the next character is r: ///brealy///breally. The ///b is equivilant to the /b except it tells the computer to ignore the r.
+Otherwise with just the one / it is: /breally. which makes it:
+eally.
+
+THE ONLY TAGS SUPPORTED ARE: /, /b, /br, ///b, /p, /i, /u, /span, /style. Where the first / is an escape character.
+THE ONLY ATTRIBUTES RECOGNIZED BY THE PROGRAM INSIDE THE STYLE ARE: color, font-family, and font-size.
+
+TO save all of your changes, you must hit the save button.
+TO discard all of your changes, you must hit the cancel button.
+NOTE: changes are not actually saved or gotten rid of until edit mode exits for that game on that page.
+
+### A KNOWN ISSUE:
+It is currently not possible to tell if multiple editors are open on a page. But:
+
+RULE: YOU ARE SUPPOSSED TO EDIT ONLY ONE GAME AT AT TIME ON A PAGE.
+
+KNOWN ISSUE: THE RULE ABOVE IS NOT ENFORCED. However, you can open multiple editors on the page. Then you can change things. But once edit mode is exited either by saving or canceling the changes, if another editor is open, all changes made in that editor will be lost.

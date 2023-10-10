@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TagLevelsClass from './TagLevelsClass';
+import EditAGame from "./EditAGame";
 
 function GameSetup({games, gameobj, updateGame})
 {
@@ -37,6 +38,201 @@ function GameSetup({games, gameobj, updateGame})
         description: "" +
             ((gameobj.description === undefined || gameobj.description === null) ? "" : gameobj.description)
     });
+
+    const mytaglvsobj = new TagLevelsClass("");
+
+    const [seltxtdomobj, setSelTextDOMObj] = useState(null);
+    const [tempsize, setTempSize] = useState(mytaglvsobj.getDefaultFontDataObject().size);
+    const [colors, setColors] = useState(["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#0000FF",
+        "#4B0082", "#7F00FF", "#000000", "#FFFFFF"]);
+
+    const [myfontdata, setMyFontData] = useState(mytaglvsobj.getDefaultFontDataObject());
+    
+
+    //# of Players: {min}-{max} (inclusive)
+    //Average Number of Minutes: {time}
+    //Number of Decks: {num}
+    //Kind of Deck: {normal, or special and included}
+    //rules and play strategies
+    /*
+    "name": "name",
+    "id": 0,
+    "MinNumberOfPlayers": 0,
+    "MaxNumberOfPlayers": 0,
+    "NumberOfPlayersExcluding": [],
+    "NumberOfDecks": 0,
+    "AverageMinutes": 0,
+    "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+    "image": "url",
+    "description": "",
+    "rules": {
+        "basic": [],
+        "vegasstyle": []
+    },
+    "strategies": []
+    */
+
+    //this calls setState method
+    function loadDefaults()
+    {
+        let mycpdefaultfontobj = mytaglvsobj.getDefaultFontDataObject();
+        setMyFontData(mycpdefaultfontobj);
+    }
+
+    //this calls a method that takes in state
+    function handleMouseUp(event)
+    {
+        getSelectedTextAndLoadFormatIn(event, false);
+    }
+
+    //this calls a method that takes in state
+    function onBlurHandler(event)
+    {
+        getSelectedTextAndLoadFormatIn(event, true);
+    }
+
+    //this calls setState method
+    function onFocusHandler(event)
+    {
+        const mytaglvs = new TagLevelsClass("");
+        setSelTextDOMObj(mytaglvs.getSelectedTextAndDOMObj());
+    }
+
+    //this takes in and calls setState
+    function getSelectedTextAndLoadFormatIn(event, isonblur = false)
+    {
+        if (editMode);
+        else return;
+
+        console.log("isonblur = " + isonblur);
+        if (isonblur === undefined || isonblur === null)
+        {
+            throw new Error("isonblur must be defined boolean variable, but it was not defined!");
+        }
+        else
+        {
+            if (isonblur === true || isonblur === false);
+            else
+            {
+                throw new Error("isonblur must be defined boolean variable, but it was not a " +
+                    "boolean variable!");
+            }
+        }
+
+        let etgnd = null;
+        if (event === undefined || event === null);
+        else
+        {
+            console.log("event.target = ", event.target);
+            console.log("event.target.id = ", event.target.id);
+            if (event.target.id === null || event.target.id === undefined ||
+                event.target.id.toString().length < 1)
+            {
+                if (event.target.tagName === "B" || event.target.tagName === "U" ||
+                    event.target.tagName === "I")
+                {
+                    console.log("event.target.parentNode = ", event.target.parentNode);
+                    console.log("event.target.parentNode.value = ", event.target.parentNode.value);
+                    //log state here...
+                    etgnd = event.target.parentNode;
+                    console.log("myfontdata = ", myfontdata);
+                }
+                else if (event.target.tagName === "BUTTON")
+                {
+                    console.log("button clicked, but no id!");
+                    return;
+                }
+                else
+                {
+                    console.log("no id!");
+                }
+            }
+            else
+            {
+                console.log("this has an id!");
+
+                etgnd = event.target;
+            }
+            console.log("etgnd = ", etgnd);
+            
+            if (etgnd === undefined || etgnd === null);
+            else
+            {
+                console.log("etgnd.id = ", etgnd.id);
+                console.log("event.target.value = ", event.target.value);
+            }
+            if (isonblur) console.log("seltxtdomobj = ", seltxtdomobj);
+            //else;//do nothing
+            //debugger;
+        }
+        
+        let myfinfmtdataobj = null;
+        const mytagclsobj = new TagLevelsClass("");
+        if (isonblur)
+        {
+            myfinfmtdataobj = mytagclsobj.getFinalFormattedSelectedTextDataObj(seltxtdomobj, gameobj,
+                mytemimgurldesc.description, null, null, null);
+        }
+        else
+        {
+            myfinfmtdataobj = mytagclsobj.getFinalFormattedSelectedTextDataObj(null, gameobj,
+                mytemimgurldesc.description, null, null, null);
+        }
+        console.log("myfinfmtdataobj = ", myfinfmtdataobj);
+
+        if (myfinfmtdataobj === undefined || myfinfmtdataobj === null)
+        {
+            console.log("no selected text!");
+            loadDefaults();
+            return;
+        }
+        //else;//do nothing safe to proceed
+
+        console.log("myfinfmtdataobj.finfmtseltextstr.length = " +
+            myfinfmtdataobj.finfmtseltextstr.length);
+        console.log("myfinfmtdataobj.fmtseltextstr.length = " + myfinfmtdataobj.fmtseltextstr.length);
+
+        const fmtdifflen = myfinfmtdataobj.finfmtseltextstr.length - myfinfmtdataobj.fmtseltextstr.length;
+        console.log("fmtdifflen = " + fmtdifflen);
+
+        
+        const nwfmtobj = mytagclsobj.getNewFormatDataObj(myfinfmtdataobj, etgnd);
+        console.log("nwfmtobj = ", nwfmtobj);
+        
+
+        //let myrulesarr = null;
+        //if (myfinfmtdataobj.mytypestr === "basic") myrulesarr = basicrules;
+        //else if (myfinfmtdataobj.mytypestr === "vegas") myrulesarr = vegasrules;
+        //else if (myfinfmtdataobj.mytypestr === "strats") myrulesarr = strats;
+        //else throw new Error("invalid rule type was found and used here!");
+
+        const ruleindx = myfinfmtdataobj.ruleindx;
+        console.log("ruleindx = " + ruleindx);
+
+
+        setMyFontData(nwfmtobj.nwfontdataobj);
+        setTempSize(nwfmtobj.nwfontdataobj.size);
+
+        if (nwfmtobj.gennwrule)
+        {
+            //take the rules array if the index matches.... use the new rule
+            //else use the old rule
+            //let mynwrules = myrulesarr.map((rule, index) => (
+            //    (index === ruleindx) ? nwfmtobj.nwruletxt : rule));
+            //if (myfinfmtdataobj.mytypestr === "basic") setBasicRules(mynwrules);
+            //else if (myfinfmtdataobj.mytypestr === "vegas") setVegasRules(mynwrules);
+            //else if (myfinfmtdataobj.mytypestr === "strats") setStrats(mynwrules);
+            //else throw new Error("invalid rule type was found and used here!");
+            
+            let nwdescobj = {...mytemimgurldesc};
+            nwdescobj.description = nwfmtobj.nwruletxt;
+            setTempImgURLAndDescObj(nwdescobj);
+        }
+        //else;//do nothing
+
+        if (isonblur) setSelTextDOMObj(null);
+        //else;//do nothing
+    }
 
 
     function changeEditingMode(nwstate = null)
@@ -134,8 +330,7 @@ function GameSetup({games, gameobj, updateGame})
     }
 
     let description = "";
-    let usedefaultdesc = true;//should be false;
-    //but to fix rendering problems due to heirarchy problems temporarily set to true.
+    let usedefaultdesc = false;
     if (mytemimgurldesc.description === undefined || mytemimgurldesc.description === null ||
         mytemimgurldesc.description.length < 1)
     {
@@ -150,19 +345,28 @@ function GameSetup({games, gameobj, updateGame})
         <div className="App">
             <h1>{name} Game Setup:</h1>
             <h3><b>{editMode ? "Editing" : "Viewing"} Mode: </b>
-                <button id={"switchmodebtn" + gameobj.id} onClick={handleEditSaveClick}>
+            {editMode ? (
+                <EditAGame mid={gameobj.id} mydataobj={myfontdata} setMyDataObj={setMyFontData}
+                    refresh={handleMouseUp} sizefocus={onFocusHandler} sizeblur={onBlurHandler}
+                    tempsize={tempsize} setTempSize={setTempSize} colors={colors} setColors={setColors} />
+                ) : null}</h3>
+            <p><button id={"switchmodebtn" + gameobj.id} onClick={handleEditSaveClick}>
                     {editMode ? "Save Changes" : "Edit These"}</button>
                 {editMode ? (<button id={"cancelbtn" + gameobj.id}
-                    onClick={cancelChangesClick}>Cancel Changes</button>) : null}
-            </h3>
+                    onClick={cancelChangesClick}>Cancel Changes</button>) : null}</p>
             {editMode ? (<>
                 <textarea id={"editimgurl" + gameobj.id} value={mytemimgurldesc.image}
                     style={{width: "1200px"}} onChange={handleChange} />
                     <img src={mytemimgurldesc.image} alt={name + " setup"} /></>
                 ) : <img src={mytemimgurldesc.image} alt={name + " setup"} />}
-            {editMode ? <textarea id={"editimgdesc" + gameobj.id} value={description}
-                style={{width: "1200px"}} onChange={handleChange} /> : (usedefaultdesc ?
-                <p>{description}</p> : <p dangerouslySetInnerHTML={description} />)}
+            {editMode ? <div onMouseUp={handleMouseUp}>
+                <textarea id={"editimgdesc" + gameobj.id} value={description} style={{width: "1200px"}}
+                    onChange={handleChange} />
+                <p id={"imgdesc" + gameobj.id} dangerouslySetInnerHTML={
+                    mytaglvsobj.generateAndCreateMarkUpForDisplayFrom(description, true)} /></div> :
+                (usedefaultdesc ? <p id={"imgdesc" + gameobj.id}>{description}</p> :
+                <p id={"imgdesc" + gameobj.id} dangerouslySetInnerHTML={
+                    mytaglvsobj.generateAndCreateMarkUpForDisplayFrom(description, true)} />)}
         </div>
     );
 }

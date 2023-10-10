@@ -1,3 +1,4 @@
+import React from "react";
 class TagLevelsClass {
     constructor(mrule)
     {
@@ -1166,7 +1167,7 @@ class TagLevelsClass {
             myseltext = myselect.toString();
             mydomnd = myselect.anchorNode;
         }
-        if (mydomnd.tagName === "LI")
+        if (mydomnd.tagName === "LI" || mydomnd.tagName === "DIV")
         {
             if (mydomnd.id === undefined || mydomnd.id === null || mydomnd.id.length < 1)
             {
@@ -1744,7 +1745,7 @@ class TagLevelsClass {
         return treatasrawtext;
     }
 
-    getRuleTextAndIsRawTextObj(myseltxtdomndobj, gameobj, basicrules, vegasrules, strats)
+    getRuleTextAndIsRawTextObj(myseltxtdomndobj, gameobj, ruletxt, basicrules, vegasrules, strats)
     {
         if (myseltxtdomndobj === null || myseltxtdomndobj === undefined)
         {
@@ -1752,128 +1753,164 @@ class TagLevelsClass {
         }
         //else;//do nothing
 
-        const myrulestratstypes = ["basic", "vegas", "strats"];
-        
-        //the id is in this format: "current" + mytypestr + "rawtext" + gameobj.name + index
-        let mybeginsrawidstrs = [];
-        for (let k = 0; k < myrulestratstypes.length; k++)
-        {
-            mybeginsrawidstrs[k] = "current" + myrulestratstypes[k] + "rawtext" + gameobj.name;
-        }
-        
-        //the id is in this format: mytypestr + gameobj.name + index
-        let mybeginsdispidstrs = [];
-        for (let k = 0; k < myrulestratstypes.length; k++)
-        {
-            mybeginsdispidstrs[k] = myrulestratstypes[k] + gameobj.name;
-        }
+        console.log("ruletxt = " + ruletxt);
+        console.log("(basicrules === null) = " + (basicrules === null));
+        console.log("(vegasrules === null) = " + (vegasrules === null));
+        console.log("(strats === null) = " + (strats === null));
 
-        let israwtext = false;
-        let myrawidindx = -1;
-        for (let k = 0; k < mybeginsrawidstrs.length; k++)
+        let useruletxt = false;
+        if (basicrules === null && vegasrules === null && strats === null)
         {
-            let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsrawidstrs[k]);
-            //console.log("myindx = " + myindx);
-
-            if (myindx === 0)
-            {
-                myrawidindx = k;
-                israwtext = true;
-                break;
-            }
-            //else;//do nothing
-        }
-        console.log("israwtext = " + israwtext);
-        console.log("myrawidindx = " + myrawidindx);
-        //console.log("myseltxtdomndobj.mydomnd.id = " + myseltxtdomndobj.mydomnd.id);
-        
-        let mydispidindx = -1;
-        for (let k = 0; k < mybeginsdispidstrs.length; k++)
-        {
-            let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsdispidstrs[k]);
-            //console.log("mybeginsdispidstrs[" + k + "] = " + mybeginsdispidstrs[k]);
-            console.log("myindx = " + myindx);
-
-            if (myindx === 0)
-            {
-                mydispidindx = k;
-                break;
-            }
-            //else;//do nothing
-        }
-        console.log("mydispidindx = " + mydispidindx);
-
-        if (israwtext)
-        {
-            if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1)
-            {
-                throw new Error("invalid value found and used for the myrawidindx index!");
-            }
-            //else;//do nothing
-
-            if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1);
-            else
-            {
-                throw new Error("invalid value found and used for the mydispidindx index!");
-            }
+            if (ruletxt === null) throw new Error("all of the rules must not be null!");
+            else useruletxt = true;
         }
         else
         {
-            if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1);
+            if (ruletxt === null) useruletxt = false;
+            else throw new Error("use ruletxt must be null, but it was not!");
+        }
+        console.log("useruletxt = " + useruletxt);
+
+        if (useruletxt)
+        {
+            console.log("myseltxtdomndobj.mydomnd.id = " + myseltxtdomndobj.mydomnd.id);
+
+            const israwtext = (myseltxtdomndobj.mydomnd.id.indexOf("edit") === 0);
+            console.log("israwtext = " + israwtext);
+
+            const myruletxtandisrawobj = {
+                myruletext: "" + ruletxt,
+                israwtext: israwtext,
+                ruleindx: -1,
+                mytypestr: "description"
+            };
+            return myruletxtandisrawobj;
+        }
+        else
+        {
+            const myrulestratstypes = ["basic", "vegas", "strats"];
+        
+            //the id is in this format: "current" + mytypestr + "rawtext" + gameobj.name + index
+            let mybeginsrawidstrs = [];
+            for (let k = 0; k < myrulestratstypes.length; k++)
+            {
+                mybeginsrawidstrs[k] = "current" + myrulestratstypes[k] + "rawtext" + gameobj.name;
+            }
+            
+            //the id is in this format: mytypestr + gameobj.name + index
+            let mybeginsdispidstrs = [];
+            for (let k = 0; k < myrulestratstypes.length; k++)
+            {
+                mybeginsdispidstrs[k] = myrulestratstypes[k] + gameobj.name;
+            }
+
+            let israwtext = false;
+            let myrawidindx = -1;
+            for (let k = 0; k < mybeginsrawidstrs.length; k++)
+            {
+                let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsrawidstrs[k]);
+                //console.log("myindx = " + myindx);
+
+                if (myindx === 0)
+                {
+                    myrawidindx = k;
+                    israwtext = true;
+                    break;
+                }
+                //else;//do nothing
+            }
+            console.log("israwtext = " + israwtext);
+            console.log("myrawidindx = " + myrawidindx);
+            //console.log("myseltxtdomndobj.mydomnd.id = " + myseltxtdomndobj.mydomnd.id);
+            
+            let mydispidindx = -1;
+            for (let k = 0; k < mybeginsdispidstrs.length; k++)
+            {
+                let myindx = myseltxtdomndobj.mydomnd.id.indexOf(mybeginsdispidstrs[k]);
+                //console.log("mybeginsdispidstrs[" + k + "] = " + mybeginsdispidstrs[k]);
+                console.log("myindx = " + myindx);
+
+                if (myindx === 0)
+                {
+                    mydispidindx = k;
+                    break;
+                }
+                //else;//do nothing
+            }
+            console.log("mydispidindx = " + mydispidindx);
+
+            if (israwtext)
+            {
+                if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1)
+                {
+                    throw new Error("invalid value found and used for the myrawidindx index!");
+                }
+                //else;//do nothing
+
+                if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1);
+                else
+                {
+                    throw new Error("invalid value found and used for the mydispidindx index!");
+                }
+            }
             else
             {
-                throw new Error("invalid value found and used for the myrawidindx index!");
-            }
+                if (myrawidindx < 0 || myrawidindx > mybeginsrawidstrs.length - 1);
+                else
+                {
+                    throw new Error("invalid value found and used for the myrawidindx index!");
+                }
 
-            if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1)
+                if (mydispidindx < 0 || mydispidindx > mybeginsdispidstrs.length - 1)
+                {
+                    throw new Error("invalid value found and used for the mydispidindx index!");
+                }
+                //else;//do nothing
+            }
+            
+            let mypartidstr = null;
+            if (israwtext) mypartidstr = mybeginsrawidstrs[myrawidindx];
+            else mypartidstr = mybeginsdispidstrs[mydispidindx];
+            console.log("mypartidstr = " + mypartidstr);
+
+            const myruleidnumstr = myseltxtdomndobj.mydomnd.id.substring(mypartidstr.length);
+            console.log("myruleidnumstr = " + myruleidnumstr);
+
+            if (myruleidnumstr.length < 1 || isNaN(myruleidnumstr))
             {
-                throw new Error("invalid value found and used for the mydispidindx index!");
+                throw new Error("illegal value found and used for the rule index here!");
             }
             //else;//do nothing
+
+            const ruleindx = Number(myruleidnumstr);
+            console.log("ruleindx = " + ruleindx);
+
+            let mytypestr = null;
+            if (israwtext) mytypestr = myrulestratstypes[myrawidindx];
+            else mytypestr = myrulestratstypes[mydispidindx];
+            console.log("mytypestr = " + mytypestr);
+
+            let myrulesarr = null;
+            if (mytypestr === "basic") myrulesarr = basicrules;
+            else if (mytypestr === "vegas") myrulesarr = vegasrules;
+            else if (mytypestr === "strats") myrulesarr = strats;
+            else throw new Error("invalid rule type was found and used here!");
+
+            const myruletext = myrulesarr[ruleindx];
+            console.log("myruletext = " + myruletext);
+
+            const myruletxtandisrawobj = {
+                myruletext: "" + myruletext,
+                israwtext: israwtext,
+                ruleindx: ruleindx,
+                mytypestr: "" + mytypestr
+            };
+            return myruletxtandisrawobj;
         }
-        
-        let mypartidstr = null;
-        if (israwtext) mypartidstr = mybeginsrawidstrs[myrawidindx];
-        else mypartidstr = mybeginsdispidstrs[mydispidindx];
-        console.log("mypartidstr = " + mypartidstr);
-
-        const myruleidnumstr = myseltxtdomndobj.mydomnd.id.substring(mypartidstr.length);
-        console.log("myruleidnumstr = " + myruleidnumstr);
-
-        if (myruleidnumstr.length < 1 || isNaN(myruleidnumstr))
-        {
-            throw new Error("illegal value found and used for the rule index here!");
-        }
-        //else;//do nothing
-
-        const ruleindx = Number(myruleidnumstr);
-        console.log("ruleindx = " + ruleindx);
-
-        let mytypestr = null;
-        if (israwtext) mytypestr = myrulestratstypes[myrawidindx];
-        else mytypestr = myrulestratstypes[mydispidindx];
-        console.log("mytypestr = " + mytypestr);
-
-        let myrulesarr = null;
-        if (mytypestr === "basic") myrulesarr = basicrules;
-        else if (mytypestr === "vegas") myrulesarr = vegasrules;
-        else if (mytypestr === "strats") myrulesarr = strats;
-        else throw new Error("invalid rule type was found and used here!");
-
-        const myruletext = myrulesarr[ruleindx];
-        console.log("myruletext = " + myruletext);
-
-        const myruletxtandisrawobj = {
-            myruletext: "" + myruletext,
-            israwtext: israwtext,
-            ruleindx: ruleindx,
-            mytypestr: "" + mytypestr
-        };
-        return myruletxtandisrawobj;
     }
 
 
-    getFinalFormattedSelectedTextDataObj(myseltxtdomobj, gameobj, basicrules, vegasrules, strats)
+    getFinalFormattedSelectedTextDataObj(myseltxtdomobj, gameobj, ruletxt, basicrules, vegasrules, strats)
     {
         const mytaglvs = new TagLevelsClass("");
         let myseltxtdomndobj = null;
@@ -1896,7 +1933,7 @@ class TagLevelsClass {
         //unless we are on the raw text
         
         const myruletxtandrawtxtobj = mytaglvs.getRuleTextAndIsRawTextObj(myseltxtdomndobj, gameobj,
-            basicrules, vegasrules, strats);
+            ruletxt, basicrules, vegasrules, strats);
         const myruletext = "" + myruletxtandrawtxtobj.myruletext;
         const israwtext = myruletxtandrawtxtobj.israwtext;
         console.log("myruletext = " + myruletext);
@@ -2027,6 +2064,591 @@ class TagLevelsClass {
         };
         
         return myfinfmtseltxtobj;
+    }
+
+    getDefaultFontDataObject()
+    {
+        const mydefaultfontdataobj = {
+            color: "#000000",
+            size: 16,
+            name: "Times New Roman",
+            isbold: false,
+            isunderline: false,
+            isitalics: false
+        };
+        return {...mydefaultfontdataobj};
+    }
+
+    getNewFormatDataObj(myfinfmtdataobj, etgnd)
+    {
+        if (myfinfmtdataobj === undefined || myfinfmtdataobj === null)
+        {
+            throw new Error("IllegalArgumentException: myfinfmtdataobj must be a defined " +
+                "non-null object, but it was not!");
+        }
+        //else;//do nothing
+
+        const mytaglvs = myfinfmtdataobj.mytaglvs;
+
+        //need to ask if certain tags are present
+        //this will contain information that we want...
+        //if bold or underline or italics are present
+        //we will then determine if all of the selected text is bolded, underlined, or italics...
+        let finfmttagis = mytaglvs.getAllTagIndexes(myfinfmtdataobj.finfmtseltextstr);
+        let finfmtstagis = mytaglvs.areAllTagsStartingTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
+        let finfmtetagis = mytaglvs.areAllTagsEndingTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
+        let finfmttagnms = mytaglvs.getAllTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
+        console.log("finfmttagis = ", finfmttagis);
+        console.log("finfmtstagis = ", finfmtstagis);
+        console.log("finfmtetagis = ", finfmtetagis);
+        console.log("finfmttagnms = ", finfmttagnms);
+
+        const mysearchtags = ["/b", "/u", "/i", "/style"];
+        let mytagspresent = [];
+        if (finfmttagis === undefined || finfmttagis === null || finfmttagis.length < 1);
+        else
+        {
+            for (let k = 0; k < mysearchtags.length; k++)
+            {
+                mytagspresent[k] = false;
+                for (let n = 0; n < finfmttagis.length; n++)
+                {
+                    if (finfmttagnms[n] === mysearchtags[k])
+                    {
+                        mytagspresent[k] = true;
+                        break;
+                    }
+                    //else;//do nothing
+                }//end of n for loop
+            }//end of k for loop
+        }
+        console.log("boldtagspresent = " + mytagspresent[0]);
+        console.log("underlinetagspresent = " + mytagspresent[1]);
+        console.log("italicstagspresent = " + mytagspresent[2]);
+        console.log("styletagspresent = " + mytagspresent[3]);
+
+        //need to check where each of the present tags are and
+        //ask if our start and end selection is between this entire thing
+        //if it is then it is that item
+        let aremytags = [];
+        let aremytagsandeis = [];
+        for (let n = 0; n < mysearchtags.length; n++)
+        {
+            aremytags[n] = false;
+            aremytagsandeis[n] = null;
+            console.log("OLD aremytags[" + n + "] = " + aremytags[n]);
+            console.log("mytagspresent[" + n + "] = " + mytagspresent[n]);
+            console.log("tag we are looking for = mysearchtags[" + n + "] = " + mysearchtags[n]);
+
+            if (mytagspresent[n]);
+            else continue;
+
+            for (let k = 0; k < finfmttagis.length; k++)
+            {
+                if (finfmttagnms[k] === mysearchtags[n])
+                {
+                    console.log("found our tag at k = " + k + "!");
+                    console.log("our tag is = finfmttagnms[" + k + "] = " + finfmttagnms[k]);
+
+                    let useparenttag = false;
+                    if (mysearchtags[n] === "/style") useparenttag = true;
+                    //else;//do nothing
+                    console.log("useparenttag = " + useparenttag);
+
+                    const mykindx = (useparenttag ? k - 1 : k);
+                    console.log("mykindx = " + mykindx);
+
+                    if (mykindx < 0) throw new Error("invalid value found and used for mykindx index!");
+                    //else;//do nothing
+
+                    if (finfmtstagis[mykindx])
+                    {
+                        console.log("this is a starting tag!");
+                        console.log("finfmttagis[" + mykindx + "] + myfinfmtdataobj.finrawtextsi = " +
+                            (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi));
+                        console.log("myfinfmtdataobj.rawtextsi = " + myfinfmtdataobj.rawtextsi);
+                        console.log("myfinfmtdataobj.rawtextei = " + myfinfmtdataobj.rawtextei);
+
+                        let pi = mytaglvs.getTagPairIndex(myfinfmtdataobj.finfmtseltextstr,
+                            finfmttagis[mykindx], finfmttagis);
+                        console.log("pi + myfinfmtdataobj.finrawtextsi = " +
+                            (pi + myfinfmtdataobj.finrawtextsi));
+
+                        if (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi <
+                            myfinfmtdataobj.rawtextsi &&
+                            ((myfinfmtdataobj.rawtextei < pi + myfinfmtdataobj.finrawtextsi) ||
+                            (myfinfmtdataobj.rawtextei === pi + myfinfmtdataobj.finrawtextsi)))
+                        {
+                            aremytagsandeis[n] = {
+                                rwtgsi: finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi,
+                                rwtgei: pi + myfinfmtdataobj.finrawtextsi
+                            };
+                            aremytags[n] = true;
+                            break;
+                        }
+                        //else;//do nothing
+                        k++;
+                    }
+                    //else;//do nothing
+                }
+                //else;//do nothing
+            }//end of k for loop
+            console.log("NEW aremytags[" + n + "] = " + aremytags[n]);
+            console.log("NEW aremytagsandeis[" + n + "] = ", aremytagsandeis[n]);
+        }//end of n for loop
+
+        const myetxtidstrs = ["bold", "underline", "italics", ""];
+        let myetxtstrsi = -1;
+        if (etgnd === undefined || etgnd === null);
+        else
+        {
+            console.log("etgnd.id = " + etgnd.id);
+
+            for (let n = 0; n < myetxtidstrs.length - 1; n++)
+            {
+                if (etgnd.id.indexOf(myetxtidstrs[n]) === 0)
+                {
+                    myetxtstrsi = n;
+                    break;
+                }
+                //else;//do nothing
+            }
+        }
+        console.log("myetxtstrsi = " + myetxtstrsi);
+
+        if (myetxtstrsi < 0 || myetxtstrsi > myetxtidstrs.length - 1) myetxtstrsi = 3;
+        //else;//do nothing
+        console.log("FINAL myetxtstrsi = " + myetxtstrsi);
+
+        if (myetxtstrsi < 0 || myetxtstrsi > myetxtidstrs.length - 1)
+        {
+            throw new Error("invlaid value found and used for the myetxtstrsi index!");
+        }
+        //else;//do nothing
+        console.log("aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
+        console.log("aremytagsandeis[" + myetxtstrsi + "] = ", aremytagsandeis[myetxtstrsi]);
+
+        let nwruletxt = "" + myfinfmtdataobj.myruletext;
+        let gennwrule = false;
+        if (myetxtstrsi === 3);
+        else
+        {
+            //log state
+            gennwrule = true;
+            //console.log("myfontdata = ", myfontdata);
+
+            const myfontobjkey = "is" + myetxtidstrs[myetxtstrsi];
+            console.log("myfontobjkey = " + myfontobjkey);
+            //console.log("myfontdata[" + myfontobjkey + "] = " + myfontdata[myfontobjkey]);
+
+            if (aremytags[myetxtstrsi])
+            {
+                //remove it from the rule...
+                //the moment we remove one, all indexes will be invalid
+                //we need to know if the bold tag is special or not
+                for (let n = 0; n < 2; n++)
+                {
+                    let i = -1;
+                    if (n === 0) i = aremytagsandeis[myetxtstrsi].rwtgei;
+                    else i = aremytagsandeis[myetxtstrsi].rwtgsi;
+                    console.log("i = " + i);
+
+                    let tgisspcal = false;
+                    if (myetxtidstrs[myetxtstrsi] === "bold")
+                    {
+                        //might be special
+                        if (myfinfmtdataobj.myruletext.charAt(i + 1) === "b");
+                        else tgisspcal = true;
+                    }
+                    //else;//do nothing
+                    console.log("tgisspcal = " + tgisspcal);
+
+                    const tglen = (tgisspcal ? mysearchtags[myetxtstrsi].length + 2:
+                        mysearchtags[myetxtstrsi].length);
+                    console.log("tglen = " + tglen);
+
+                    console.log("nwruletxt.substring(0, " + i + ") = " + nwruletxt.substring(0, i));
+                    
+                    if (i + tglen < nwruletxt.length)
+                    {
+                        console.log("nwruletxt.substring(" + (i + tglen) + ") = " +
+                            nwruletxt.substring(i + tglen));
+                        
+                        nwruletxt = nwruletxt.substring(0, i) + nwruletxt.substring(i + tglen);
+                    }
+                    else
+                    {
+                        console.log("it ends after that tag!");
+
+                        nwruletxt = nwruletxt.substring(0, i);
+                    }
+                    console.log("NEW nwruletxt = " + nwruletxt);
+                }//end of n for loop
+                console.log("FINAL nwruletxt = " + nwruletxt);
+
+                aremytags[myetxtstrsi] = false;
+                console.log("NEW aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
+            }
+            else
+            {
+                //add it to the rule...
+                console.log("part 1: nwruletxt.substring(0, " + myfinfmtdataobj.finrawtextsi + ") = " +
+                    nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi));
+                
+                console.log("mysearchtags[" + myetxtstrsi + "] = " + mysearchtags[myetxtstrsi]);
+                
+                let myfirsttg = "";
+                if (mysearchtags[myetxtstrsi] === "/b")
+                {
+                    if (nwruletxt.charAt(myfinfmtdataobj.finrawtextsi) === 'r')
+                    {
+                        //this tag needs to be special
+                        myfirsttg = "//" + mysearchtags[myetxtstrsi];
+                    }
+                    else myfirsttg = "" + mysearchtags[myetxtstrsi];
+                }
+                else myfirsttg = "" + mysearchtags[myetxtstrsi];
+                console.log("part 2: myfirsttg = " + myfirsttg);
+                
+                console.log("part 3: nwruletxt.substring(" + myfinfmtdataobj.finrawtextsi + ", " +
+                    myfinfmtdataobj.finrawtextei + ") = " +
+                    nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei));
+
+                let myotg = "";
+                if (mysearchtags[myetxtstrsi] === "/b")
+                {
+                    if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
+                    {
+                        if (nwruletxt.charAt(myfinfmtdataobj.finrawtextei) === 'r')
+                        {
+                            //this tag needs to be special
+                            myotg = "//" + mysearchtags[myetxtstrsi];
+                        }
+                        else myotg = "" + mysearchtags[myetxtstrsi];
+                    }
+                    else myotg = "" + mysearchtags[myetxtstrsi];
+                }
+                else myotg = "" + mysearchtags[myetxtstrsi];
+                console.log("part 4: myotg = " + myotg);
+
+                if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
+                {
+                    console.log("part 5: nwruletxt.substring(" + myfinfmtdataobj.finrawtextei + ") = " +
+                        nwruletxt.substring(myfinfmtdataobj.finrawtextei));
+                }
+                else console.log("part 5: ");
+
+                if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
+                {
+                    nwruletxt = nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi) + myfirsttg +
+                        nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei) +
+                        myotg + nwruletxt.substring(myfinfmtdataobj.finrawtextei);
+                }
+                else
+                {
+                    nwruletxt = nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi) + myfirsttg +
+                        nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei) +
+                        myotg;
+                }
+                console.log("FINAL nwruletxt = " + nwruletxt);
+
+                aremytags[myetxtstrsi] = true;
+                console.log("NEW aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
+            }
+        }
+        console.log("gennwrule = " + gennwrule);
+        //debugger;
+
+        let myinstylestr = "";
+        let myfontvals = ["", "", ""];
+        const fontstrs = [" font-family: ", " font-size: ", " color: "];
+        const fontpidstrs = ["fonts-drop-down", "fontsize", "font-color"];
+        let instylestrsi = -1;
+        let instylestrei = -1;
+        let myfontsindxs = [];
+        let myfontvalssindxs = [];
+        let myfonteindxs = [];
+        if (aremytags[3])
+        {
+            //need to get the information between the two style tags
+            for (let n = 0; n < finfmttagis.length; n++)
+            {
+                if (finfmttagnms[n] === "/style")
+                {
+                    if (finfmtstagis[n])
+                    {
+                        let pi = mytaglvs.getTagPairIndex(myfinfmtdataobj.finfmtseltextstr, finfmttagis[n],
+                            finfmttagis);
+                        console.log("pi = " + pi);
+
+                        myinstylestr = myfinfmtdataobj.finfmtseltextstr.substring(
+                            finfmttagis[n] + finfmttagnms[n].length, pi);
+                        instylestrsi = finfmttagis[n] + finfmttagnms[n].length;
+                        instylestrei = pi;
+                        break;
+                    }
+                    //else;//do nothing
+                }
+                //else;//do nothing
+            }
+            console.log("myinstylestr = " + myinstylestr);
+
+            if (myinstylestr === undefined || myinstylestr === null || myinstylestr.length < 1)
+            {
+                throw new Error("the string of characters inside of the style tags should not be empty!");
+            }
+            //else;//do nothing
+
+            //extract the font family, the font size, the color
+            myfontsindxs = fontstrs.map((mystr) => myinstylestr.indexOf(mystr));
+            const myfontsindxsvld = myfontsindxs.map((fsi) =>
+                ((fsi > 0 || fsi === 0) && fsi < myinstylestr.length));
+            console.log("fontstrs = ", fontstrs);
+            console.log("myfontsindxs = ", myfontsindxs);
+            console.log("myfontsindxsvld = ", myfontsindxsvld);
+
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
+                if (myfontsindxsvld[n])
+                {
+                    console.log("the start index is valid!");
+
+                    myfontvalssindxs[n] = myfontsindxs[n] + fontstrs[n].length;
+                }
+                else myfontvalssindxs[n] = myfontsindxs[n];
+                console.log("NEW myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
+            }//end of n for loop
+            console.log("myfontvalssindxs = ", myfontvalssindxs);
+
+            //go until ; or end of string index from the start index
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
+                if (myfontsindxsvld[n])
+                {
+                    console.log("the start index is valid!");
+
+                    myfonteindxs[n] = -1;
+                    for (let i = myfontsindxs[n] + fontstrs[n].length; i < myinstylestr.length; i++)
+                    {
+                        if (myinstylestr.charAt(i) === ';')
+                        {
+                            console.log("found a semi-colon at i = " + i + "!");
+                            myfonteindxs[n] = i;
+                            break;
+                        }
+                        else
+                        {
+                            if (i + 1 === myinstylestr.length)
+                            {
+                                console.log("reached the end of the string length!");
+                                myfonteindxs[n] = myinstylestr.length;
+                                break;
+                            }
+                            //else;//do nothing
+                        }
+                    }//end of i for loop
+                }
+                else myfonteindxs[n] = myfontsindxs[n];
+                console.log("NEW myfonteindxs[" + n + "] = " + myfonteindxs[n]);
+            }//end of n for loop
+            console.log("myfonteindxs = ", myfonteindxs);
+            console.log("");
+
+            console.log("myinstylestr = " + myinstylestr);
+            console.log("fontstrs = ", fontstrs);
+            console.log("myfontsindxs = ", myfontsindxs);
+            console.log("myfontsindxsvld = ", myfontsindxsvld);
+            console.log("myfontvalssindxs = ", myfontvalssindxs);
+            console.log("myfonteindxs = ", myfonteindxs);
+
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                if (myfontsindxsvld[n])
+                {
+                    myfontvals[n] = myinstylestr.substring(myfontvalssindxs[n], myfonteindxs[n]);
+                }
+                else myfontvals[n] = "";
+            }
+            console.log("myfontvals = ", myfontvals);
+        }
+        //else;//do nothing
+
+        //get and save the vals now
+        console.log("fontstrs = ", fontstrs);
+        console.log("myfontvals = ", myfontvals);
+        
+        if (aremytags[3])
+        {
+            console.log("etgnd = ", etgnd);
+            if (etgnd === undefined || etgnd === null);
+            else
+            {
+                console.log("etgnd.id = " + etgnd.id);
+                console.log("etgnd.value = " + etgnd.value);
+                
+                for (let n = 0; n < fontstrs.length; n++)
+                {
+                    if (fontstrs[n] === " font-family: " || fontstrs[n] === " color: " ||
+                        fontstrs[n] === " font-size: ")
+                    {
+                        if (etgnd.id.indexOf(fontpidstrs[n]) === 0)
+                        {
+                            let mytempstr = "";
+                            if (fontstrs[n] === " font-size: ") mytempstr = "" + etgnd.value + "px";
+                            else mytempstr = "" + etgnd.value;
+                            console.log("init mytempstr = " + mytempstr);
+
+                            if (fontstrs[n] === " font-family: ")
+                            {
+                                //replace the spaces with -s
+                                for (let i = 0; i < mytempstr.length; i++)
+                                {
+                                    if (mytempstr.charAt(i) === ' ')
+                                    {
+                                        if (i + 1 < mytempstr.length)
+                                        {
+                                            mytempstr = mytempstr.substring(0, i) + "-" +
+                                                mytempstr.substring(i + 1);
+                                        }
+                                        else mytempstr = mytempstr.substring(0, i) + "-";
+                                        console.log("NEW mytempstr = " + mytempstr);
+                                    }
+                                    //else;//do nothing
+                                }//end of i for loop
+                            }
+                            //else;//do nothing
+                            console.log("FINAL mytempstr = " + mytempstr);
+
+                            myfontvals[n] = "" + mytempstr;
+
+                            console.log("NEW myfontvals[" + n + "] = " + myfontvals[n]);
+                            console.log("myfinfmtdataobj.finrawtextsi = " + myfinfmtdataobj.finrawtextsi);
+                            console.log("instylestrsi = " + instylestrsi);
+                            console.log("instylestrei = " + instylestrei);
+                            console.log("myfontsindxs[" + n + "] = " + myfontsindxs[n]);
+                            console.log("myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
+                            console.log("myfonteindxs[" + n + "] = " + myfonteindxs[n]);
+
+                            console.log("instylestrsi + myfinfmtdataobj.finrawtextsi = " +
+                                (instylestrsi + myfinfmtdataobj.finrawtextsi));
+                            
+                            console.log("nwruletxt.substring(myfontvalssindxs[n] + instylestrsi + " +
+                                "myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi + " +
+                                "myfinfmtdataobj.finrawtextsi) = " +
+                                nwruletxt.substring(myfontvalssindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi));
+                            
+                            console.log(nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi));
+                            console.log(mytempstr);
+                            console.log(nwruletxt.substring(myfonteindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi));
+                            
+                            nwruletxt = nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
+                                myfinfmtdataobj.finrawtextsi) + mytempstr +
+                                nwruletxt.substring(myfonteindxs[n] + instylestrsi +
+                                    myfinfmtdataobj.finrawtextsi);
+                            gennwrule = true;
+                            
+                            console.log("NEW nwruletxt = " + nwruletxt);
+                            console.log("NEW gennwrule = " + gennwrule);
+
+                            break;
+                        }
+                        //else;//do nothing
+                    }
+                    else throw new Error("illegal font property found in the style tag!");
+                }//end of n for loop
+            }
+        }
+        //else;//do nothing
+        //debugger;
+        
+        let nwfontdataobj = this.getDefaultFontDataObject();
+        nwfontdataobj.isbold = aremytags[0];
+        nwfontdataobj.isunderline = aremytags[1];
+        nwfontdataobj.isitalics = aremytags[2];
+        if (myinstylestr.length < 1);
+        else
+        {
+            console.log("now beginning to add the styleing information to the object!");
+
+            if (fontstrs.length === 3);
+            else throw new Error("there must be at least one string on the font strings to look for!");
+
+            for (let n = 0; n < fontstrs.length; n++)
+            {
+                if (fontstrs[n] === " font-family: ")
+                {
+                    //take the value and replace -s with spaces
+                    //then add to the object
+                    let mynwnm = "";
+                    for (let i = 0; i < myfontvals[n].length; i++)
+                    {
+                        if (myfontvals[n].charAt(i) === '-') mynwnm += " ";
+                        else mynwnm += myfontvals[n].charAt(i);
+                    }
+                    console.log("mynwnm = " + mynwnm);
+
+                    nwfontdataobj.name = "" + mynwnm;
+                }
+                else if (fontstrs[n] === " font-size: ")
+                {
+                    //remove the px at the end and convert remainder to a number
+                    //if invalid do not set and use defaults in state
+                    //then add to the object
+                    let mypxindx = myfontvals[n].indexOf("px");
+                    console.log("mypxindx = " + mypxindx);
+
+                    if (mypxindx < 0 || mypxindx > myfontvals[n].length - 1 || myfontvals[n].length === 0)
+                    {
+                        continue;
+                    }
+                    //else;//do nothing safe to proceed
+
+                    let mynumstr = myfontvals[n].substring(0, mypxindx);
+                    console.log("mynumstr = " + mynumstr);
+                    
+                    if (mynumstr.length < 1) continue;
+                    //else;//do nothing
+
+                    let mynumsz = Number(mynumstr);
+                    if (isNaN(mynumsz)) continue;
+                    //else;//do nothing
+                    console.log("mynumsz = " + mynumsz);
+
+                    nwfontdataobj.size = mynumsz;
+                }
+                else if (fontstrs[n] === " color: ")
+                {
+                    //this has multiple values just load it
+                    //value must not be empty, use defaults in state
+                    //then add to the object
+
+                    let mycolorstr = "" + myfontvals[n];
+                    console.log("mycolorstr = " + mycolorstr);
+
+                    if (mycolorstr.length < 1) continue;
+                    //else;//do nothing
+
+                    nwfontdataobj.color = "" + mycolorstr;
+                }
+                else throw new Error("illegal font property found in the style tag!");
+            }//end of n for loop
+        }
+        console.log("nwfontdataobj = ", nwfontdataobj);
+        console.log("gennwrule = " + gennwrule);
+
+        const myretfontobj = {
+            nwfontdataobj: nwfontdataobj,
+            gennwrule: gennwrule,
+            nwruletxt: "" + nwruletxt
+        };
+
+        return myretfontobj;
     }
 
     

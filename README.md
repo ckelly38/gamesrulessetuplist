@@ -94,6 +94,9 @@ The Rules And Strategies page, show the rules and strategies for the game. By de
 ### Game Setup Page
 The Setup page lets you view how the game is supposed to look like when it is played to give you an idea.
 
+### New Game Page
+The New Game page lets you add a game to the server.
+
 ### NAVBAR Usage
 If you click the links above, in the NavBar, then it will load information for ALL of the games.
 

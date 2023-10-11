@@ -329,7 +329,7 @@ function GameSetup({games, gameobj, updateGame})
     console.log("usedefaultdesc = " + usedefaultdesc);
 
     return (
-        <div className="App">
+        <div className="App" style={{backgroundColor: "orange"}}>
             <h1>{name} Game Setup:</h1>
             <h3><b>{editMode ? "Editing" : "Viewing"} Mode: </b>
             {editMode ? (

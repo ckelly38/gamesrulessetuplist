@@ -524,7 +524,7 @@ function RulesNStrategies({games, gameobj, updateGame})
     console.log("EDIT-MODE: " + iseditingmode);
 
     return (
-        <div>
+        <div style={{backgroundColor: "orange"}}>
             <h1>Rules And Strategies For <u>{gameobj.name}</u>:</h1>
             <h3>{iseditingmode ? "Editing" : "Viewing"} Mode: {iseditingmode ? (
                 <EditAGame mid={gameobj.id} mydataobj={myfontdata} setMyDataObj={setMyFontData}

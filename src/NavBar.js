@@ -7,7 +7,7 @@ function NavBar({gameid})
     
     return (
         <>
-            <div className="App">
+            <div className="App" style={{backgroundColor: "yellow"}}>
                 <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}
                     exact to="/">Home</NavLink>
                 <NavLink className="App-link" style={{paddingLeft: "20px", paddingRight: "20px"}}

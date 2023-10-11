@@ -85,6 +85,11 @@ As an admin, you can add a game, and also edit games. You can save your changes 
 ### Home Page
 Starting at the Home page, you see a list of games. If you click on one of the links below the name of each game, then it will take you to the page and only show that game's information for the page you requested.
 
+The Tron Uprising Background Image was obtained from URLs:
+https://static.wikia.nocookie.net/tronuprisings/images/6/6b/Argon_Park.png
+https://static.wikia.nocookie.net/tronuprisings/images/6/6b/Argon_Park.png/revision/latest?cb=20131128164544
+https://c4.wallpaperflare.com/wallpaper/71/679/615/tron-uprising-wallpaper-preview.jpg
+
 ### Stats Page
 The Stats page, shows basic requirements of the game. As well as normal playing length.
 

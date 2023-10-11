@@ -216,7 +216,7 @@ function Stats({games, gameobj, updateGame})
     }
 
     return (
-        <div>
+        <div style={{backgroundColor: "orange"}}>
             <h1>Stats or Statistics or Requirements For <u>
                 {editmode ? <input type="text" id={"edit-game-name" + gameobj.id}
                     value={mypartialgamedata.name} style={{fontSize: "18px", height: "20px"}}

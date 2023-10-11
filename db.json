@@ -67,7 +67,8 @@
           "test: /b/u/i/span/style font-family: Webdings; font-size: 30px; color: rgb(256, 0, 0, 1) /styleHearts/span/i/u/b, Spades, Clubs, and /span/style color: red /styleDiamonds/span",
           "test ///breally/b escapes pull//push the rope",
           "test escapes pull//push the rope or people",
-          "othertext"
+          "othertext",
+          "test ///breally ///breally"
         ],
         "vegasstyle": []
       },

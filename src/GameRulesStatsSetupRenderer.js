@@ -4,6 +4,7 @@ import NavBar from "./NavBar";
 import Stats from "./Stats";
 import GameSetup from "./GameSetup";
 import RulesNStrategies from "./RulesNStrategies";
+import TagLevelsClass from "./TagLevelsClass";
 
 function GameRulesStatsSetupRenderer({games, type, updateGame})
 {
@@ -43,6 +44,7 @@ function GameRulesStatsSetupRenderer({games, type, updateGame})
     console.log("mygameobj = ", mygameobj);
     console.log("type = " + type);
 
+    //variable must be a boolean
     function errorCheckBools(boolsobj)
     {
         if (boolsobj === undefined || boolsobj === null)
@@ -58,27 +60,11 @@ function GameRulesStatsSetupRenderer({games, type, updateGame})
         console.log("usesetup = " + usesetup);
         console.log("usestats = " + usestats);
         console.log("userules = " + userules);
-        if (usesetup === undefined || usesetup === null ||
-            usestats === undefined || usestats === null ||
-            userules === undefined || userules === null)
-        {
-            throw new Error("the bools object was created wrong because at least one of the " +
-                "expected properties were not defined or were null, but all must be booleans!");
-        }
-        else
-        {
-            if ((usesetup === true || usesetup === false) &&
-                (usestats === true || usestats === false) &&
-                (userules === true || userules === false))
-            {
-                //they were defined as booleans correctly
-            }
-            else
-            {
-                throw new Error("the bools object was created wrong because at least one of the " +
-                    "expected properties were not booleans and must be!");
-            }
-        }
+        
+        const mytaglvs = new TagLevelsClass("");
+        mytaglvs.varMustBeDefinedBool(usesetup, "usesetup");
+        mytaglvs.varMustBeDefinedBool(usestats, "usestats");
+        mytaglvs.varMustBeDefinedBool(userules, "userules");
 
         if (usesetup)
         {

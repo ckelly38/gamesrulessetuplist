@@ -94,6 +94,8 @@ The Rules And Strategies page, show the rules and strategies for the game. By de
 ### Game Setup Page
 The Setup page lets you view how the game is supposed to look like when it is played to give you an idea.
 
+IMAGES FOR THE GAMES ARE LOADED FROM THE URLS PROVIDED BY THE USER.
+
 ### New Game Page
 The New Game page lets you add a game to the server.
 
@@ -121,6 +123,11 @@ THE ONLY ATTRIBUTES RECOGNIZED BY THE PROGRAM INSIDE THE STYLE ARE: color, font-
 TO save all of your changes, you must hit the save button.
 TO discard all of your changes, you must hit the cancel button.
 NOTE: changes are not actually saved or gotten rid of until edit mode exits for that game on that page.
+
+FOR A LIST OF FONTS I USED: https://granneman.com/webdev/coding/css/fonts-and-formatting/web-browser-font-defaults
+https://stackoverflow.com/questions/3368837/list-every-font-a-users-browser-can-display
+
+FOR THE REFRESH EMOJI I USED: https://emojicombos.com/refresh    
 
 ### A KNOWN ISSUE:
 It is currently not possible to tell if multiple editors are open on a page. But:

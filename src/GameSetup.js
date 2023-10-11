@@ -94,30 +94,18 @@ function GameSetup({games, gameobj, updateGame})
     //this calls setState method
     function onFocusHandler(event)
     {
-        const mytaglvs = new TagLevelsClass("");
-        setSelTextDOMObj(mytaglvs.getSelectedTextAndDOMObj());
+        setSelTextDOMObj(mytaglvsobj.getSelectedTextAndDOMObj());
     }
 
     //this takes in and calls setState
+    //variable must be a boolean
     function getSelectedTextAndLoadFormatIn(event, isonblur = false)
     {
         if (editMode);
         else return;
 
         console.log("isonblur = " + isonblur);
-        if (isonblur === undefined || isonblur === null)
-        {
-            throw new Error("isonblur must be defined boolean variable, but it was not defined!");
-        }
-        else
-        {
-            if (isonblur === true || isonblur === false);
-            else
-            {
-                throw new Error("isonblur must be defined boolean variable, but it was not a " +
-                    "boolean variable!");
-            }
-        }
+        mytaglvsobj.varMustBeDefinedBool(isonblur, "isonblur");
 
         let etgnd = null;
         if (event === undefined || event === null);
@@ -167,15 +155,14 @@ function GameSetup({games, gameobj, updateGame})
         }
         
         let myfinfmtdataobj = null;
-        const mytagclsobj = new TagLevelsClass("");
         if (isonblur)
         {
-            myfinfmtdataobj = mytagclsobj.getFinalFormattedSelectedTextDataObj(seltxtdomobj, gameobj,
+            myfinfmtdataobj = mytaglvsobj.getFinalFormattedSelectedTextDataObj(seltxtdomobj, gameobj,
                 mytemimgurldesc.description, null, null, null);
         }
         else
         {
-            myfinfmtdataobj = mytagclsobj.getFinalFormattedSelectedTextDataObj(null, gameobj,
+            myfinfmtdataobj = mytaglvsobj.getFinalFormattedSelectedTextDataObj(null, gameobj,
                 mytemimgurldesc.description, null, null, null);
         }
         console.log("myfinfmtdataobj = ", myfinfmtdataobj);
@@ -196,7 +183,7 @@ function GameSetup({games, gameobj, updateGame})
         console.log("fmtdifflen = " + fmtdifflen);
 
         
-        const nwfmtobj = mytagclsobj.getNewFormatDataObj(myfinfmtdataobj, etgnd);
+        const nwfmtobj = mytaglvsobj.getNewFormatDataObj(myfinfmtdataobj, etgnd);
         console.log("nwfmtobj = ", nwfmtobj);
         
 

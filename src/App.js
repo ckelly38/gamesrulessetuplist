@@ -108,22 +108,7 @@ function App() {
   console.log("loaded = " + loaded);
   console.log("games = ", games);
 
-  function varMustBeDefinedBool(myvar, myvarname = "myvar")
-  {
-    if (myvar === undefined || myvar === null)
-    {
-      throw new Error("" + myvarname + " must be a defined boolean variable, but it was not defined!");
-    }
-    else
-    {
-      if (myvar === true || myvar === false) return true;
-      else
-      {
-        throw new Error("" + myvarname + " must be a defined boolean variable, but it was not a boolean!");
-      }
-    }
-  }
-
+  //variable must be a boolean
   function updateOrAddOrDeleteGame(nwgameobj, useupdate, usedelgame)
   {
     console.log("APP: addGame: nwgameobj = ", nwgameobj);
@@ -136,8 +121,9 @@ function App() {
     }
     //else;//do nothing
 
-    varMustBeDefinedBool(useupdate, "useupdate");
-    varMustBeDefinedBool(usedelgame, "usedelgame");
+    const mytaglvs = new TagLevelsClass("");
+    mytaglvs.varMustBeDefinedBool(useupdate, "useupdate");
+    mytaglvs.varMustBeDefinedBool(usedelgame, "usedelgame");
 
     if (useupdate === usedelgame)
     {

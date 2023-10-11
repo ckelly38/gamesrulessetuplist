@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 class TagLevelsClass {
     constructor(mrule)
     {
@@ -943,14 +943,11 @@ class TagLevelsClass {
                 mystrs[n] = "" + str;
                 //console.log("NEW mystrs[" + n + "] = " + mystrs[n]);
             }//end of n for loop
-            console.log("");
+            //console.log("");
 
-            if (rule === undefined || rule === null) console.log("");
-            else console.log(rule + " (rule)");
-            for (let p = 0; p < mypow; p++)
-            {
-                console.log(mystrs[p] + " = FINAL mystrs[" + p + "]!");
-            }
+            //if (rule === undefined || rule === null) console.log("");
+            //else console.log(rule + " (rule)");
+            //for (let p = 0; p < mypow; p++) console.log(mystrs[p] + " = FINAL mystrs[" + p + "]!");
             return mystrs;
         }
     }
@@ -1015,6 +1012,25 @@ class TagLevelsClass {
         //return false;
     }
 
+    varMustBeDefinedBool(myvar, myvarname = "myvar")
+    {
+        if (myvar === undefined || myvar === null)
+        {
+            throw new Error("" + myvarname + " must be a defined boolean variable, but it was not " +
+                "defined!");
+        }
+        else
+        {
+            if (myvar === true || myvar === false) return true;
+            else
+            {
+                throw new Error("" + myvarname + " must be a defined boolean variable, but it was not " +
+                    "a boolean!");
+            }
+        }
+    }
+
+    //variable must be a boolean
     getRawIndexRelativeToParts(myparts, txtonlyindx, myformattingparts, usestart)
     {
         //now compute the new indexes using the parts and formatting parts as guides
@@ -1035,19 +1051,7 @@ class TagLevelsClass {
         }
         //else;//do nothing
 
-        if (usestart === undefined || usestart === null)
-        {
-            throw new Error("usestart must be a defined boolean variable, but it was not defined!");
-        }
-        else
-        {
-            if (usestart === true || usestart === false);
-            else
-            {
-                throw new Error("usestart must be a defined boolean variable, but it was not a " +
-                    "boolean variable!");
-            }
-        }
+        this.varMustBeDefinedBool(usestart, "usestart");
         
         let cumpartslen = -1;
         let mysparti = -1;
@@ -1064,11 +1068,11 @@ class TagLevelsClass {
                 txtonlyindx < cumpartslen)
             {
                 //this is the part we want...
-                console.log("found the part we want!");
-                console.log("cumpartslen - myparts[" + n + "].length = " +
-                    (cumpartslen - myparts[n].length));
-                console.log("txtonlyindx = " + txtonlyindx);
-                console.log("cumpartslen = " + cumpartslen);
+                //console.log("found the part we want!");
+                //console.log("cumpartslen - myparts[" + n + "].length = " +
+                //    (cumpartslen - myparts[n].length));
+                //console.log("txtonlyindx = " + txtonlyindx);
+                //console.log("cumpartslen = " + cumpartslen);
                 
                 mysireltoparti = txtonlyindx - (cumpartslen - myparts[n].length);
                 mysparti = n;
@@ -1078,11 +1082,11 @@ class TagLevelsClass {
                 ((txtonlyindx === cumpartslen) && !usestart)))
             {
                 //this is the part we want...
-                console.log("found the part we want!");
-                console.log("cumpartslen - myparts[" + n + "].length = " +
-                    (cumpartslen - myparts[n].length));
-                console.log("txtonlyindx = " + txtonlyindx);
-                console.log("cumpartslen = " + cumpartslen);
+                //console.log("found the part we want!");
+                //console.log("cumpartslen - myparts[" + n + "].length = " +
+                //    (cumpartslen - myparts[n].length));
+                //console.log("txtonlyindx = " + txtonlyindx);
+                //console.log("cumpartslen = " + cumpartslen);
                 
                 mysireltoparti = txtonlyindx - (cumpartslen - myparts[n].length);
                 mysparti = n;
@@ -1090,8 +1094,8 @@ class TagLevelsClass {
             }
             //else;//do nothing
         }//end of n for loop
-        console.log("mysparti = " + mysparti);
-        console.log("mysireltoparti = " + mysireltoparti);
+        //console.log("mysparti = " + mysparti);
+        //console.log("mysireltoparti = " + mysireltoparti);
 
         if (mysparti < 0 || mysparti > myparts.length - 1)
         {
@@ -1099,8 +1103,8 @@ class TagLevelsClass {
         }
         //else;//do nothing
         
-        console.log("myparts[" + mysparti + "] = " + myparts[mysparti]);
-        console.log("myparts[" + mysparti + "].length = " + myparts[mysparti].length);
+        //console.log("myparts[" + mysparti + "] = " + myparts[mysparti]);
+        //console.log("myparts[" + mysparti + "].length = " + myparts[mysparti].length);
 
         if ((mysireltoparti > 0 || mysireltoparti === 0) &&
         ((mysireltoparti < myparts[mysparti].length) || (mysireltoparti === myparts[mysparti].length)))
@@ -1125,7 +1129,7 @@ class TagLevelsClass {
             rawtexti += myparts[n].length + myformattingparts[n].length;
         }
         rawtexti += mysireltoparti;
-        console.log("NEW rawtexti = " + rawtexti);
+        //console.log("NEW rawtexti = " + rawtexti);
 
         if (rawtexti < 0 || rawtexti < mysireltoparti || rawtexti < txtonlyindx)
         {
@@ -1214,12 +1218,12 @@ class TagLevelsClass {
             //best case position for selection is absolute
             //the rule text is myseltxtdomndobj.mydomnd.textContent
 
-            console.log("the start and the end are on the raw text values!");
+            //console.log("the start and the end are on the raw text values!");
 
             rawtextsi = myhtmlsi;
             rawtextei = myhtmlei;
-            console.log("NEW rawtextsi = " + rawtextsi);
-            console.log("NEW rawtextei = " + rawtextei);
+            //console.log("NEW rawtextsi = " + rawtextsi);
+            //console.log("NEW rawtextei = " + rawtextei);
         }
         else
         {
@@ -1267,9 +1271,9 @@ class TagLevelsClass {
             let useformat = false;
             for (let i = 0; i < myruletext.length; i++)
             {
-                console.log("myruletext.charAt(i=" + i + ") = " + myruletext.charAt(i));
-                console.log("myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi=" + mytxtonlyi +
-                    ") = " + myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi));
+                //console.log("myruletext.charAt(i=" + i + ") = " + myruletext.charAt(i));
+                //console.log("myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi=" + mytxtonlyi +
+                //    ") = " + myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi));
                 if (myruletext.charAt(i) === myseltxtdomndobj.mydomnd.textContent.charAt(mytxtonlyi))
                 {
                     mytxtonlyi++;
@@ -1281,9 +1285,9 @@ class TagLevelsClass {
                         useformat = false;
                         mytxtonlysi = i;
 
-                        console.log("NEW myformattingpartstr = " + myformattingpartstr);
-                        console.log("NEW useformat = " + useformat);
-                        console.log("NEW mytxtonlysi = " + mytxtonlysi);
+                        //console.log("NEW myformattingpartstr = " + myformattingpartstr);
+                        //console.log("NEW useformat = " + useformat);
+                        //console.log("NEW mytxtonlysi = " + mytxtonlysi);
                     }
                     //else;//do nothing
 
@@ -1296,15 +1300,15 @@ class TagLevelsClass {
                 }
                 else
                 {
-                    console.log("diff found at i = " + i + "!");
-                    console.log("OLD useformat = " + useformat);
+                    //console.log("diff found at i = " + i + "!");
+                    //console.log("OLD useformat = " + useformat);
 
                     if (useformat);
                     else
                     {
                         myparts.push(myruletext.substring(mytxtonlysi, i));
                         useformat = true;
-                        console.log("NEW useformat = " + useformat);
+                        //console.log("NEW useformat = " + useformat);
                     }
                     
 
@@ -1321,8 +1325,8 @@ class TagLevelsClass {
                         }
                         //else;//do nothing
                     }//end of k for loop
-                    console.log("attagi = " + attagi);
-                    console.log("mytagi = " + mytagi);
+                    //console.log("attagi = " + attagi);
+                    //console.log("mytagi = " + mytagi);
 
                     if (attagi)
                     {
@@ -1351,12 +1355,12 @@ class TagLevelsClass {
 
                         if (mytagnms[mytagi] === "/style")
                         {
-                            console.log("style tag found at i = " + i + "!");
+                            //console.log("style tag found at i = " + i + "!");
                             
                             if (stagis[mytagi])
                             {
                                 let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[mytagi], mytagis);
-                                console.log("pi = " + pi);
+                                //console.log("pi = " + pi);
 
                                 if (mytagi + 1 < mytagis.length)
                                 {
@@ -1380,7 +1384,7 @@ class TagLevelsClass {
                             }
                             else
                             {
-                                console.log("this ending style tag was already counted!");
+                                //console.log("this ending style tag was already counted!");
 
                                 if (etagis[mytagi]);
                                 else
@@ -1392,7 +1396,7 @@ class TagLevelsClass {
                         }
                         else
                         {
-                            console.log("non-style tag formatting code found at i = " + i + "!");
+                            //console.log("non-style tag formatting code found at i = " + i + "!");
 
                             let isspecialbtag = false;
                             if (mytagnms[mytagi] === "/b")
@@ -1409,7 +1413,7 @@ class TagLevelsClass {
                                 }
                             }
                             //else;//do nothing
-                            console.log("isspecialbtag = " + isspecialbtag);
+                            //console.log("isspecialbtag = " + isspecialbtag);
 
                             if (isspecialbtag)
                             {
@@ -1423,8 +1427,8 @@ class TagLevelsClass {
                                 i += mytagnms[mytagi].length - 1;
                             }
                         }
-                        console.log("NEW myformattingpartstr = " + myformattingpartstr);
-                        console.log("NEW i = " + i);
+                        //console.log("NEW myformattingpartstr = " + myformattingpartstr);
+                        //console.log("NEW i = " + i);
 
                         if (i + 1 === myruletext.length)
                         {
@@ -1439,12 +1443,12 @@ class TagLevelsClass {
                     {
                         if (myruletext.charAt(i) === '/')
                         {
-                            console.log("this is an escape character found at i = " + i + "!");
+                            //console.log("this is an escape character found at i = " + i + "!");
                             
                             myformattingpartstr += "/";
                             
-                            console.log("NEW myformattingpartstr = " + myformattingpartstr);
-                            console.log("NEW i = " + i);
+                            //console.log("NEW myformattingpartstr = " + myformattingpartstr);
+                            //console.log("NEW i = " + i);
                         }
                         else
                         {
@@ -1454,8 +1458,8 @@ class TagLevelsClass {
                     }
                 }
             }//end of i for loop
-            console.log("myparts = ", myparts);
-            console.log("myformattingparts = ", myformattingparts);
+            //console.log("myparts = ", myparts);
+            //console.log("myformattingparts = ", myformattingparts);
 
             if (myparts.length === myformattingparts.length);
             else
@@ -1469,8 +1473,8 @@ class TagLevelsClass {
             {
                 myresstr += "" + myparts[n] + myformattingparts[n];
             }
-            console.log("  myresstr = " + myresstr);
-            console.log("myruletext = " + myruletext);
+            //console.log("  myresstr = " + myresstr);
+            //console.log("myruletext = " + myruletext);
 
             if (myresstr === myruletext);
             else
@@ -1478,20 +1482,20 @@ class TagLevelsClass {
                 throw new Error("the rule text only plus formatting parts in the correct order must " +
                     "be the same as the original rule text, but it was not!");
             }
-            console.log("no data integrity violation!");
+            //console.log("no data integrity violation!");
 
 
             //now compute the new indexes here
-            console.log("myhtmlsi = " + myhtmlsi);
-            console.log("myhtmlei = " + myhtmlei);
+            //console.log("myhtmlsi = " + myhtmlsi);
+            //console.log("myhtmlei = " + myhtmlei);
             rawtextsi = mytaglvs.getRawIndexRelativeToParts(myparts, myhtmlsi, myformattingparts, true);
             rawtextei = mytaglvs.getRawIndexRelativeToParts(myparts, myhtmlei, myformattingparts, false);
 
-            console.log("NEW rawtextsi = " + rawtextsi);
-            console.log("NEW rawtextei = " + rawtextei);
+            //console.log("NEW rawtextsi = " + rawtextsi);
+            //console.log("NEW rawtextei = " + rawtextei);
         }
-        console.log("FINAL rawtextsi = " + rawtextsi);
-        console.log("FINAL rawtextei = " + rawtextei);
+        //console.log("FINAL rawtextsi = " + rawtextsi);
+        //console.log("FINAL rawtextei = " + rawtextei);
 
         if (rawtextsi < 0 || rawtextei < 0 || rawtextei < rawtextsi ||
             rawtextei > myruletext.length - 1 || rawtextsi > myruletext.length - 1)
@@ -1517,13 +1521,13 @@ class TagLevelsClass {
                 {
                     //this is the nearest starting tag found before the starting index
                     //this needs to be included
-                    console.log("found are starting tag index at n = " + n + "!");
-                    console.log("mytagis[" + n + "] = " + mytagis[n]);
-                    console.log("rawtextsi = " + rawtextsi);
-                    console.log("rawtextei = " + rawtextei);
+                    //console.log("found are starting tag index at n = " + n + "!");
+                    //console.log("mytagis[" + n + "] = " + mytagis[n]);
+                    //console.log("rawtextsi = " + rawtextsi);
+                    //console.log("rawtextei = " + rawtextei);
 
                     let pi = mytaglvs.getTagPairIndex(myruletext, mytagis[n], mytagis);
-                    console.log("pi = " + pi);
+                    //console.log("pi = " + pi);
 
                     if (pi < rawtextsi);
                     else
@@ -1533,7 +1537,7 @@ class TagLevelsClass {
                         if (notagsbeforeoratsi) notagsbeforeoratsi = false;
                         //else;//do nothing
                         
-                        console.log("NEED TO KEEP THIS PAIR...!");
+                        //console.log("NEED TO KEEP THIS PAIR...!");
                         if (minsindx < 0 && minsi < 0)
                         {
                             minsindx = mytagis[n];
@@ -1548,26 +1552,27 @@ class TagLevelsClass {
                             }
                             //else;//do nothing
                         }
-                        console.log("NEW minsindx = " + minsindx);
-                        console.log("NEW minsi = " + minsi);
+                        //console.log("NEW minsindx = " + minsindx);
+                        //console.log("NEW minsi = " + minsi);
                     }
                 }
                 //else;//do nothing
             }
             //else;//do nothing
         }//end of n for loop
-        console.log("FINAL minsindx = " + minsindx);
-        console.log("FINAL minsi = " + minsi);
-        console.log("notagsbeforeoratsi = " + notagsbeforeoratsi);
+        //console.log("FINAL minsindx = " + minsindx);
+        //console.log("FINAL minsi = " + minsi);
+        //console.log("notagsbeforeoratsi = " + notagsbeforeoratsi);
 
         if (notagsbeforeoratsi)
         {
             let diffsitagis = [];
+            let fndatleastoneposdiff = false;
             for (let n = stagis.length - 1; n > -1 && n < stagis.length; n--)
             {
                 if (stagis[n]) diffsitagis[n] = mytagis[n] - rawtextsi;
                 else diffsitagis[n] = -1;
-                console.log("diffsitagis[" + n + "] = " + diffsitagis[n]);
+                //console.log("diffsitagis[" + n + "] = " + diffsitagis[n]);
             }
 
             let minvdiff = -1;
@@ -1579,6 +1584,9 @@ class TagLevelsClass {
                     if (diffsitagis[n] < 0);
                     else
                     {
+                        if (fndatleastoneposdiff);
+                        else fndatleastoneposdiff = true;
+
                         if (minvdiff < 0)
                         {
                             minvdiff = diffsitagis[n];
@@ -1597,8 +1605,9 @@ class TagLevelsClass {
                 }
                 //else;//do nothing
             }
-            console.log("minvdiff = " + minvdiff);
-            console.log("minvdiffi = " + minvdiffi);
+            //console.log("minvdiff = " + minvdiff);
+            //console.log("minvdiffi = " + minvdiffi);
+            //console.log("fndatleastoneposdiff = " + fndatleastoneposdiff);
 
             if (minvdiffi < 0 || minvdiffi > stagis.length - 1)
             {
@@ -1607,27 +1616,31 @@ class TagLevelsClass {
                 if (stagis.length < 1);
                 else
                 {
-                    throw new Error("no starting tag indexes were found! Only ending tag indexes " +
-                        "were found!");
+                    if (fndatleastoneposdiff)
+                    {
+                        throw new Error("no starting tag indexes were found! Only ending tag indexes " +
+                            "were found!");
+                    }
+                    //else;//do nothing
                 }
             }
             else
             {
-                console.log("found what we are looking for!");
+                //console.log("found what we are looking for!");
 
                 minsi = minvdiffi;
                 minsindx = mytagis[minsi];
                 notagsbeforeoratsi = false;
 
-                console.log("NEW minsindx = " + minsindx);
-                console.log("NEW minsi = " + minsi);
-                console.log("NEW notagsbeforeoratsi = " + notagsbeforeoratsi);
+                //console.log("NEW minsindx = " + minsindx);
+                //console.log("NEW minsi = " + minsi);
+                //console.log("NEW notagsbeforeoratsi = " + notagsbeforeoratsi);
             }
         }
         //else;//do nothing
-        console.log("FINAL minsindx = " + minsindx);
-        console.log("FINAL minsi = " + minsi);
-        console.log("FINAL notagsbeforeoratsi = " + notagsbeforeoratsi);
+        //console.log("FINAL minsindx = " + minsindx);
+        //console.log("FINAL minsi = " + minsi);
+        //console.log("FINAL notagsbeforeoratsi = " + notagsbeforeoratsi);
 
         if (notagsbeforeoratsi)
         {
@@ -1655,33 +1668,35 @@ class TagLevelsClass {
         
         const finrawtextsi = (notagsbeforeoratsi ? rawtextsi :
             ((minsindx < rawtextsi) ? minsindx : rawtextsi));
-        console.log("rawtextsi = " + rawtextsi);
-        console.log("finrawtextsi = " + finrawtextsi);
+        //console.log("rawtextsi = " + rawtextsi);
+        //console.log("finrawtextsi = " + finrawtextsi);
 
         const mytagpi = (notagsbeforeoratsi ? -1 : 
             mytaglvs.getTagPairIndex(myruletext, mytagis[minsi], mytagis));
-        console.log("mytagpi = " + mytagpi);
+        //console.log("mytagpi = " + mytagpi);
 
         let mytagpilen = -1;
         if (notagsbeforeoratsi);
         else
         {
             mytagpilen = mytagnms[minsi].length;
-            if (mytagnms[minsi] === "\b")
+            if (mytagnms[minsi] === "/b")
             {
+                //console.log("myruletext.charAt(" + (mytagpi + 2) + ") = " +
+                //    myruletext.charAt(mytagpi + 2));
                 if (myruletext.charAt(mytagpi + 2) === 'b');
                 else mytagpilen += 2;
             }
             //else;//do nothing
         }
-        console.log("mytagpilen = " + mytagpilen);
-        console.log("mytagpi + mytagpilen = " + (mytagpi + mytagpilen));
-        console.log("rawtextei = " + rawtextei);
+        //console.log("mytagpilen = " + mytagpilen);
+        //console.log("mytagpi + mytagpilen = " + (mytagpi + mytagpilen));
+        //console.log("rawtextei = " + rawtextei);
 
         let finrawtextei = -1;
         if (mytagpi + mytagpilen < rawtextei) finrawtextei = rawtextei;
         else finrawtextei = mytagpi + mytagpilen;
-        console.log("finrawtextei = " + finrawtextei);
+        //console.log("finrawtextei = " + finrawtextei);
 
         return [finrawtextsi, finrawtextei];
     }
@@ -1696,17 +1711,17 @@ class TagLevelsClass {
             //if there are no tag indexes, then treat as rawtext with escape characters
             //if the entire selection is before all of the tag indexes, then treat as raw text
             //otherwise it is not safe to do that
-            console.log("mytagis = ", mytagis);
+            //console.log("mytagis = ", mytagis);
             
             if (mytagis === undefined || mytagis === null || mytagis.length < 1)
             {
-                console.log("there are no tags on the rule (this is raw text)!");
+                //console.log("there are no tags on the rule (this is raw text)!");
 
                 treatasrawtext = true;
             }
             else
             {
-                console.log("checking if the entire selection ends before the tags start!");
+                //console.log("checking if the entire selection ends before the tags start!");
 
                 treatasrawtext = true; 
                 for (let n = 0; n < mytagis.length; n++)
@@ -1714,8 +1729,8 @@ class TagLevelsClass {
                     if (myhtmlei < mytagis[n]);
                     else
                     {
-                        console.log("there exists one tag that the end selection is after " +
-                            "(this is not raw text)!");
+                        //console.log("there exists one tag that the end selection is after " +
+                        //    "(this is not raw text)!");
                         treatasrawtext = false;
                         break;
                     }
@@ -1723,7 +1738,7 @@ class TagLevelsClass {
 
                 if (treatasrawtext)
                 {
-                    console.log("the entire selection ends before the tags start (this is raw text)!");
+                    //console.log("the entire selection ends before the tags start (this is raw text)!");
                 }
                 //else;//do nothing
             }
@@ -1734,13 +1749,13 @@ class TagLevelsClass {
                 if (treatasrawtext)
                 {
                     treatasrawtext = false;
-                    console.log("escape characters are present (not raw text, but very close to it)!");
+                    //console.log("escape characters are present (not raw text, but very close to it)!");
                 }
                 //else;//do nothing
             }
         }
-        console.log("treatasrawtext = " + treatasrawtext);
-        console.log("israwtext = " + israwtext);
+        //console.log("treatasrawtext = " + treatasrawtext);
+        //console.log("israwtext = " + israwtext);
 
         return treatasrawtext;
     }
@@ -2098,10 +2113,10 @@ class TagLevelsClass {
         let finfmtstagis = mytaglvs.areAllTagsStartingTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
         let finfmtetagis = mytaglvs.areAllTagsEndingTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
         let finfmttagnms = mytaglvs.getAllTags(myfinfmtdataobj.finfmtseltextstr, finfmttagis);
-        console.log("finfmttagis = ", finfmttagis);
-        console.log("finfmtstagis = ", finfmtstagis);
-        console.log("finfmtetagis = ", finfmtetagis);
-        console.log("finfmttagnms = ", finfmttagnms);
+        //console.log("finfmttagis = ", finfmttagis);
+        //console.log("finfmtstagis = ", finfmtstagis);
+        //console.log("finfmtetagis = ", finfmtetagis);
+        //console.log("finfmttagnms = ", finfmttagnms);
 
         const mysearchtags = ["/b", "/u", "/i", "/style"];
         let mytagspresent = [];
@@ -2136,9 +2151,9 @@ class TagLevelsClass {
         {
             aremytags[n] = false;
             aremytagsandeis[n] = null;
-            console.log("OLD aremytags[" + n + "] = " + aremytags[n]);
-            console.log("mytagspresent[" + n + "] = " + mytagspresent[n]);
-            console.log("tag we are looking for = mysearchtags[" + n + "] = " + mysearchtags[n]);
+            //console.log("OLD aremytags[" + n + "] = " + aremytags[n]);
+            //console.log("mytagspresent[" + n + "] = " + mytagspresent[n]);
+            //console.log("tag we are looking for = mysearchtags[" + n + "] = " + mysearchtags[n]);
 
             if (mytagspresent[n]);
             else continue;
@@ -2147,32 +2162,32 @@ class TagLevelsClass {
             {
                 if (finfmttagnms[k] === mysearchtags[n])
                 {
-                    console.log("found our tag at k = " + k + "!");
-                    console.log("our tag is = finfmttagnms[" + k + "] = " + finfmttagnms[k]);
+                    //console.log("found our tag at k = " + k + "!");
+                    //console.log("our tag is = finfmttagnms[" + k + "] = " + finfmttagnms[k]);
 
                     let useparenttag = false;
                     if (mysearchtags[n] === "/style") useparenttag = true;
                     //else;//do nothing
-                    console.log("useparenttag = " + useparenttag);
+                    //console.log("useparenttag = " + useparenttag);
 
                     const mykindx = (useparenttag ? k - 1 : k);
-                    console.log("mykindx = " + mykindx);
+                    //console.log("mykindx = " + mykindx);
 
                     if (mykindx < 0) throw new Error("invalid value found and used for mykindx index!");
                     //else;//do nothing
 
                     if (finfmtstagis[mykindx])
                     {
-                        console.log("this is a starting tag!");
-                        console.log("finfmttagis[" + mykindx + "] + myfinfmtdataobj.finrawtextsi = " +
-                            (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi));
-                        console.log("myfinfmtdataobj.rawtextsi = " + myfinfmtdataobj.rawtextsi);
-                        console.log("myfinfmtdataobj.rawtextei = " + myfinfmtdataobj.rawtextei);
+                        //console.log("this is a starting tag!");
+                        //console.log("finfmttagis[" + mykindx + "] + myfinfmtdataobj.finrawtextsi = " +
+                        //    (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi));
+                        //console.log("myfinfmtdataobj.rawtextsi = " + myfinfmtdataobj.rawtextsi);
+                        //console.log("myfinfmtdataobj.rawtextei = " + myfinfmtdataobj.rawtextei);
 
                         let pi = mytaglvs.getTagPairIndex(myfinfmtdataobj.finfmtseltextstr,
                             finfmttagis[mykindx], finfmttagis);
-                        console.log("pi + myfinfmtdataobj.finrawtextsi = " +
-                            (pi + myfinfmtdataobj.finrawtextsi));
+                        //console.log("pi + myfinfmtdataobj.finrawtextsi = " +
+                        //    (pi + myfinfmtdataobj.finrawtextsi));
 
                         if (finfmttagis[mykindx] + myfinfmtdataobj.finrawtextsi <
                             myfinfmtdataobj.rawtextsi &&
@@ -2193,8 +2208,8 @@ class TagLevelsClass {
                 }
                 //else;//do nothing
             }//end of k for loop
-            console.log("NEW aremytags[" + n + "] = " + aremytags[n]);
-            console.log("NEW aremytagsandeis[" + n + "] = ", aremytagsandeis[n]);
+            //console.log("NEW aremytags[" + n + "] = " + aremytags[n]);
+            //console.log("NEW aremytagsandeis[" + n + "] = ", aremytagsandeis[n]);
         }//end of n for loop
 
         const myetxtidstrs = ["bold", "underline", "italics", ""];
@@ -2214,11 +2229,11 @@ class TagLevelsClass {
                 //else;//do nothing
             }
         }
-        console.log("myetxtstrsi = " + myetxtstrsi);
+        //console.log("myetxtstrsi = " + myetxtstrsi);
 
         if (myetxtstrsi < 0 || myetxtstrsi > myetxtidstrs.length - 1) myetxtstrsi = 3;
         //else;//do nothing
-        console.log("FINAL myetxtstrsi = " + myetxtstrsi);
+        //console.log("FINAL myetxtstrsi = " + myetxtstrsi);
 
         if (myetxtstrsi < 0 || myetxtstrsi > myetxtidstrs.length - 1)
         {
@@ -2235,11 +2250,9 @@ class TagLevelsClass {
         {
             //log state
             gennwrule = true;
-            //console.log("myfontdata = ", myfontdata);
 
             const myfontobjkey = "is" + myetxtidstrs[myetxtstrsi];
-            console.log("myfontobjkey = " + myfontobjkey);
-            //console.log("myfontdata[" + myfontobjkey + "] = " + myfontdata[myfontobjkey]);
+            //console.log("myfontobjkey = " + myfontobjkey);
 
             if (aremytags[myetxtstrsi])
             {
@@ -2251,7 +2264,7 @@ class TagLevelsClass {
                     let i = -1;
                     if (n === 0) i = aremytagsandeis[myetxtstrsi].rwtgei;
                     else i = aremytagsandeis[myetxtstrsi].rwtgsi;
-                    console.log("i = " + i);
+                    //console.log("i = " + i);
 
                     let tgisspcal = false;
                     if (myetxtidstrs[myetxtstrsi] === "bold")
@@ -2261,28 +2274,28 @@ class TagLevelsClass {
                         else tgisspcal = true;
                     }
                     //else;//do nothing
-                    console.log("tgisspcal = " + tgisspcal);
+                    //console.log("tgisspcal = " + tgisspcal);
 
                     const tglen = (tgisspcal ? mysearchtags[myetxtstrsi].length + 2:
                         mysearchtags[myetxtstrsi].length);
-                    console.log("tglen = " + tglen);
+                    //console.log("tglen = " + tglen);
 
-                    console.log("nwruletxt.substring(0, " + i + ") = " + nwruletxt.substring(0, i));
+                    //console.log("nwruletxt.substring(0, " + i + ") = " + nwruletxt.substring(0, i));
                     
                     if (i + tglen < nwruletxt.length)
                     {
-                        console.log("nwruletxt.substring(" + (i + tglen) + ") = " +
-                            nwruletxt.substring(i + tglen));
+                        //console.log("nwruletxt.substring(" + (i + tglen) + ") = " +
+                        //    nwruletxt.substring(i + tglen));
                         
                         nwruletxt = nwruletxt.substring(0, i) + nwruletxt.substring(i + tglen);
                     }
                     else
                     {
-                        console.log("it ends after that tag!");
+                        //console.log("it ends after that tag!");
 
                         nwruletxt = nwruletxt.substring(0, i);
                     }
-                    console.log("NEW nwruletxt = " + nwruletxt);
+                    //console.log("NEW nwruletxt = " + nwruletxt);
                 }//end of n for loop
                 console.log("FINAL nwruletxt = " + nwruletxt);
 
@@ -2292,10 +2305,10 @@ class TagLevelsClass {
             else
             {
                 //add it to the rule...
-                console.log("part 1: nwruletxt.substring(0, " + myfinfmtdataobj.finrawtextsi + ") = " +
-                    nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi));
+                //console.log("part 1: nwruletxt.substring(0, " + myfinfmtdataobj.finrawtextsi + ") = " +
+                //    nwruletxt.substring(0, myfinfmtdataobj.finrawtextsi));
                 
-                console.log("mysearchtags[" + myetxtstrsi + "] = " + mysearchtags[myetxtstrsi]);
+                //console.log("mysearchtags[" + myetxtstrsi + "] = " + mysearchtags[myetxtstrsi]);
                 
                 let myfirsttg = "";
                 if (mysearchtags[myetxtstrsi] === "/b")
@@ -2308,11 +2321,11 @@ class TagLevelsClass {
                     else myfirsttg = "" + mysearchtags[myetxtstrsi];
                 }
                 else myfirsttg = "" + mysearchtags[myetxtstrsi];
-                console.log("part 2: myfirsttg = " + myfirsttg);
+                //console.log("part 2: myfirsttg = " + myfirsttg);
                 
-                console.log("part 3: nwruletxt.substring(" + myfinfmtdataobj.finrawtextsi + ", " +
-                    myfinfmtdataobj.finrawtextei + ") = " +
-                    nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei));
+                //console.log("part 3: nwruletxt.substring(" + myfinfmtdataobj.finrawtextsi + ", " +
+                //    myfinfmtdataobj.finrawtextei + ") = " +
+                //    nwruletxt.substring(myfinfmtdataobj.finrawtextsi, myfinfmtdataobj.finrawtextei));
 
                 let myotg = "";
                 if (mysearchtags[myetxtstrsi] === "/b")
@@ -2329,14 +2342,14 @@ class TagLevelsClass {
                     else myotg = "" + mysearchtags[myetxtstrsi];
                 }
                 else myotg = "" + mysearchtags[myetxtstrsi];
-                console.log("part 4: myotg = " + myotg);
+                //console.log("part 4: myotg = " + myotg);
 
                 if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
                 {
-                    console.log("part 5: nwruletxt.substring(" + myfinfmtdataobj.finrawtextei + ") = " +
-                        nwruletxt.substring(myfinfmtdataobj.finrawtextei));
+                    //console.log("part 5: nwruletxt.substring(" + myfinfmtdataobj.finrawtextei + ") = " +
+                    //    nwruletxt.substring(myfinfmtdataobj.finrawtextei));
                 }
-                else console.log("part 5: ");
+                //else console.log("part 5: ");
 
                 if (myfinfmtdataobj.finrawtextei < nwruletxt.length)
                 {
@@ -2356,7 +2369,7 @@ class TagLevelsClass {
                 console.log("NEW aremytags[" + myetxtstrsi + "] = " + aremytags[myetxtstrsi]);
             }
         }
-        console.log("gennwrule = " + gennwrule);
+        //console.log("gennwrule = " + gennwrule);
         //debugger;
 
         let myinstylestr = "";
@@ -2379,7 +2392,7 @@ class TagLevelsClass {
                     {
                         let pi = mytaglvs.getTagPairIndex(myfinfmtdataobj.finfmtseltextstr, finfmttagis[n],
                             finfmttagis);
-                        console.log("pi = " + pi);
+                        //console.log("pi = " + pi);
 
                         myinstylestr = myfinfmtdataobj.finfmtseltextstr.substring(
                             finfmttagis[n] + finfmttagnms[n].length, pi);
@@ -2391,7 +2404,7 @@ class TagLevelsClass {
                 }
                 //else;//do nothing
             }
-            console.log("myinstylestr = " + myinstylestr);
+            //console.log("myinstylestr = " + myinstylestr);
 
             if (myinstylestr === undefined || myinstylestr === null || myinstylestr.length < 1)
             {
@@ -2403,38 +2416,38 @@ class TagLevelsClass {
             myfontsindxs = fontstrs.map((mystr) => myinstylestr.indexOf(mystr));
             const myfontsindxsvld = myfontsindxs.map((fsi) =>
                 ((fsi > 0 || fsi === 0) && fsi < myinstylestr.length));
-            console.log("fontstrs = ", fontstrs);
-            console.log("myfontsindxs = ", myfontsindxs);
-            console.log("myfontsindxsvld = ", myfontsindxsvld);
+            //console.log("fontstrs = ", fontstrs);
+            //console.log("myfontsindxs = ", myfontsindxs);
+            //console.log("myfontsindxsvld = ", myfontsindxsvld);
 
             for (let n = 0; n < fontstrs.length; n++)
             {
-                console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
+                //console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
                 if (myfontsindxsvld[n])
                 {
-                    console.log("the start index is valid!");
+                    //console.log("the start index is valid!");
 
                     myfontvalssindxs[n] = myfontsindxs[n] + fontstrs[n].length;
                 }
                 else myfontvalssindxs[n] = myfontsindxs[n];
-                console.log("NEW myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
+                //console.log("NEW myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
             }//end of n for loop
-            console.log("myfontvalssindxs = ", myfontvalssindxs);
+            //console.log("myfontvalssindxs = ", myfontvalssindxs);
 
             //go until ; or end of string index from the start index
             for (let n = 0; n < fontstrs.length; n++)
             {
-                console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
+                //console.log("myfontsindxsvld[" + n + "] = " + myfontsindxsvld[n]);
                 if (myfontsindxsvld[n])
                 {
-                    console.log("the start index is valid!");
+                    //console.log("the start index is valid!");
 
                     myfonteindxs[n] = -1;
                     for (let i = myfontsindxs[n] + fontstrs[n].length; i < myinstylestr.length; i++)
                     {
                         if (myinstylestr.charAt(i) === ';')
                         {
-                            console.log("found a semi-colon at i = " + i + "!");
+                            //console.log("found a semi-colon at i = " + i + "!");
                             myfonteindxs[n] = i;
                             break;
                         }
@@ -2442,7 +2455,7 @@ class TagLevelsClass {
                         {
                             if (i + 1 === myinstylestr.length)
                             {
-                                console.log("reached the end of the string length!");
+                                //console.log("reached the end of the string length!");
                                 myfonteindxs[n] = myinstylestr.length;
                                 break;
                             }
@@ -2451,17 +2464,17 @@ class TagLevelsClass {
                     }//end of i for loop
                 }
                 else myfonteindxs[n] = myfontsindxs[n];
-                console.log("NEW myfonteindxs[" + n + "] = " + myfonteindxs[n]);
+                //console.log("NEW myfonteindxs[" + n + "] = " + myfonteindxs[n]);
             }//end of n for loop
-            console.log("myfonteindxs = ", myfonteindxs);
-            console.log("");
+            //console.log("myfonteindxs = ", myfonteindxs);
+            //console.log("");
 
-            console.log("myinstylestr = " + myinstylestr);
-            console.log("fontstrs = ", fontstrs);
-            console.log("myfontsindxs = ", myfontsindxs);
-            console.log("myfontsindxsvld = ", myfontsindxsvld);
-            console.log("myfontvalssindxs = ", myfontvalssindxs);
-            console.log("myfonteindxs = ", myfonteindxs);
+            //console.log("myinstylestr = " + myinstylestr);
+            //console.log("fontstrs = ", fontstrs);
+            //console.log("myfontsindxs = ", myfontsindxs);
+            //console.log("myfontsindxsvld = ", myfontsindxsvld);
+            //console.log("myfontvalssindxs = ", myfontvalssindxs);
+            //console.log("myfonteindxs = ", myfonteindxs);
 
             for (let n = 0; n < fontstrs.length; n++)
             {
@@ -2471,7 +2484,7 @@ class TagLevelsClass {
                 }
                 else myfontvals[n] = "";
             }
-            console.log("myfontvals = ", myfontvals);
+            //console.log("myfontvals = ", myfontvals);
         }
         //else;//do nothing
 
@@ -2498,7 +2511,7 @@ class TagLevelsClass {
                             let mytempstr = "";
                             if (fontstrs[n] === " font-size: ") mytempstr = "" + etgnd.value + "px";
                             else mytempstr = "" + etgnd.value;
-                            console.log("init mytempstr = " + mytempstr);
+                            //console.log("init mytempstr = " + mytempstr);
 
                             if (fontstrs[n] === " font-family: ")
                             {
@@ -2513,39 +2526,40 @@ class TagLevelsClass {
                                                 mytempstr.substring(i + 1);
                                         }
                                         else mytempstr = mytempstr.substring(0, i) + "-";
-                                        console.log("NEW mytempstr = " + mytempstr);
+                                        //console.log("NEW mytempstr = " + mytempstr);
                                     }
                                     //else;//do nothing
                                 }//end of i for loop
                             }
                             //else;//do nothing
-                            console.log("FINAL mytempstr = " + mytempstr);
+                            //console.log("FINAL mytempstr = " + mytempstr);
 
                             myfontvals[n] = "" + mytempstr;
 
-                            console.log("NEW myfontvals[" + n + "] = " + myfontvals[n]);
-                            console.log("myfinfmtdataobj.finrawtextsi = " + myfinfmtdataobj.finrawtextsi);
-                            console.log("instylestrsi = " + instylestrsi);
-                            console.log("instylestrei = " + instylestrei);
-                            console.log("myfontsindxs[" + n + "] = " + myfontsindxs[n]);
-                            console.log("myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
-                            console.log("myfonteindxs[" + n + "] = " + myfonteindxs[n]);
+                            //console.log("NEW myfontvals[" + n + "] = " + myfontvals[n]);
+                            //console.log("myfinfmtdataobj.finrawtextsi = " +
+                            //    myfinfmtdataobj.finrawtextsi);
+                            //console.log("instylestrsi = " + instylestrsi);
+                            //console.log("instylestrei = " + instylestrei);
+                            //console.log("myfontsindxs[" + n + "] = " + myfontsindxs[n]);
+                            //console.log("myfontvalssindxs[" + n + "] = " + myfontvalssindxs[n]);
+                            //console.log("myfonteindxs[" + n + "] = " + myfonteindxs[n]);
 
-                            console.log("instylestrsi + myfinfmtdataobj.finrawtextsi = " +
-                                (instylestrsi + myfinfmtdataobj.finrawtextsi));
+                            //console.log("instylestrsi + myfinfmtdataobj.finrawtextsi = " +
+                            //    (instylestrsi + myfinfmtdataobj.finrawtextsi));
                             
-                            console.log("nwruletxt.substring(myfontvalssindxs[n] + instylestrsi + " +
-                                "myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi + " +
-                                "myfinfmtdataobj.finrawtextsi) = " +
-                                nwruletxt.substring(myfontvalssindxs[n] + instylestrsi +
-                                myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi +
-                                myfinfmtdataobj.finrawtextsi));
+                            //console.log("nwruletxt.substring(myfontvalssindxs[n] + instylestrsi + " +
+                            //    "myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi + " +
+                            //    "myfinfmtdataobj.finrawtextsi) = " +
+                            //    nwruletxt.substring(myfontvalssindxs[n] + instylestrsi +
+                            //    myfinfmtdataobj.finrawtextsi, myfonteindxs[n] + instylestrsi +
+                            //    myfinfmtdataobj.finrawtextsi));
                             
-                            console.log(nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
-                                myfinfmtdataobj.finrawtextsi));
-                            console.log(mytempstr);
-                            console.log(nwruletxt.substring(myfonteindxs[n] + instylestrsi +
-                                myfinfmtdataobj.finrawtextsi));
+                            //console.log(nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
+                            //    myfinfmtdataobj.finrawtextsi));
+                            //console.log(mytempstr);
+                            //console.log(nwruletxt.substring(myfonteindxs[n] + instylestrsi +
+                            //    myfinfmtdataobj.finrawtextsi));
                             
                             nwruletxt = nwruletxt.substring(0, myfontvalssindxs[n] + instylestrsi +
                                 myfinfmtdataobj.finrawtextsi) + mytempstr +
@@ -2574,7 +2588,7 @@ class TagLevelsClass {
         if (myinstylestr.length < 1);
         else
         {
-            console.log("now beginning to add the styleing information to the object!");
+            //console.log("now beginning to add the styleing information to the object!");
 
             if (fontstrs.length === 3);
             else throw new Error("there must be at least one string on the font strings to look for!");
@@ -2641,6 +2655,8 @@ class TagLevelsClass {
         }
         console.log("nwfontdataobj = ", nwfontdataobj);
         console.log("gennwrule = " + gennwrule);
+       
+        //debugger;
 
         const myretfontobj = {
             nwfontdataobj: nwfontdataobj,
@@ -2654,13 +2670,13 @@ class TagLevelsClass {
     
     doesInputHaveUnnecessaryCharacters(inputobj)
     {
-        console.log("AddAGame screener: inputobj = ", inputobj);
+        //console.log("AddAGame screener: inputobj = ", inputobj);
         if (inputobj.input === undefined || inputobj.input === null)
         {
             throw new Error("AddAGame screener: the input string was null and must be defined!");
         }
         //else;//do nothing
-        console.log("screener: inputobj.input.length = " + inputobj.input.length);
+        //console.log("screener: inputobj.input.length = " + inputobj.input.length);
 
         for (let i = 0; i < inputobj.input.length; i++)
         {
@@ -2669,7 +2685,7 @@ class TagLevelsClass {
             //console.log("inputobj.input.charAt(" + i + ") = " + inputobj.input.charAt(i));
             if (inputobj.input.charAt(i) === '<')
             {
-                console.log("may have found a tag start here at i = " + i + "!");
+                //console.log("may have found a tag start here at i = " + i + "!");
                 let errmsg = "";
                 for (let k = i + 1; k < inputobj.input.length; k++)
                 {
@@ -2717,10 +2733,20 @@ class TagLevelsClass {
             }
             //else;//do nothing should be safe
         }//end of i for loop
-        console.log("AddAGame screener: input object is safe!");
+        //console.log("AddAGame screener: input object is safe!");
         return false;
     }
     screener(inputobj) { return this.doesInputHaveUnnecessaryCharacters(inputobj);}
+
+    getTagStr(rule, i, stis)
+    {
+        let tagstr = "";
+        if (this.isTagIndexOnListOfIndexes(rule, i, stis)) tagstr = "<";
+        else tagstr = "</";
+        //console.log("tagstr = " + tagstr);
+
+        return tagstr;
+    }
 
     generateMarkUpForDisplayFromRule(rule)
     {
@@ -2741,7 +2767,7 @@ class TagLevelsClass {
         //usually basic drop down with the values...?
         //that is not what we will be doing here...
 
-        console.log("genmarkup: rule = " + rule);
+        //console.log("genmarkup: rule = " + rule);
 
         if (rule === undefined || rule === null) return null;
         else if (rule.length < 1) return "";
@@ -2762,21 +2788,21 @@ class TagLevelsClass {
 
         //we can see anyone above, but the style must be after one of them.
         let mytagis = this.getAllTagIndexes(rule);
-        console.log("genmarkup: mytagis = ", mytagis);
+        //console.log("genmarkup: mytagis = ", mytagis);
         
         let mytags = this.getAllTags(rule, mytagis);
-        console.log("genmarkup: mytags = ", mytags);
+        //console.log("genmarkup: mytags = ", mytags);
 
         let stis = this.getStartingOrEndingTagIndexes(rule, mytagis, true);
-        console.log("genmarkup: stis = ", stis);
+        //console.log("genmarkup: stis = ", stis);
         
         let etis = this.getStartingOrEndingTagIndexes(rule, mytagis, false);
-        console.log("genmarkup: etis = ", etis);
+        //console.log("genmarkup: etis = ", etis);
 
         for (let n = 0; n < mytagis.length; n++)
         {
             let pairi = this.getTagPairIndex(rule, mytagis[n], mytagis);
-            console.log("genmarkup call 1: pair tag index for indx (" + mytagis[n] + ") = " + pairi);
+            //console.log("genmarkup call 1: pair tag index for indx (" + mytagis[n] + ") = " + pairi);
 
             if (pairi < 0 || (pairi > rule.length - 1 && rule.length > 0) || rule.length === 0)
             {
@@ -2785,8 +2811,8 @@ class TagLevelsClass {
             //else;//do nothing
             
             let opairi = this.getTagPairIndex(rule, pairi, mytagis);
-            console.log("genmarkup call 2: pair tag index for indx (" + mytagis[n] + ") = " + pairi);
-            console.log("genmarkup: pair tag index for indx (" + pairi + ") = " + opairi);
+            //console.log("genmarkup call 2: pair tag index for indx (" + mytagis[n] + ") = " + pairi);
+            //console.log("genmarkup: pair tag index for indx (" + pairi + ") = " + opairi);
             if (mytagis[n] === opairi);
             else throw new Error("the indexes for the pairs must match up, but they did not!");
         }
@@ -2806,14 +2832,12 @@ class TagLevelsClass {
         }
 
         let rulemkup = "";
-        const otag = "<";
-        const ctag = "</";
         for (let i = 0; i < rule.length; i++)
         {
             if (rule.charAt(i) === "/")
             {
-                console.log("found the forward slash at i = " + i + "!");
-                console.log("OLD rulemkup = " + rulemkup);
+                //console.log("found the forward slash at i = " + i + "!");
+                //console.log("OLD rulemkup = " + rulemkup);
                 if (i + 1 < rule.length)
                 {
                     if (rule.charAt(i + 1) === "/")
@@ -2827,17 +2851,9 @@ class TagLevelsClass {
                                 {
                                     //render the bold here
                                     //style can also be inside of this
-                                    console.log("render the bold here at i = " + i + "!");
+                                    //console.log("render the bold here at i = " + i + "!");
 
-                                    let tagstr = "";
-                                    if (this.isTagIndexOnListOfIndexes(rule, i, stis))
-                                    {
-                                        tagstr = "" + otag;
-                                    }
-                                    else tagstr = "" + ctag;
-                                    console.log("tagstr = " + tagstr);
-
-                                    rulemkup += tagstr + rule.charAt(i + 3) + ">";
+                                    rulemkup += this.getTagStr(rule, i, stis) + rule.charAt(i + 3) + ">";
                                     i += 3;
                                 }
                                 else renesc = true;
@@ -2849,7 +2865,7 @@ class TagLevelsClass {
                         if (renesc)
                         {
                             //just render the escape character
-                            console.log("render the escape character at i = " + i + "!");
+                            //console.log("render the escape character at i = " + i + "!");
                             rulemkup += rule.charAt(i);
                             i++;
                         }
@@ -2859,17 +2875,12 @@ class TagLevelsClass {
                         rule.charAt(i + 1) === "p")
                     {
                         //render the italics or under line here
-                        console.log("render the italics or underline or p at i = " + i + "!");
+                        //console.log("render the italics or underline or p at i = " + i + "!");
                         
                         //need to know which kind opening or closing tag to render
                         //style can be inside any of these too
                         
-                        let tagstr = "";
-                        if (this.isTagIndexOnListOfIndexes(rule, i, stis)) tagstr = "" + otag;
-                        else tagstr = "" + ctag;
-                        console.log("tagstr = " + tagstr);
-
-                        rulemkup += tagstr + rule.charAt(i + 1) + ">";
+                        rulemkup += this.getTagStr(rule, i, stis) + rule.charAt(i + 1) + ">";
                         i++;
                     }
                     else if (rule.charAt(i + 1) === "b")
@@ -2880,7 +2891,7 @@ class TagLevelsClass {
                             if (rule.charAt(i + 2) === "r")
                             {
                                 //render the new line here
-                                console.log("render the new line here at i = " + i + "!");
+                                //console.log("render the new line here at i = " + i + "!");
                                 rulemkup += "<br />";
                                 i += 2;
                             }
@@ -2892,14 +2903,9 @@ class TagLevelsClass {
                         {
                             //render the bold here
                             //style can also be inside of this
-                            console.log("render the bold here at i = " + i + "!");
+                            //console.log("render the bold here at i = " + i + "!");
 
-                            let tagstr = "";
-                            if (this.isTagIndexOnListOfIndexes(rule, i, stis)) tagstr = "" + otag;
-                            else tagstr = "" + ctag;
-                            console.log("tagstr = " + tagstr);
-
-                            rulemkup += tagstr + rule.charAt(i + 1) + ">";
+                            rulemkup += this.getTagStr(rule, i, stis) + rule.charAt(i + 1) + ">";
                             i++;
                         }
                         //else;//do nothing
@@ -2917,11 +2923,11 @@ class TagLevelsClass {
 
                                 if (temptagnm === "/style")
                                 {
-                                    console.log("render the style tag here at i = " + i + "!");
+                                    //console.log("render the style tag here at i = " + i + "!");
                                     if (this.isTagIndexOnListOfIndexes(rule, i, stis))
                                     {
                                         let pi = this.getTagPairIndex(rule, i, mytagis);
-                                        console.log("pi = " + pi);
+                                        //console.log("pi = " + pi);
 
                                         if (pi < i || pi > rule.length - 1)
                                         {
@@ -2937,7 +2943,7 @@ class TagLevelsClass {
                                     }
                                     else
                                     {
-                                        console.log("this tag was already rendered with its pair!");
+                                        //console.log("this tag was already rendered with its pair!");
                                     }
                                 }
                             }
@@ -2949,16 +2955,9 @@ class TagLevelsClass {
 
                                 if (temptagnm === "/span")
                                 {
-                                    console.log("render the span tag here at i = " + i + "!");
-                                    let tagstr = "";
-                                    if (this.isTagIndexOnListOfIndexes(rule, i, stis))
-                                    {
-                                        tagstr = "" + otag;
-                                    }
-                                    else tagstr = "" + ctag;
-                                    console.log("tagstr = " + tagstr);
-
-                                    rulemkup += tagstr + "span>";
+                                    //console.log("render the span tag here at i = " + i + "!");
+                                    
+                                    rulemkup += this.getTagStr(rule, i, stis) + "span>";
                                     i += 4;
                                 }
                                 //else;//do nothing
@@ -2975,16 +2974,9 @@ class TagLevelsClass {
 
                                 if (temptagnm === "/span")
                                 {
-                                    console.log("render the span tag here at i = " + i + "!");
-                                    let tagstr = "";
-                                    if (this.isTagIndexOnListOfIndexes(rule, i, stis))
-                                    {
-                                        tagstr = "" + otag;
-                                    }
-                                    else tagstr = "" + ctag;
-                                    console.log("tagstr = " + tagstr);
-
-                                    rulemkup += tagstr + "span>";
+                                    //console.log("render the span tag here at i = " + i + "!");
+                                    
+                                    rulemkup += this.getTagStr(rule, i, stis) + "span>";
                                     i += 4;
                                 }
                                 //else;//do nothing
@@ -2996,7 +2988,7 @@ class TagLevelsClass {
                     //else;//do nothing
                 }
                 //else;//do nothing
-                console.log("NEW rulemkup = " + rulemkup);
+                //console.log("NEW rulemkup = " + rulemkup);
             }
             else rulemkup += rule.charAt(i);
         }//end of i for loop

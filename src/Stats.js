@@ -28,6 +28,7 @@ function Stats({games, gameobj, updateGame})
     "NumberOfDecks": 0,
     "AverageMinutes": 0,
     "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+    "UsesMarkers": false,
     "image": "url",
     "description": "",
     "rules": {
@@ -54,6 +55,7 @@ function Stats({games, gameobj, updateGame})
         AverageMinutes: gameobj.AverageMinutes,
         MinNumberOfPlayers: gameobj.MinNumberOfPlayers,
         MaxNumberOfPlayers: gameobj.MaxNumberOfPlayers,
+        UsesMarkers: gameobj.UsesMarkers,
         NumberOfDecks: gameobj.NumberOfDecks,
         NumberOfPlayersExcluding: cpmypexsgameobj
     };
@@ -82,12 +84,14 @@ function Stats({games, gameobj, updateGame})
             (event.target.id.indexOf("edit-numdecks") === 0) ||
             (event.target.id.indexOf("edit-averagemins") === 0));
         const usedrop = (event.target.id.indexOf("deck-type") === 0);
+        const usechecked = (event.target.id.indexOf("markers") === 0);
         
         if (event.target.id.indexOf("edit-game-name") === 0) objkey = "name";
         else if (event.target.id.indexOf("edit-minplayers") === 0) objkey = "MinNumberOfPlayers";
         else if (event.target.id.indexOf("edit-maxplayers") === 0) objkey = "MaxNumberOfPlayers";
         else if (event.target.id.indexOf("edit-numdecks") === 0) objkey = "NumberOfDecks";
         else if (event.target.id.indexOf("edit-averagemins") === 0) objkey = "AverageMinutes";
+        else if (event.target.id.indexOf("markers") === 0) objkey = "UsesMarkers";
         else if (event.target.id.indexOf("deck-type") === 0) objkey = "KindOfDeck";
         else if ((event.target.id.indexOf("other-deck-type") === 0) ||
             (event.target.id.indexOf("otherdecktype") === 0))
@@ -102,8 +106,10 @@ function Stats({games, gameobj, updateGame})
         console.log("statshandleChange: objkey = " + objkey);
         console.log("statshandleChange: usenumber = " + usenumber);
         console.log("statshandleChange: usedrop = " + usedrop);
+        console.log("statshandleChange: usechecked = " + usechecked);
 
         if (usenumber) nwpgameobj[objkey] = Number(event.target.value);
+        else if (usechecked) nwpgameobj[objkey] = event.target.checked;
         else
         {
             const mytaglvs = new TagLevelsClass("");
@@ -155,6 +161,7 @@ function Stats({games, gameobj, updateGame})
                 nwgameobj.MaxNumberOfPlayers = mypartialgamedata.MaxNumberOfPlayers;
                 nwgameobj.NumberOfDecks = mypartialgamedata.NumberOfDecks;
                 nwgameobj.NumberOfPlayersExcluding = mypexs.map((myexobj) => myexobj.value);
+                nwgameobj.UsesMarkers = mypartialgamedata.UsesMarkers;
             }
             else
             {
@@ -168,6 +175,7 @@ function Stats({games, gameobj, updateGame})
                 nwgameobj.MaxNumberOfPlayers = nwstate.MaxNumberOfPlayers;
                 nwgameobj.NumberOfDecks = nwstate.NumberOfDecks;
                 nwgameobj.NumberOfPlayersExcluding = nwstate.NumberOfPlayersExcluding.map((val) => val);
+                nwgameobj.UsesMarkers = nwstate.UsesMarkers;
             }
             console.log("nwgameobj = ", nwgameobj);
             //debugger;
@@ -263,6 +271,13 @@ function Stats({games, gameobj, updateGame})
                     <td>{editmode ? (<DeckTypeSelection gameobj={mypartialgamedata} mid={gameobj.id}
                         handleChange={handleChange}
                         myotherdecktype={myodecktype} />) : (gameobj.KindOfDeck)}</td>
+                </tr>
+                <tr>
+                <td className="tabletextright">Uses Markers:</td>
+                <td>{editmode ? (<input type="checkbox" id={"markers" + gameobj.id} onChange={handleChange}
+                    name={"markers" + gameobj.id} checked={mypartialgamedata.UsesMarkers}
+                    value="Uses Special Markers Or Chips Or Pieces" />) :
+                    (gameobj.UsesMarkers ? "true" : "false")}</td>
                 </tr>
             </table>
         </div>

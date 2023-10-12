@@ -14,6 +14,7 @@ function AddAGame({addGame})
         "NumberOfDecks": 0,
         "AverageMinutes": 0,
         "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+        "UsesMarkers": false,
         "image": "",
         "description": "",
         "rules": {
@@ -88,6 +89,7 @@ function AddAGame({addGame})
         const usenumber = ((event.target.id === "minnumplayers") || (event.target.id === "maxnumplayers") ||
             (event.target.id === "numdecks") || (event.target.id === "avnummins"));
         const usedrop = (event.target.id === "deck-type");
+        const usechecked = (event.target.id === "markers");
         
         if (event.target.id === "nwname") objkey = "name";
         else if (event.target.id === "nwurl") objkey = "image";
@@ -96,6 +98,7 @@ function AddAGame({addGame})
         else if (event.target.id === "maxnumplayers") objkey = "MaxNumberOfPlayers";
         else if (event.target.id === "numdecks") objkey = "NumberOfDecks";
         else if (event.target.id === "avnummins") objkey = "AverageMinutes";
+        else if (event.target.id === "markers") objkey = "UsesMarkers";
         else if (event.target.id === "deck-type") objkey = "KindOfDeck";
         else if (event.target.id === "other-deck-type" || event.target.id === "otherdecktype")
         {
@@ -109,8 +112,10 @@ function AddAGame({addGame})
         console.log("handleChange: objkey = " + objkey);
         console.log("handleChange: usenumber = " + usenumber);
         console.log("handleChange: usedrop = " + usedrop);
+        console.log("handleChange: usechecked = " + usechecked);
 
         if (usenumber) nwgameobj[objkey] = Number(event.target.value);
+        else if (usechecked) nwgameobj[objkey] = event.target.checked;
         else
         {
             const mytaglvs = new TagLevelsClass("");
@@ -142,6 +147,7 @@ function AddAGame({addGame})
     "NumberOfDecks": 0,
     "AverageMinutes": 0,
     "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+    "UsesMarkers": false,
     "image": "url",
     "description": "",
     "rules": {
@@ -153,7 +159,7 @@ function AddAGame({addGame})
 
     const mytaglvs = new TagLevelsClass("");
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{backgroundColor: "orange"}}>
             <label htmlFor="nwname" id="nwnamelbl">Game Name: </label>
             <input required={true} style={{width: "200px"}} id="nwname" type="text"
                 placeholder="Game Name:" value={gameobj.name} onChange={handleChange} /><br />
@@ -177,6 +183,10 @@ function AddAGame({addGame})
             <label htmlFor="avnummins" id="avnumminslbl">Average Number of Minutes: </label>
             <input required={true} id="avnummins" type="number" min="0" step="any" placeholder="0"
                 value={gameobj.AverageMinutes} onChange={handleChange} /><br />
+            <input type="checkbox" id={"markers"} name={"markers"} onChange={handleChange}
+                value="Uses Special Markers Or Chips Or Pieces" checked={gameobj.UsesMarkers} />
+            <label htmlFor={"markers"} id={"markerslbl"}>Uses Special Markers Or Chips Or Pieces</label>
+            <br />
             <label htmlFor="deck-type" id="deck-typelbl">Deck Type: </label>
             <DeckTypeSelection gameobj={gameobj} handleChange={handleChange} mid=""
                 myotherdecktype={myotherdecktype} />

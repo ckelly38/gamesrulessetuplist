@@ -63,6 +63,7 @@ function GameSetup({games, gameobj, updateGame})
     "NumberOfDecks": 0,
     "AverageMinutes": 0,
     "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+    "UsesMarkers": false,
     "image": "url",
     "description": "",
     "rules": {

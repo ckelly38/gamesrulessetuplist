@@ -41,7 +41,7 @@ function App() {
     const basickeysarr = ["name", "KindOfDeck", "image", "description"];
     for (let item in basickeysarr)
     {
-      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj[item]}))
+      if (mytaglvs.screener({input: "" + gameobj[item]}))
       {
           console.error("handleChange: input (" + gameobj[item] + ") has illegal characters in it!");
           console.log("changes aborted!");
@@ -51,7 +51,7 @@ function App() {
     }
     for (let n = 0; n < gameobj.rules.basic.length; n++)
     {
-      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj.rules.basic[n]}))
+      if (mytaglvs.screener({input: "" + gameobj.rules.basic[n]}))
       {
           console.error("handleChange: input (" + gameobj.rules.basic[n] +
             ") has illegal characters in it!");
@@ -62,7 +62,7 @@ function App() {
     }
     for (let n = 0; n < gameobj.rules.vegasstyle.length; n++)
     {
-      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj.rules.vegasstyle[n]}))
+      if (mytaglvs.screener({input: "" + gameobj.rules.vegasstyle[n]}))
       {
           console.error("handleChange: input (" + gameobj.rules.vegasstyle[n] +
             ") has illegal characters in it!");
@@ -73,7 +73,7 @@ function App() {
     }
     for (let n = 0; n < gameobj.strategies.length; n++)
     {
-      if (mytaglvs.doesInputHaveUnnecessaryCharacters({input: "" + gameobj.strategies[n]}))
+      if (mytaglvs.screener({input: "" + gameobj.strategies[n]}))
       {
           console.error("handleChange: input (" + gameobj.strategies[n] +
             ") has illegal characters in it!");

@@ -2668,7 +2668,7 @@ class TagLevelsClass {
     }
 
     
-    doesInputHaveUnnecessaryCharacters(inputobj)
+    screener(inputobj)
     {
         //console.log("AddAGame screener: inputobj = ", inputobj);
         if (inputobj.input === undefined || inputobj.input === null)
@@ -2729,6 +2729,7 @@ class TagLevelsClass {
                         alert("Error: input = " + inputobj.input + " is illegal! " + errmsg);
                         return true;
                     }
+                    //else;//do nothing
                 }//end of k for loop
             }
             //else;//do nothing should be safe
@@ -2736,7 +2737,6 @@ class TagLevelsClass {
         //console.log("AddAGame screener: input object is safe!");
         return false;
     }
-    screener(inputobj) { return this.doesInputHaveUnnecessaryCharacters(inputobj);}
 
     getTagStr(rule, i, stis)
     {

@@ -105,6 +105,63 @@
         "Plan your hand out a bit. If you have a lot of doubles or triples, save them to the end or when it becomes necessary to play them. This will eventually force your opponents to pass and keep them out of the game. Letting someone take the lead and run away with it. If one cannot lose the lead, and the other opponents cannot get it. Then that one person is next (or first) to finish."
       ],
       "id": 2
+    },
+    {
+      "name": "B.S.",
+      "MinNumberOfPlayers": 3,
+      "MaxNumberOfPlayers": 8,
+      "NumberOfPlayersExcluding": [],
+      "NumberOfDecks": 1,
+      "AverageMinutes": 30,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "UsesMarkers": false,
+      "image": "https://content.instructables.com/FT9/M7ND/I7KB4V3U/FT9M7NDI7KB4V3U.jpg?auto=webp&frame=1&width=600&height=1024&fit=bounds&md=ba7f9db6ba403279f2cbca924aaca4fd",
+      "description": "Liar in BS. They were on 10s and they lied. Someone called BS on them and were correct.",
+      "rules": {
+        "basic": [
+          "Deal out all of the cards. Then the player with the Ace of Spades goes first and starts with Aces or Ones.",
+          "The play moves up in sequence and rotates to the next player in a clockwise direction according to point value of card: Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King. After King it restarts at Aces and repeats...",
+          "You must play at least one card out of your hand each time. Regardless of whether or not you have to lie.",
+          "Each time you play a number, you call it out for instance: 3 Fours. Or 4 Fives. Or 1 ace or 1 one. You play it/them face down on the pile. But you could be on Aces and not have any. In that case, you would still say 1 Ace or 1 one and hope and pray no one calls you out. Calling zero or more than 5 of something forces the player to take the pile.",
+          "To call someone out for lying or for B.S., a player says \"BS\". If the other player lied, they got caught. So the Liar takes the pile. If on the other hand, BS was called and the player did not lie, the Caller takes the pile. When the turn advances alternatively, a player can say \"Just take the pile. I know you don't have any.\" Is an alternative way of saying or calling BS on someone.",
+          "The winner is the first person to get rid of all of their cards."
+        ],
+        "vegasstyle": []
+      },
+      "strategies": [
+        "Win honestly. Plan out the cards by the number and rotation and try to win honestly, if possible."
+      ],
+      "id": 3
+    },
+    {
+      "name": "Egyptian Rat Slap/Stew",
+      "MinNumberOfPlayers": 3,
+      "MaxNumberOfPlayers": 8,
+      "NumberOfPlayersExcluding": [],
+      "NumberOfDecks": 1,
+      "AverageMinutes": 75,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "UsesMarkers": false,
+      "image": "https://www.wikihow.com/images/thumb/2/2e/Play-Egyptian-Rat-Screw-Step-3-Version-4.jpg/v4-460px-Play-Egyptian-Rat-Screw-Step-3-Version-4.jpg.webp",
+      "description": "This shows the basic layout of Egyptian Rat Slap/Stew.",
+      "rules": {
+        "basic": [
+          "The winner is the first one to collect the entire deck.",
+          "The cards are ranked as follows: Ace > King > Queen > Jack > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2.",
+          "The name implies slapping. You may slap on sandwichs, super-sandwiches, and doubles. A double as the name implies is two cards of the same number next to each other. A sandwich or super-sandwhich is where there is one card of one number then at least one other card then that original number again.",
+          "Whoever is the first to slap takes it. A false slap is when someone slaps thinking there is a sandwich, super-sandwich or a double and there is none. The penalty is a card each time paid to the winner of said pile. Also, when out of cards and you are allowed to slap in and you make 3 false slaps, you are not allowed to slap in anymore and are out of the game.",
+          "Face cards: When a face card is played. The player who played it will take the pile if the next player cannot get another face card. For Aces, the next player has 4 chances to get another face card or to slap and take it if possible. For Kings, that is 3. For Queens, that is 2. For Jacks, that is 1. For this reason, Jacks will keep you alive. If the next player runs out, then the player after that must finish up.",
+          "When all players are out other than one, the game is over.",
+          "You are allowed to slap in if you are out of cards. That is unless the forced out declares a winner or you are not allowed to slap in due to exceeding 3 false slaps when out of cards.",
+          "Drop it. Then slap it.",
+          "You are not allowed to look at the cards in your hand. You flip it up into the center of the table for all to see. Then slap it if you are allowed to."
+        ],
+        "vegasstyle": []
+      },
+      "strategies": [
+        "Always try to slap in when out. And hope you have a lot of high cards and face cards."
+      ],
+      "id": 4
     }
   ]
 }

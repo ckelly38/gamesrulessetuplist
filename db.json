@@ -75,6 +75,36 @@
         "vegasstyle": []
       },
       "strategies": []
+    },
+    {
+      "name": "Scum",
+      "MinNumberOfPlayers": 3,
+      "MaxNumberOfPlayers": 8,
+      "NumberOfPlayersExcluding": [],
+      "NumberOfDecks": 1,
+      "AverageMinutes": 15,
+      "KindOfDeck": "A normal 52 card deck that has the 4 suits and no jokers",
+      "UsesMarkers": false,
+      "image": "https://i0.wp.com/fun-squared.com/wp-content/uploads/2020/04/Playing-President.jpg?ssl=1",
+      "description": "This shows a set of 8s has been played by one player. A set of 10s has been played by another.",
+      "rules": {
+        "basic": [
+          "Cards are ranked as follows in suit from highest to lowest: 2 > Ace > King > Queen > Jack > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3.",
+          "For the first round, you decide who goes first, and the order of play (clockwise or counterclockwise). For all other rounds, whoever finished last (IE: SCUM) goes first then next to last ... President goes last.",
+          "The person who starts (has the lead) decides how many and of what number to play. Then everyone must play that many of a number greater than that and so on.",
+          "If someone does not have a number bigger than the current play number and does not have the number of cards of that number to play, then he or she says \"pass\" (FORCED PASS), and cannot play any more that round until someone wins the round. Anyone can \"pass\" when it is their turn.",
+          "Someone wins the round and takes the lead when all other players have \"passed\" or they play the correct number of 2s (IE the highest possible number that can be played) to end the round.",
+          "BEFORE PLAY STARTS on games other than the first game, President and Scum must give each other one card. Scum must pay a tax to the President of the Highest Ranking Card that Scum possesses. The President is allowed to give Scrum whatever card the President wishes (typically their lowest card).",
+          "When a player is out of cards and has won that game per-say, the next one in order of finish leads. Unless there is one person left. That person is automatically Scum.",
+          "President is always first to finish. Scum is always last to finish. With 3 people, that middle person is called Middle Class."
+        ],
+        "vegasstyle": []
+      },
+      "strategies": [
+        "Save your highest cards as long as possible. When you get the lead always lead with your lowest card.",
+        "Plan your hand out a bit. If you have a lot of doubles or triples, save them to the end or when it becomes necessary to play them. This will eventually force your opponents to pass and keep them out of the game. Letting someone take the lead and run away with it. If one cannot lose the lead, and the other opponents cannot get it. Then that one person is next (or first) to finish."
+      ],
+      "id": 2
     }
   ]
 }

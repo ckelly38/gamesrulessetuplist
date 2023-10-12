@@ -1498,7 +1498,7 @@ class TagLevelsClass {
         //console.log("FINAL rawtextei = " + rawtextei);
 
         if (rawtextsi < 0 || rawtextei < 0 || rawtextei < rawtextsi ||
-            rawtextei > myruletext.length - 1 || rawtextsi > myruletext.length - 1)
+            rawtextei > myruletext.length || rawtextsi > myruletext.length - 1)
         {
             throw new Error("invalid start or end index found and used for the rule text here!");
         }
